@@ -1,0 +1,14 @@
+package com.it.services;
+
+import com.it.bean.BusinessOpporitunity;
+
+import java.util.List;
+
+public interface IBusinessOppoServices {
+    //添加商机
+    boolean add(BusinessOpporitunity businessOpporitunity);
+    boolean del(BusinessOpporitunity businessOpporitunity);
+    boolean upd(BusinessOpporitunity businessOpporitunity);
+    List<BusinessOpporitunity> queryAllLike(String sql);
+    int count(String sql);
+}

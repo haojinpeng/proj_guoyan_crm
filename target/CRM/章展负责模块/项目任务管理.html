@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <title>项目任务管理</title>
+    <link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css"/>
+
+    <link rel="stylesheet" type="text/css" href="resources/layui_ext/dtree/dtree.css"/>
+    <style type="text/css">
+        /**自定义滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: transparent;
+            -webkit-border-radius: 2em;
+            -moz-border-radius: 2em;
+            border-radius: 2em;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #9c9da0;
+            -webkit-border-radius: 2em;
+            -moz-border-radius: 2em;
+            border-radius: 2em
+        }
+    </style>
+</head>
+
+<body>
+<!-- 数据表格开始 -->
+<table class="layui-hide" id="userTable" lay-filter="userTable"></table>
+<div style="display: none;" id="userToolBar">
+    <form action="" class="layui-form" method="post">
+        <form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+            <div class="layui-form-item" style="margin-left: -50px;margin-top: 10px">
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="width: 150px;">项目名称:</label>
+                    <div class="layui-input-inline" style="width: 150px">
+                        <input type="text" name="project_name" id="project_name" autocomplete="off" placeholder="请输入关键字"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="width: 100px">开始时间:</label>
+                    <div class="layui-input-inline" style="width: 150px;">
+                        <input type="text" name="startTime" id="startTime" placeholder="yyyy-MM-dd" readonly="readonly"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="width:100px">结束时间:</label>
+                    <div class="layui-input-inline" style="width: 150px;">
+                        <input type="text" name="endTime" id="endTime" placeholder="yyyy-MM-dd" readonly="readonly"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <button type="button" class="layui-btn layui-btn-sm layui-icon layui-icon-search" id="doSearch"
+                        data-type="reload">查询
+                </button>&nbsp;
+                <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm ">重置</button>&nbsp;&nbsp;
+            </div>
+
+        </form>
+
+        <div id="userBar" style="display: none;">
+
+            <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="out">转出</a>
+            <a class="layui-btn layui-btn-xs" lay-event="zcsh">转出审核</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="add">添加日报</a>
+        </div>
+        <!-- 数据表格结束 -->
+    </form>
+</div>
+<!-- 修改的弹出层开始 -->
+<div style="display: none" id="updateDiv">
+    <form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+        <br>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">编号:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="project_id" id="project_id" lay-verify="required" autocomplete="off"
+                           class="layui-input" readonly="readonly">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">项目状态:</label>
+                <div class="layui-input-inline">
+                    <select name="status" lay-filter="" id="status">
+                        <option value="0">请选择</option>
+                        <option value="1">开发</option>
+                        <option value="2">未开发</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">实际工时:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="actul_time" id="actul_time" lay-verify="required" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item" style="text-align: center;">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release"
+                        lay-filter="doSubmit" lay-submit="">提交可修改项
+                </button>
+                <button type="button" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh" lay-filter="doSubmit1" lay-submit="">取消
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<!-- 修改的弹出层结束 -->
+
+
+<!-- 任务转出的弹出层开始 -->
+<div style="display: none;padding: 20px" id="outDiv">
+    <form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">项目名称:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="project_name" lay-verify="required" autocomplete="off" placeholder="不可修改项"
+                           class="layui-input" readonly="readonly">
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">任务名称:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入任务名称"
+                           class="layui-input">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">转交人:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="manager_id" lay-verify="required" autocomplete="off" placeholder="不可修改项"
+                           class="layui-input" readonly="readonly">
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">交接人:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="manager_id" lay-verify="required" autocomplete="off" placeholder="请输入交接人"
+                           class="layui-input">
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">转出时间:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="createtime" lay-verify="required" id="test2" autocomplete="off"
+                           placeholder="new Date()" class="layui-input">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="layui-form-item" style="text-align: center;">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release"
+                        lay-filter="doSubmit2" lay-submit="">转出
+                </button>
+                <button type="button" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh" lay-filter="doSubmit1" lay-submit="">取消
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<!-- 任务转出的弹出层结束 -->
+
+<!-- 转出审核的弹出层开始 -->
+<div style="display: none;padding: 20px" id="zcshDiv">
+    <form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">审核人ID:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="reviewer_id" id="reviewer_id"  autocomplete="off" placeholder=""
+                           class="layui-input" readonly="readonly">
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">审核时间:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="createtime" id="createtime"  autocomplete="off" placeholder=""
+                           class="layui-input">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">审核状态:</label>
+                <div class="layui-input-inline">
+                    <select name="status" lay-filter="" id="status">
+                        <option value="0">请选择</option>
+                        <option value="1">未审核</option>
+                        <option value="2">已审核</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">审核描述:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="description" id="description"  autocomplete="off" placeholder=""
+                           class="layui-input">
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item" style="text-align: center;">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release"
+                        lay-filter="doSubmit2" lay-submit="">审核
+                </button>
+                <button type="button" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh" lay-filter="doSubmit1" lay-submit="">取消
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<!-- 任务转出的弹出层结束 -->
+
+<!-- 添加日报的弹出层开始 -->
+<div style="display: none;padding: 20px" id="addDiv">
+    <form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+
+        <div class="layui-form-item" >
+
+            <div class="layui-inline" style="width: 600px;height: 40px;text-align: center;/*border: 1px solid black*/">
+                <span style="font-size: 22px">个人工作日报</span>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">项目编号:</label>
+                <div class="layui-input-inline" >
+                    <input type="text" name="project_id" id="project_id" style="border: 1px solid black;width: 150px;height: 35px"  autocomplete="off" placeholder=""
+                           class="layui-input" >
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-left: -50px">
+                <label class="layui-form-label">项目名称:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="project_name" id="project_name" style="border: 1px solid black;width: 150px;height: 35px"  autocomplete="off" placeholder=""
+                           class="layui-input" >
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">任务名称:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" id="name" style="border: 1px solid black;width: 150px;height: 35px"  autocomplete="off" placeholder=""
+                           class="layui-input" >
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-left: -50px">
+                <label class="layui-form-label">添加时间:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="createtime" id="createtime" style="border: 1px solid black;width: 150px;height: 35px"  autocomplete="off" placeholder=""
+                           class="layui-input" >
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+
+        <div class="layui-inline" style="width: 600px;height: 150px;">
+            <div class="layui-input-inline" style="width: 60px;text-align: center;margin-left: 40px;">
+                <label class="layui-form-label" style="width: 20px;margin-top: 30px">项目描述</label>
+
+            </div>
+            <div class="layui-input-inline" >
+                <input type="text" style="width: 420px;height: 150px;border: 1px solid black" name="description" id="description"   autocomplete="off" placeholder=""
+                       class="layui-input" >
+            </div>
+        </div>
+
+    </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline" style="width: 600px;height: 150px;">
+                <div class="layui-input-inline" style="width: 60px;text-align: center;margin-left: 40px">
+                    <label class="layui-form-label" style="width: 20px;margin-top: 30px">任务描述</label>
+
+                </div>
+                <div class="layui-input-inline" >
+                    <input type="text" style="width: 420px;height: 150px;border: 1px solid black" name="description" id="description"   autocomplete="off" placeholder=""
+                           class="layui-input" >
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item" style="text-align:center;margin-top: 30px">
+            <div class="layui-input-block" >
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release"
+                        lay-filter="doSubmit" lay-submit="" style="margin-left: 180px">提交
+                </button>
+                <button type="button" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh" lay-filter="doSubmit1" lay-submit="">取消
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<!-- 添加的弹出层结束 -->
+</body>
+<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table', 'layer', 'laydate', 'form'], function () {
+
+        var $ = layui.jquery,
+            slider = layui.slider,
+            element = layui.element,
+            form = layui.form,
+            table = layui.table,
+            laydate = layui.laydate,
+            rate = layui.rate,
+            layer = layui.layer,
+            carousel = layui.carousel;
+
+
+        // 时间选择器初始化 开始时间
+        laydate.render({
+            elem: '#startTime',
+            format: 'yyyy-MM-dd',
+            done: function (value, date, endDate) {
+                var startDate = new Date(value).getTime();
+                var endTime = new Date($('#endTime').val()).getTime();
+                if (endTime < startDate) {
+                    layer.msg('结束时间不能小于开始时间');
+                    $('#startTime').val('');
+                }
+            }
+        });
+
+        laydate.render({ //结束时间
+            elem: '#endTime',
+            format: 'yyyy-MM-dd',
+            done: function (value, date, endDate) {
+                var startDate = new Date($('#startTime').val()).getTime();
+                var endTime = new Date(value).getTime();
+                if (endTime < startDate) {
+                    layer.msg('结束时间不能小于开始时间');
+                    $('#endTime').val('');
+                }
+            }
+        });
+        //常规用法
+        laydate.render({
+            elem: '#test2'
+        });
+
+
+        //渲染数据表格
+        table.render({
+            elem: '#userTable',
+            url: '/project_task.do?opt=queryAll',//数据接口
+            toolbar: '#userToolBar',
+            height: '450',
+            cellMinWidth: 40,
+            title: '用户数据表',
+            cols: [[
+
+                {
+                    type: 'checkbox',
+                    fixed: 'left'
+                }, {
+                    field: 'project_id',
+                    title: '项目编号',
+                    sort: true,
+                    align: 'center'
+                }, {
+                    field: 'project_name',
+                    title: '项目名称',
+                    sort: true,
+                    align: 'center'
+                }, {
+                    field: 'name',
+                    title: '任务名称',
+                    sort: true,
+                    align: 'center'
+                }, {
+                    field: 'plan_time',
+                    title: '计划工时',
+                    sort: true,
+                    align: 'center'
+                }, {
+                    field: 'actul_time',
+                    title: '实际工时',
+                    sort: true,
+                    align: 'center'
+                }, {
+                    field: 'createtime',
+                    title: '添加时间',
+                    sort: true,
+                    align: 'center'
+                }, {
+                    field: 'manager_id',
+                    title: '当前执行人',
+                    sort: true,
+                    align: 'center'
+                }, {
+                    field: 'status',
+                    title: '任务状态',
+                    sort: true,
+                    align: 'center'
+                }, {
+                    fixed: 'right',
+                    title: '操作',
+                    width: 320,
+                    toolbar: '#userBar',
+                    align: 'center'
+                }
+            ]]
+            , page: {layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']}
+            , id: 'testReload'
+        });
+        //模糊查询日期
+        $("#doSearch").click(function () {
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+            var project_name = $("#project_name").val();
+            //只重载数据
+            table.reload('testReload', {
+                where: { //设定异步数据接口的额外参数，任意设
+                    project_name: project_name,
+                    startTime: startTime,
+                    endTime: endTime
+                }
+                , page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+        /**
+         * 监听头工具栏事件
+         * */
+        table.on('toolbar(userTable)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+
+        });
+        //监听行工具事件
+        table.on('tool(userTable)', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            if (layEvent === 'out') { //转出
+                openOutUser(data);
+            } else if (layEvent === 'edit') { //修改
+                openUpdateUser(data);
+            } else if (layEvent === 'add') {
+                openAddUser(data);
+            }else if(layEvent === 'zcsh'){
+                openZcshUser(data);
+            }
+        });
+
+
+        //打开修改页面
+        function openUpdateUser(data) {
+            layer.open({
+                type: 1,
+                title: ' ',
+                content: $("#updateDiv"),
+                area: ['400px', '300px'],
+                success: function (index) {
+                    form.val("dataFrm", data);
+                    url = "/project_task.do?opt=upd";
+                }
+            });
+        }
+
+        //打开转出页面
+        function openOutUser(data) {
+            layer.open({
+                type: 1,
+                title: ' ',
+                content: $("#outDiv"),
+                area: ['400px', '430px'],
+                success: function (index) {
+                    form.val("dataFrm", data);
+
+                }
+            });
+        };
+        //打开转出审核页面
+        function openZcshUser(data) {
+            layer.open({
+                type: 1,
+                title: ' ',
+                content: $("#zcshDiv"),
+                area: ['400px', '420px'],
+                success: function (index) {
+                    form.val("dataFrm", data);
+
+                }
+            });
+        };
+        //打开添加日报页面
+        function openAddUser(data) {
+            layer.open({
+                type: 1,
+                title: '  ',
+                content: $("#addDiv"),
+                area: ['640px', '500px'],
+                success: function (index) {
+                    //清空表单数据
+                    $("#dataFrm")[0].reset();
+                   url = "/project_task.do?opt=add";
+                }
+            });
+        };
+
+        /**
+         * 监听提交
+         * */
+        form.on('submit(doSubmit)', function (data) {
+            alert(JSON.stringify(data.field));
+
+            alert(url);
+            $.get(
+                url,
+                data.field,
+                function (flag) {
+                    if (flag == 1) {
+                        alert("恭喜您操作成功!");
+                        window.location.href = "项目任务管理.html";
+                    } else {
+                        alert("操作失败!");
+                        window.location.href = "项目任务管理.html";
+                    }
+                }, "json");
+
+        });
+        form.on('submit(doSubmit1)', function (data) {
+
+            window.location.href = "项目任务管理.html";
+
+
+        });
+        form.on('submit(doSubmit2)', function (data) {
+            alert(JSON.stringify(data.field));
+            alert("恭喜您操作成功!");
+            window.location.href = "项目任务管理.html";
+
+
+        });
+    });
+</script>
+
+</html>

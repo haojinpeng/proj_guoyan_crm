@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+	</head>
+	<style>
+		/**自定义滚动条样式 */
+
+		::-webkit-scrollbar {
+			width: 8px;
+			height: 8px
+		}
+
+		::-webkit-scrollbar-track {
+			background-color: transparent;
+			-webkit-border-radius: 2em;
+			-moz-border-radius: 2em;
+			border-radius: 2em;
+		}
+
+		::-webkit-scrollbar-thumb {
+			background-color: #9c9da0;
+			-webkit-border-radius: 2em;
+			-moz-border-radius: 2em;
+			border-radius: 2em
+		}
+	</style>
+	<body>
+		<div class="layui-tab">
+			<ul class="layui-tab-title">
+				<li class="layui-this" ><a href="index.html" target="contains">客户类型</a></li>
+				<li><a href="部门维护.html" target="contains">部门维护</a></li>
+				<!--<li><a href="../manage.html" target="contains">商机类型</a></li>-->
+				<li><a href="商机消费类型.html" target="contains">商机消费类型</a></li>
+				<li><a href="审批类型管理1_1.html" target="contains">审批类型</a></li>
+				
+				<li><a href="../章展负责模块/采购类型.html" target="contains">采购类型</a></li>
+				<li><a href="../章展负责模块/公司维护.html" target="contains">公司维护</a></li>
+			</ul>
+			<div class="layui-tab-content" style="height: 800px;">
+				<iframe  src="index.html" name="contains" style="width: 100%;height: 100%;">
+									
+				</iframe>
+				
+			</div>
+		</div>
+
+	</body>
+	<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script>
+//注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+layui.use('element', function(){
+  var element = layui.element;
+  
+  //…
+});
+</script>
+</html>

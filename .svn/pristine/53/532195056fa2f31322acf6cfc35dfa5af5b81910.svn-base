@@ -1,0 +1,9 @@
+package com.it.services.impl;
+
+import com.it.dao.Project_cost_statisticsDAO;
+import com.it.dao.Project_cost_statisticsDAOImpl;
+import com.it.services.Project_cost_statisticsServices;
+
+public class Project_cost_statisticsServicesImpl implements Project_cost_statisticsServices {
+    Project_cost_statisticsDAO project_cost_statisticsDAO=new Project_cost_statisticsDAOImpl();
+}

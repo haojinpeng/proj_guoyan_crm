@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- 引入 ECharts 文件 -->
+		<script src="js/项目js/echarts.js"></script>
+		<title>开票管理</title>
+		<link rel="stylesheet" href="resources/layui/css/layui.css">
+	</head>
+
+	<body class="layui-layout-body">
+<!-- 顶部内容开始 -->
+			<blockquote class="layui-elem-quote layui-text" style="height: 40px;">
+				<div class="layui-fluid">
+					<div class="layui-row">
+						<div class="layui-col-md3">
+
+							<div class="layui-inline">
+								<label class="layui-form-label" >项目名称</label>
+
+
+								<input type="text" name="cainame" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入关键字"
+								 style="width: 150px;">
+
+
+							</div>
+						</div>
+						<div class="layui-col-md3">
+							<div class="layui-inline">
+								<label class="layui-form-label" >合同编号</label>
+
+								<input type="text" name="caitype" id="caitype" lay-verify="required" placeholder="请选择合同编号" autocomplete="off"
+								 class="layui-input" style="width: 150px;">
+
+							</div>
+						</div>
+						<div class="layui-col-md6">
+							<div class="layui-inline">
+								<label class="layui-form-label" >开票日期</label>
+								<input type="text" class="layui-input" id="test1" placeholder="yyyy-MM-dd" style="width: 200px;">
+							</div>
+							<div class="layui-inline">
+								<button type="button" class="layui-btn layui-btn-ms  layui-btn-normal layui-icon layui-icon-search" style="margin-left: 20px;">查询</button>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</blockquote>
+			<!-- 顶部内容结束 -->
+		<!-- 数据表格开始 -->
+		<table class="layui-hide" id="userTable" lay-filter="userTable"></table>
+		<div id="userBar" style="display: none;">
+			<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="look">预览</a>
+		</div>
+		<!-- 数据表格结束 -->
+		<!-- 添加和修改的弹出层开始 -->
+		<div style="display: none;padding: 20px; " id="saveOrUpdateDiv">
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+				<div class="layui-form-item">
+
+					<label class="layui-form-label">合同编号:</label>
+					<div class="layui-input-block">
+						<input type="text" name="id" lay-verify="required" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">项目名称:</label>
+					<div class="layui-input-block">
+						<input type="text" name="username" autocomplete="off" class="layui-input">
+					</div>
+
+				</div>
+				<div class="layui-form-item">
+
+					<label class="layui-form-label">开票人:</label>
+					<div class="layui-input-block">
+						<input type="text" name="addrs" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">开票时间:</label>
+					<div class="layui-input-block">
+						<input type="text" name="sex" lay-verify="required" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">客户名称:</label>
+					<div class="layui-input-block">
+						<input type="text" name="tel" lay-verify="required" autocomplete="off" class="layui-input">
+					</div>
+
+				</div>
+				<div class="layui-form-item">
+
+					<label class="layui-form-label">开票描述:</label>
+					<div class="layui-input-block">
+						<input type="text" name="post" lay-verify="required" autocomplete="off" class="layui-input">
+					</div>
+
+				</div>
+				<div class="layui-form-item" style="text-align: center;">
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+						 lay-submit="">提交</button>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+					</div>
+				</div>
+			</form>
+
+		</div>
+		<!-- 添加和修改的弹出层结束 -->
+		<!-- 预览的弹出层开始 -->
+		<div style="display: none;padding: 20px; " id="lookDiv">
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+				<div class="layui-form-item">
+		
+					<label class="layui-form-label">合同编号:</label>
+					<div class="layui-input-block">
+						<input type="text" name="id" lay-verify="required" autocomplete="off" class="layui-input" readonly="readonly">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">项目名称:</label>
+					<div class="layui-input-block">
+						<input type="text" name="username" autocomplete="off" class="layui-input" readonly="readonly">
+					</div>
+		
+				</div>
+				<div class="layui-form-item">
+		
+					<label class="layui-form-label">开票人:</label>
+					<div class="layui-input-block">
+						<input type="text" name="addrs" autocomplete="off" class="layui-input" readonly="readonly">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">开票时间:</label>
+					<div class="layui-input-block">
+						<input type="text" name="sex" lay-verify="required" autocomplete="off" class="layui-input" readonly="readonly">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">客户名称:</label>
+					<div class="layui-input-block">
+						<input type="text" name="tel" lay-verify="required" autocomplete="off" class="layui-input" readonly="readonly">
+					</div>
+		
+				</div>
+				<div class="layui-form-item">
+		
+					<label class="layui-form-label">开票描述:</label>
+					<div class="layui-input-block">
+						<input type="text" name="post" lay-verify="required" autocomplete="off" class="layui-input" readonly="readonly">
+					</div>
+		
+				</div>
+				<div class="layui-form-item">
+						
+					<label class="layui-form-label">发票图片:</label>
+					<div class="layui-input-block">
+						<img src="img/00.jpg" >
+					</div>
+						
+				</div>
+				
+				
+			</form>
+		
+		</div>
+		<!-- 预览的弹出层结束 -->
+		
+	</body>	
+		
+		<!-- 身体部分结束 -->
+
+		<script src="resources/layui/layui.js"></script>
+	<script type="text/javascript">
+			var data;
+			var index = 0;
+			layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table', 'layer', 'laydate', 'form'], function() {
+				
+				var $ = layui.jquery,
+					slider = layui.slider,
+					element = layui.element,
+					form = layui.form,
+					table = layui.table,
+					laydate = layui.laydate,
+					rate = layui.rate,
+					layer = layui.layer,
+					carousel = layui.carousel;
+					//日期范围
+					  laydate.render({
+					    elem: '#test1'
+					  });
+				//绑定时间选择器
+				laydate.render({
+					elem: '#startTime'
+				});
+				laydate.render({
+					elem: '#endTime'
+				})
+				//渲染数据表格
+				var tableIns = table.render({
+					elem: '#userTable' //渲染的目标对象
+						,
+					url: 'js/invoice.json' //数据接口
+						,
+					title: '用户数据表' //数据导出来的标题
+						,
+					toolbar: "#userToolBar" //表格的工具条
+						,
+					height: 'full-150',
+					cellMinWidth: 100 //设置列的最小默认宽度
+						,
+					id: 'testReload',
+					page: true,
+					done: function(res, curr, count) {
+						index++;
+						if(index == 1)
+						data = res.data;
+					},
+					cols: [
+						[ //列表数据
+							{
+								type: 'checkbox',
+								fixed: 'left'
+							},
+							{
+								field: 'ID',
+								title: 'ID'
+							}, {
+								field: 'id',
+								title: '合同编号',
+								sort: true
+							}, {
+								field: 'username',
+								title: '项目名称',
+								sort: true,
+								align: 'center'
+							}, {
+								field: 'addrs',
+								title: '开票人',
+								align: 'center'
+	
+							}, {
+								field: 'sex',
+								title: '开票时间',
+								align: 'center'
+							}, {
+								field: 'tel',
+								title: '客户名称',
+								align: 'center'
+							}, {
+								field: 'post',
+								title: '开票描述',
+								align: 'center'
+							}, {
+								fixed: 'right',
+								title: '操作',
+								toolbar: '#userBar',
+								width: 220,
+								align: 'center'
+							}
+						]
+					],
+	
+	
+				});
+	
+				
+				var	active = {
+						reload: function() {
+							var selectData = new Array();
+							var demoReload = $('#demoReload');
+							data.forEach(function(value){
+								if(value.id==demoReload.val())
+									selectData.push(value);
+							})
+							//执行重载
+							table.reload('testReload', {
+								page: {
+									curr: 1 //重新从第 1 页开始
+								},
+								data: selectData,
+								url: ""
+							});
+						}
+					};
+				
+				
+				$('#doSearch').on('click', function() {
+					var type = $(this).data('type');
+					active[type] ? active[type].call(this) : '';
+				});
+	
+				//监听行工具事件
+				table.on('tool(userTable)', function(obj) {
+					var data = obj.data; //获得当前行数据
+					var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+					if (layEvent === 'del') { //删除
+						layer.confirm('真的删除行么', function(index) {
+							obj.del();
+							layer.close(index);
+						});
+					} else if (layEvent === 'edit') { //编辑
+						openUpdateUser(data);
+					}else if (layEvent === 'look') { //预览
+						openUpdateUser(data);
+					}
+				});
+	
+				var url;
+				var mainIndex;
+	
+				//打开添加页面
+				function openAddUser() {
+					mainIndex = layer.open({
+						type: 1,
+						title: '添加用户',
+						content: $("#saveOrUpdateDiv"),
+						area: ['800px', '400px'],
+						success: function(index) {
+							//清空表单数据       
+							$("#dataFrm")[0].reset();
+							url = "user/addUser.action";
+						}
+					});
+				}
+	
+				//打开修改页面
+				function openUpdateUser(data) {
+					mainIndex = layer.open({
+						type: 1,
+						title: '修改用户',
+						content: $("#saveOrUpdateDiv"),
+						area: ['800px', '400px'],
+						success: function(index) {
+							form.val("dataFrm", data);
+							url = "user/updateUser.action";
+						}
+					});
+				}
+				//打开预览页面
+				function openUpdateUser(data) {
+					mainIndex = layer.open({
+						type: 1,
+						title: '修改用户',
+						content: $("#lookDiv"),
+						area: ['800px', '400px'],
+						success: function(index) {
+							form.val("dataFrm", data);
+							url = "user/updateUser.action";
+						}
+					});
+				}
+	
+	
+			});
+		</script>
+	</html>
+	

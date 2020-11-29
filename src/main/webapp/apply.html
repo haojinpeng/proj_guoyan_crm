@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>采购信息管理</title>
+    <link rel="stylesheet" href="resources/layui/css/layui.css">
+</head>
+
+<body class="layui-layout-body">
+<!-- 身体部分开始 -->
+<div style="margin-top: 20px; margin-bottom: 10px; margin-left: 10px; margin-right: 10px;">
+    <!-- 数据表格开始 -->
+    <table class="layui-hide" id="applyTable" lay-filter="applyTable"></table>
+
+    <div style="display: none;" id="userToolBar">
+        <form class="layui-form" action="">
+        <div class="layui-form-item" style="height: 30px;">
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: auto;">项目名称:</label>
+                <div class="layui-input-inline layui-form-pane" style="width: 180px;">
+                    <select name="projectId" id="ProjectId" lay-filter="ProjectId">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: auto;">申请状态</label>
+                <div class="layui-input-inline layui-form-pane" style="width: 180px;">
+                    <select name="status" id="Status">
+                        <option value="">请选择申请状态</option>
+                        <option value="3">审核中</option>
+                        <option value="1">成功</option>
+                        <option value="2">驳回</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" style="width: auto;">日期</label>
+                <input type="text" class="layui-input" name="queryTime" id="QueryTime" placeholder="yyyy-MM-dd" style="width: 180px;">
+            </div>
+            <div class="layui-inline">
+                <button class=" layui-btn" lay-event="Submit"
+                        lay-filter="Submit"
+                        lay-submit>查询
+                </button>
+                <!--<button type="button" class="layui-btn layui-btn btnsearch" data-type="reload" style="margin-left: 0px;">查询</button>-->
+            </div>
+            <div class="layui-inline">
+                <button type="button" class="layui-btn layui-btn" lay-event="add" style="margin-right: -17px;">添加采购</button>
+            </div>
+        </div>
+        </form>
+    </div>
+
+    <!--3为审核中-->
+    <!--1为成功-->
+    <!--2为驳回-->
+    <!--0为未申请-->
+    <script type="text/html" id="barDemo">
+        {{#  if(d.apply_status =="0"){ }}
+        <button class="layui-btn layui-btn layui-btn-xs" lay-event="submit">申请</button>
+        <button class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit">修改</button>
+        <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</button>
+        <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-disabled" lay-event="">预览流程图</button>
+        {{# } }}
+        {{#  if(d.apply_status =="3"){ }}
+        <button class="layui-btn layui-btn layui-btn-xs layui-btn-disabled" lay-event="">申请</button>
+        <button class="layui-btn layui-btn-warm layui-btn-xs layui-btn-disabled" lay-event="">修改</button>
+        <button class="layui-btn layui-btn-danger layui-btn-xs layui-btn-disabled" lay-event="">删除</button>
+        <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="look_phone">预览流程图</button>
+        {{# } }}
+        {{#  if(d.apply_status =="1"){ }}
+        <button class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="">申请</button>
+        <button class="layui-btn layui-btn-warm layui-btn-xs layui-btn-disabled" lay-event="">修改</button>
+        <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</button>
+        <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="look_phone">预览流程图</button>
+        {{# } }}
+        {{#  if(d.apply_status =="2"){ }}
+        <button class="layui-btn layui-btn layui-btn-xs" lay-event="submit">申请</button>
+        <button class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit">修改</button>
+        <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</button>
+        <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="look_phone">预览流程图</button>
+        {{# } }}
+    </script>
+
+    <!-- 数据表格结束 -->
+</div>
+<!-- 身体部分结束 -->
+
+<!-- 弹出层开始 -->
+<div style="display: none;padding: 10px" id="addDiv">
+    <form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">申请人:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="apply_user" id="Apply_user" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入申请人">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">所属项目:</label>
+                <div class="layui-input-inline layui-form-pane">
+                    <div class="layui-input-block layui-form" style="margin-left: 0px;">
+                        <select name=project_id" id="Project_id" lay-filter="project_id">
+                            <option value="" selected="">请选择</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">申请类型:</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="apply_type" id="Apply_type" value="1" checked="checked" title="软件">
+                    <input type="radio" name="apply_type" id="Apply_type" value="2" title="硬件">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">申请金额:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="apply_money" id="Apply_money" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入申请金额">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">商品信息:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="commodity" id="Commodity" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入商品信息">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label" style="margin-left: -2px;">审核人员</label>
+                <div class="layui-input-inline layui-form-pane">
+                    <div class="layui-input-block layui-form" style="margin-left: 0px;">
+                        <select name="audit_people" id="Audit_people" lay-filter="audit_people">
+                            <option value="" selected="">请选择</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">创建日期:</label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="required" name="createtime" id="Createtime" autocomplete="off" class="layui-input" placeholder="请选择创建日期">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">申请描述:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="apply_description" id="Apply_description" lay-verify="required" autocomplete="off" class="layui-input"
+                           placeholder="请输入申请描述">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">申请凭证:</label>
+                <button type="button" class="layui-btn layui-btn" id="test3"><i class="layui-icon"></i>请上传申请凭证</button>
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="text-align: center;">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release"
+                        lay-filter="doSubmit"
+                        lay-submit="" style="margin-left: 100px;">保存</button>
+                <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh" style="margin-right: 200px;">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- 弹出层结束 -->
+
+<script src="resources/layui/layui.js"></script>
+<script>
+    var data;
+    var index = 0;
+    layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table', 'layer', 'laydate', 'form', 'upload'],
+        function() {
+            var slider = layui.slider,
+                element = layui.element,
+                form = layui.form,
+                table = layui.table,
+                laydate = layui.laydate,
+                rate = layui.rate,
+                layer = layui.layer,
+                form = layui.form,
+                upload = layui.upload,
+                $ = layui.jquery,
+                carousel = layui.carousel;
+
+            //日期范围
+            laydate.render({
+                elem: 'QueryTime',
+            });
+            laydate.render({
+                elem: '#Createtime',
+            });
+
+
+
+            //渲染数据表格
+            table.render({
+                elem: '#applyTable', //渲染的目标对象
+                url: 'apply.do?opt=queryAll', //数据接口
+                title: '采购信息管理表', //数据导出来的标题
+                toolbar: "#userToolBar", //表格的工具条
+                defaultToolbar: ['filter', 'exports'],
+                height: 'full-110',
+                cellMinWidth: 100, //设置列的最小默认宽度
+                done: function(res, curr, count) {
+                    /* alert(res);//后台url返回的json串
+                    alert(curr);//当前页
+                    alert(count);//数据总条数 */
+                },
+                totalRow: true, //开启合并行
+                page: true, //是否启用分页
+                /*   ,limit:20 //设置每页显示条数 默认为10
+                  ,limits:[20,40,60,80] */
+                text: {
+                    none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+                },
+                cols: [
+                    [{
+                        type: 'checkbox',
+                        fixed: 'left'
+                    }, {
+                        field: 'id',
+                        title: 'ID',
+                        sort: true,
+                        align: 'center'
+                    }, {
+                        field: 'project_name',
+                        title: '所属项目',
+                        width: 130,
+                        sort: true,
+                        align: 'center'
+                    }, {
+                        field: 'username',
+                        title: '申请人',
+                        align: 'center'
+                    }, {
+                        field: 'reviewer_id',
+                        title: '审核人id',
+                        align: 'center',
+                        width: 120
+                    }, {
+                        field: 'createtime',
+                        title: '创建日期',
+                        width: 130,
+                        align: 'center'
+                    }, {
+                        field: 'apply_money',
+                        title: '申请金额',
+                        align: 'center'
+                    }, {
+                        field: 'apply_type',
+                        title: '申请类型',
+                        align: 'center',
+                        templet:function(d){
+                return d.apply_type=='1'?'软件':'硬件';
+            }
+                    }, {
+                        field: 'apply_status',
+                        title: '申请状态',
+                        align: 'center',
+                        templet:function(d) {
+                            if (d.apply_status == '3'){
+                                return '审核中'
+                            } else if (d.apply_status == '1') {
+                                return '成功'
+                            } else if (d.apply_status == '2') {
+                                return '驳回'
+                            } else if (d.apply_status == '0') {
+                                return '未申请'
+                            }
+                        }
+                    }, {
+                        field: 'apply_description',
+                        title: '申请描述',
+                        align: 'center'
+                    }, {
+                        field: 'gistaddr',
+                        title: '申请凭证',
+                        align: 'center'
+                    }, {
+                        field: 'commodity',
+                        title: '商品信息',
+                        align: 'center'
+                    }, {
+                        fixed: 'right',
+                        title: '操作',
+                        width: 270,
+                        align: 'center',
+                        toolbar: '#barDemo'
+                    }
+                    ]
+                ],
+                id: 'pushReload'
+            });
+
+            //项目名称选择框
+            $(function(){
+                $.getJSON(
+                    "apply.do?opt=queryAllProject_id",
+                    function (date) {
+                        $.each(date,function (k,v) {
+                            $("#ProjectId").append(
+                                "<option value='" + v.project_name+"'>"+v.project_name+"</option>"
+                            );
+                        });
+                        form.render('select');
+                    });
+                });
+
+
+            //监听头部工具栏事件
+            table.on("toolbar(applyTable)", function(obj) {
+                switch (obj.event) {
+                    case 'add':
+                        openAddUser(data);
+                        break;
+                    case 'Submit':
+                        Submit();
+                        break;
+                };
+
+
+            function Submit(){
+                //模糊查询
+                    var ProjectId = $("#ProjectId").val();
+                    var QueryTime = $("#QueryTime").val();
+                    var Status = $("#Status").val();
+                    table.reload('pushReload',{
+                        where:{project_id : ProjectId,createtime:QueryTime,status:Status}
+                    });
+                $(function(){
+                    $.getJSON(
+                        "apply.do?opt=queryAllProject_id",
+                        function (date) {
+                            $.each(date,function (k,v) {
+                                $("#ProjectId").append(
+                                    "<option value='" + v.id+"'>"+v.project_name+"</option>"
+                                );
+                            });
+                            form.render('select');
+                        }
+                    )
+                });
+            }
+            });
+
+
+            //监听行工具事件
+            table.on('tool(applyTable)', function(obj) {
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                if (layEvent === 'del') { //删除
+                    layer.confirm('真的删除行么', function(index) {
+                        del(obj.data.id);
+                        layer.close(index);
+                        //向服务端发送删除指令
+                    });
+                } else if (layEvent === 'edit') { //编辑
+                    openUpdateUser(data,data.id);
+                } else if (layEvent === 'submit') {
+                    layer.confirm('确定提交申请吗', function(index) {
+                        $.post("apply.do", { opt: "submit", "id":data.id },
+                            function(flag){
+                                if(flag==1){
+                                    layer.msg("申请成功", {icon: 6});
+                                    layer.close(index);
+                                    //点击申请，申请状态变为审核中，同时申请按钮不可点击
+                                    //申请后刷新页面使得状态变换
+                                    location.reload();
+                                }else{
+                                    layer.msg("申请失败", {icon: 5});
+                                    location.reload();
+                                }
+                            });
+                        layer.close(index);
+                    });
+                } else if (layEvent === 'look_phone') {
+                    layer.msg("流程图")
+                }
+            });
+
+            //删除操作
+            function del(id){
+                $.post("apply.do", { opt: "delete", id : id },
+                    function(flag){
+                        if(flag==1){
+                            layer.msg("删除成功", {icon: 6});
+                            location.reload();
+                            layer.close(index);
+                        }else{
+                            layer.msg("删除失败", {icon: 5});
+                            location.reload();
+                        }
+                    });
+            }
+
+            var url;
+            var mainIndex;
+            //打开添加页面
+            function openAddUser(data) {
+                mainIndex = layer.open({
+                    type: 1,
+                    title: '添加采购',
+                    content: $("#addDiv"),
+                    area: ['700px', '400px'],
+                    success: function(index) {
+                        //清空表单数据
+                        $("#dataFrm")[0].reset();
+                        //所属项目下列框
+                        $.getJSON(
+                            "apply.do?opt=queryAllProject_id",
+                            function (date) {
+                                console.log(date),
+                                $("#Project_id").empty(),
+                                $("#Project_id").append(
+                                    "<option value=''>请选择</option>"
+                                );
+                                $.each(date,function (k,v) {
+                                    $("#Project_id").append(
+                                        "<option value='" + v.id+"'>"+v.project_name+"</option>"
+                                    );
+                                });
+                                form.render('select');
+                            });
+                        //审核人员下拉框
+                        $.getJSON(
+                            "apply.do?opt=queryApprovalUser",
+                            function (date) {
+                                console.log(date),
+                                    $("#Audit_people").empty(),
+                                    $("#Audit_people").append(
+                                        "<option value=''>请选择</option>"
+                                    );
+                                $.each(date,function (k,v) {
+                                    $("#Audit_people").append(
+                                        "<option value='" + v.id+"'>"+v.username+"</option>"
+                                    );
+                                });
+                                form.render('select');
+                            });
+                        url = "apply.do?opt=add";
+                        }
+                });
+            }
+
+            //监听submit提交
+            form.on('submit(doSubmit)', function(data){
+                //console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                alert(JSON.stringify(data.field));
+                var type = $("input[type='radio']:checked").val();
+                $.get(
+                    url,
+                    {"apply_user":$("#Apply_user").val(),"project_id":$("#Project_id").val(),
+                        "apply_type":type,"apply_money":$("#Apply_money").val(),
+                        "commodity":$("#Commodity").val(),"createtime":$("#Createtime").val(),
+                        "apply_description":$("#Apply_description").val(),
+                        "audit_people":$("#Audit_people").val()},
+                    function (flag){
+                        if(flag==1){
+                            alert("恭喜您操作成功!");
+                            window.location.href="apply.html";
+                        }else{
+                            alert("操作失败!");
+                            window.location.href="apply.html";
+                        }
+                    },"json");
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+
+            //打开修改页面
+            function openUpdateUser(data,id) {
+                mainIndex = layer.open({
+                    type: 1,
+                    title: '修改采购',
+                    content: $("#addDiv"),
+                    area: ['700px', '400px'],
+                    success: function (index) {
+                        console.log(data);
+                        form.val("dataFrm", data);
+                        // $("#Project_id").attr(selected,selected);
+                        //修改默认选中下列框
+                        $.getJSON("apply.do?opt=queryAllProject_id", function (Pro) {
+                            $("#Project_id").empty();
+                            $.each(Pro, function (i, pro) {
+                                console.log(pro)
+                                var option = "<option value='"+pro.id;
+                                if(pro.id == data.project_id){
+                                    option = option + "'selected = 'selected'>" + pro.project_name + "</option>";
+                                }else{
+                                    option = option + "'>" + pro.project_name + "</option>";
+                                }
+                                $("#Project_id").append(option);
+                                form.render('select');
+                            });
+                        });
+                        url = "apply.do?opt=update&id=" + id + "";
+                    }
+                });
+            }
+
+            //设定文件大小限制
+            upload.render({
+                elem: '#test3',
+                url: 'https://httpbin.org/post' //改成您自己的上传接口
+                ,
+                done: function(res) {
+                    layer.msg('上传成功');
+                    console.log(res)
+                }
+            });
+            //设定文件大小限制
+            upload.render({
+                elem: '#test5',
+                url: 'https://httpbin.org/post' //改成您自己的上传接口
+                ,
+                done: function(res) {
+                    layer.msg('上传成功');
+                    console.log(res)
+                }
+            });
+
+
+        });
+</script>
+
+</body>
+</html>

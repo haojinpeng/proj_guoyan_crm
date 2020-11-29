@@ -1,0 +1,169 @@
+package com.it.dao;
+
+import com.it.bean.*;
+//import com.it.jdbcutils.JdbcUtils;
+import com.it.utils.JdbcUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+
+import java.sql.SQLException;
+import java.util.List;
+
+public class ResourceDAOImpl implements ResourceDAO {
+    QueryRunner queryRunner = new QueryRunner(JdbcUtils.getDataSource());
+
+    @Override
+    public int addResource(Resource resource) {
+        //编写sql语句
+        String sql = "INSERT INTO `crm`.`resource` (`id`,`name`, `path`,`type`) VALUE(?,?,?,?)";
+        System.out.println(sql);
+        Object[] parame = {resource.getId(),resource.getName(),resource.getPath(),resource.getType()};
+        try {
+            return queryRunner.update(sql, parame);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("添加失败!!");
+        }
+//        return 0;
+    }
+
+    @Override
+    public int addResources_jurisdiction(Resources_jurisdiction resources_jurisdiction) {
+        //编写sql语句
+        String sql = "INSERT INTO `crm`.`resources_jurisdiction` (`resourceid`, `jurisdiction`) VALUES (?, ?)";
+        System.out.println(sql);
+        Object[] parame = {resources_jurisdiction.getResourceid(),resources_jurisdiction.getJurisdiction()};
+        try {
+            return queryRunner.update(sql, parame);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("添加失败!!");
+        }
+    }
+
+    @Override
+    public int del(String delIds) {
+        String sql = "delete from `crm`.`resource` where `id` in (" + delIds + ")";
+        System.out.println("sql--->" + sql);
+        try {
+            return queryRunner.update(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public List<ResourceAndJurisdiction> queryAll(PageBean pageBean, ResourceAndJurisdiction resourceAndJurisdiction) {
+        //编写sql
+        StringBuffer sql = new StringBuffer("SELECT re.`id` AS resource_id,re.`name`,re.`path`,re.`type`,GROUP_CONCAT(ju.`id`) AS `jurisdiction_id`,GROUP_CONCAT(ju.`name`) AS `jurisdiction_name`\n" +
+                "FROM `resource` AS re,`resources_jurisdiction` AS rj,`jurisdiction` AS ju\n" +
+                "WHERE re.`id`=rj.`resourceid` AND rj.`jurisdiction`=ju.`id` \n" +
+                "GROUP BY re.`id`\n" +
+                "HAVING 1=1");
+        if (resourceAndJurisdiction != null) {
+            //判定账户名的文本框的合法性
+            // "" null判定
+            if (!"".equals(resourceAndJurisdiction.getName()) && resourceAndJurisdiction.getName() != null) {
+                //拼接sql
+                sql.append(" and `name` like '%" + resourceAndJurisdiction.getName() + "%' ");
+            }
+            if (!"".equals(resourceAndJurisdiction.getType()) && resourceAndJurisdiction.getType() != null) {
+                sql.append(" and `type` like '%" + resourceAndJurisdiction.getType() + "%'");
+            }
+            if (!"".equals(resourceAndJurisdiction.getPath()) && resourceAndJurisdiction.getPath() != null) {
+                sql.append(" and `path` like '%" + resourceAndJurisdiction.getPath() + "%'");
+            }
+            if (!"".equals(resourceAndJurisdiction.getJurisdiction_name()) && resourceAndJurisdiction.getJurisdiction_name() != null) {
+                sql.append(" and `jurisdiction_name` like '%" + resourceAndJurisdiction.getJurisdiction_name() + "%'");
+            }
+        }
+        if (pageBean != null) {
+            sql.append(" limit " + pageBean.getStart() + ","
+                    + pageBean.getRows());
+        }
+        System.out.println("sql-->" + sql);
+        //存放所有Users信息
+//        List<Jurisdiction> jurisdictionList = null;
+        List<ResourceAndJurisdiction> resourceAndJurisdictionList = null;
+        try {
+            resourceAndJurisdictionList = queryRunner.query(sql.toString(), new BeanListHandler<>(ResourceAndJurisdiction.class));
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            throw new RuntimeException("查询数据失败!");
+        }
+        return resourceAndJurisdictionList;
+    }
+
+    @Override
+    public Resource select(Resource resource) {
+        //编写sql语句
+        String sql="SELECT * FROM `crm`.`resource` WHERE `id`=? or `name`=?";
+        System.out.println(sql);
+        Object[]parame={resource.getId(),resource.getName()};
+        try {
+            return queryRunner.query(sql, new BeanHandler<Resource>(Resource.class),parame);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public int count(ResourceAndJurisdiction resourceAndJurisdiction) {
+        //编写sql
+        StringBuffer sql = new StringBuffer("SELECT re.`id` AS resource_id,re.`name`,re.`path`,re.`type`,GROUP_CONCAT(ju.`id`) AS `jurisdiction_id`,GROUP_CONCAT(ju.`name`) AS `jurisdiction_name`\n" +
+                "FROM `resource` AS re,`resources_jurisdiction` AS rj,`jurisdiction` AS ju\n" +
+                "WHERE re.`id`=rj.`resourceid` AND rj.`jurisdiction`=ju.`id` \n" +
+                "GROUP BY re.`id`\n" +
+                "HAVING 1=1");
+        if (resourceAndJurisdiction != null) {
+            //判定账户名的文本框的合法性
+            // "" null判定
+            if (!"".equals(resourceAndJurisdiction.getName()) && resourceAndJurisdiction.getName() != null) {
+                //拼接sql
+                sql.append(" and `name` like '%" + resourceAndJurisdiction.getName() + "%' ");
+            }
+            if (!"".equals(resourceAndJurisdiction.getType()) && resourceAndJurisdiction.getType() != null) {
+                sql.append(" and `type` like '%" + resourceAndJurisdiction.getType() + "%'");
+            }
+            if (!"".equals(resourceAndJurisdiction.getPath()) && resourceAndJurisdiction.getPath() != null) {
+                sql.append(" and `path` like '%" + resourceAndJurisdiction.getPath() + "%'");
+            }
+            if (!"".equals(resourceAndJurisdiction.getJurisdiction_name()) && resourceAndJurisdiction.getJurisdiction_name() != null) {
+                sql.append(" and `jurisdiction_name` like '%" + resourceAndJurisdiction.getJurisdiction_name() + "%'");
+            }
+        }
+        System.out.println("sql-->" + sql);
+        //存放所有Users信息
+        List<ResourceAndJurisdiction> resourceAndJurisdictionList = null;
+        try {
+            resourceAndJurisdictionList = queryRunner.query(sql.toString(), new BeanListHandler<>(ResourceAndJurisdiction.class));
+            return resourceAndJurisdictionList.size();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            throw new RuntimeException("查询数据失败!");
+        }
+//        return 0;
+    }
+
+    @Override
+    public List<Jurisdiction> queryAllJurisdiction(Jurisdiction jurisdiction) {
+        //编写sql
+        StringBuffer sql = new StringBuffer("SELECT * FROM `jurisdiction`");
+        System.out.println("sql-->" + sql);
+
+        try {
+            return queryRunner.query(sql.toString(), new BeanListHandler<>(Jurisdiction.class));
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            throw new RuntimeException("查询数据失败!");
+        }
+//        return null;
+    }
+}

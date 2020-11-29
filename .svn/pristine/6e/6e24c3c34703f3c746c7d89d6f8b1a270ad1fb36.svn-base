@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- 引入 ECharts 文件 -->
+		<script src="js/项目js/echarts.js"></script>
+		<title>项目工单统计</title>
+		<link rel="stylesheet" href="resources/layui/css/layui.css">
+		<script src="js/项目js/echarts.js"></script>
+		<!-- 引入主题 -->
+		<script src="https://www.runoob.com/static/js/wonderland.js"></script>
+		<style>
+			.layui-layout-body{
+				overflow:auto;
+			}
+		</style>
+	</head>
+
+	<body class="layui-layout-body">
+	
+		<!-- 身体部分开始 -->
+		<div style="margin-top: 20px; margin-bottom: 10px; margin-left: 10px; margin-right: 10px;">
+			
+			<!--图片-->
+			<div class="layui-row " >
+				<div class="layui-col-md6">
+					<!--折线图-->
+					<div id="zhe" style="width: 600px;height:400px;"></div>
+				</div>
+				<div class="layui-col-md6">
+					<!--饼图-->
+					<div id="bing" style="width: 100%;height:400px;"></div>
+				</div>
+			</div>
+			<!--图片-->
+			
+			<!-- 数据表格开始 -->
+			<table class="layui-hide" id="gongdantable" lay-filter="gongdantable"></table>
+			<div style="display: none;" id="userToolBar">
+				<div class="layui-form-item" style="height: 30px;">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: auto;">客户名称</label>
+						<input type="text" name="cainame" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入关键字" style="width: 180px;">
+					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: auto;">项目名称:</label>
+						<div class="layui-input-inline layui-form-pane" style="width: 180px;">
+							<select name="" lay-filter="">
+								<option value="" selected="">请选择</option>
+								<option value="0">智慧医疗系统</option>
+								<option value="1">智慧养老系统</option>
+								<option value="2">智慧交通系统</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: auto;">时间范围</label>
+						<input type="text" class="layui-input" id="test1" placeholder="yyyy-MM-dd" style="width: 180px;">
+					</div>
+					<div class="layui-inline">
+						<button type="button" class="layui-btn layui-btn" style="margin-left: 0px;">查询</button>
+					</div>
+				</div>
+			</div>
+			<div id="userBar" style="display: none;">
+				<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="out">统计</a>
+			</div>
+			<!-- 数据表格结束 -->
+		</div>
+		
+		<!-- 添加和修改的弹出层开始 -->
+		<div style="display: none;padding: 20px" id="tubiao">
+			<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+			<div id="main" style="width: 600px;height:400px;"></div>
+		</div>
+		<!-- 添加和修改的弹出层结束 -->
+
+		<!-- 身体部分结束 -->
+		
+		<script src="resources/layui/layui.js"></script>
+		<script type="text/javascript">
+			layui.use(['jquery', 'layer', 'form', 'table', 'laydate', 'element'], function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				var element = layui.element;
+				var form = layui.form;
+				var table = layui.table;
+				var laydate = layui.laydate;
+
+				//日期范围
+				laydate.render({
+					elem: '#test1',
+					range: true
+				});
+
+				//绑定时间选择器
+				laydate.render({
+					elem: '#startTime'
+				});
+				laydate.render({
+					elem: '#endTime'
+				})
+
+
+				//渲染数据表格
+				table.render({
+					elem: '#gongdantable', //渲染的目标对象
+
+					url: 'js/gongdan.json' //数据接口
+						,
+					title: '项目工单统计表' //数据导出来的标题
+						/* ,toolbar:"<div>xxx</div>" */
+						,
+					toolbar: "#userToolBar" //表格的工具条
+						,
+					defaultToolbar: ['filter', 'print', 'exports', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+							title: '提示',
+							layEvent: 'LAYTABLE_TIPS',
+							icon: 'layui-icon-tips'
+						}]
+						/* ,height:300 */
+						,
+					height: 'auto',
+					cellMinWidth: 100 //设置列的最小默认宽度
+						,
+					done: function(res, curr, count) {
+						/* alert(res);//后台url返回的json串
+						alert(curr);//当前页
+						alert(count);//数据总条数 */
+					},
+					totalRow: true //开启合并行
+						,
+					page: true //是否启用分页
+						/*   ,limit:20 //设置每页显示条数 默认为10
+						  ,limits:[20,40,60,80] */
+						,
+					text: {
+						none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+					},
+					cols: [
+						[ //列表数据
+							{
+								type: 'checkbox',
+								fixed: 'left'
+							}, {
+								field: 'id',
+								title: 'ID',
+								width: 80,
+								sort: true,
+								align: 'center'
+							}, {
+								field: 'customer_id',
+								title: '客户名称',
+								width: 120,
+								sort: true,
+								align: 'center'
+							}, {
+								field: 'project_id',
+								title: '项目名称',
+								align: 'center'
+							}, {
+								field: 'receive_time',
+								title: '接受时间',
+								width: 110,
+								align: 'center'
+							}, {
+								field: 'workorder',
+								title: '工单申请',
+								width: 100,
+								align: 'center',
+							}, {
+								field: 'workorder_process',
+								title: '工单解决',
+								align: 'center',
+								width: 120
+							}, {
+								field: 'workorder_visit',
+								title: '工单回访',
+								align: 'center',
+								width: 120
+							}, {
+								fixed: 'right',
+								title: '操作',
+								width: 150,
+								align: 'center',
+								toolbar: '#userBar'
+							}
+						]
+					],
+					done: function(res, curr, count) {
+						merge(res, curr, count);
+					}
+				});
+
+				//尺寸重置
+				table.resize('gongdantable');
+
+				//监听行工具事件
+				table.on('tool(gongdantable)', function(obj) {
+					switch (obj.event) {
+						case 'out':
+							openToolUser();
+							break;
+					};
+				});
+
+				var url;
+				var mainIndex;
+				//打开统计页面
+				function openToolUser() {
+					mainIndex = layer.open({
+						type: 1,
+						title: '工单统计数据',
+						content: $("#tubiao"),
+						area: ['800px', '500px'],
+
+					});
+				}
+
+				//柱状图
+				// 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('main'));
+
+				// 指定图表的配置项和数据
+				var option = {
+					title: {
+						text: '项目工单统计'
+					},
+					tooltip: {}, //鼠标放上提示
+					/* legend: {
+					    data:['销量']
+					}, */
+					xAxis: {
+						data: ["工单申请", "工单解决", "工单回访"]
+					},
+					yAxis: {},
+					series: [{
+						//自己配置调色
+						itemStyle: {
+							normal: {
+								color: function(params) {
+									var colorList = ['#ff0000', 'green', '#0000ff'];
+									return colorList[params.dataIndex]
+								},
+							}
+						},
+						name: '工单统计',
+						type: 'bar',
+						data: [13, 10, 6]
+					}]
+				};
+
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+			});
+		</script>
+		<script type="text/javascript">
+			// 基于准备好的dom，初始化echarts实例
+			var myChart = echarts.init(document.getElementById('zhe'));
+		
+			// 指定图表的配置项和数据
+			option = {
+				title: {
+					text: '工单年度统计图'
+				},
+				tooltip: {
+					trigger: 'axis'
+				},
+				legend: {
+					data: ['智慧医疗系统', '智慧养老系统', '智慧交通系统']
+				},
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					top: '10%',
+					containLabel: true
+				},
+				toolbox: {
+					feature: {
+						saveAsImage: {}
+					}
+				},
+				xAxis: {
+					type: 'category',
+					boundaryGap: false,
+					data: ['2015', '2016', '2017', '2018', '2019', '2020', '2021']
+				},
+				yAxis: {
+					type: 'value'
+				},
+				series: [{
+						name: '智慧医疗系统',
+						type: 'line',
+						stack: '总量',
+						data: [120, 132, 101, 134, 90, 230, 210]
+					},
+					{
+						name: '智慧养老系统',
+						type: 'line',
+						stack: '总量',
+						data: [220, 182, 191, 234, 290, 330, 310]
+					},
+					{
+						name: '智慧交通系统',
+						type: 'line',
+						stack: '总量',
+						data: [150, 232, 201, 154, 190, 330, 410]
+					}
+				]
+			};
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+		</script>
+		<script type="text/javascript">
+			// 基于准备好的dom，初始化echarts实例
+			var myChart = echarts.init(document.getElementById('bing'));
+		
+			option = {
+			    title: {
+			        text: '各项目工单统计',
+			        /* subtext: '纯属虚构', */
+			        left: 'center'
+			    },
+			    tooltip: {
+			        trigger: 'item',
+			        formatter: '{a} <br/>{b} : {c} ({d}%)'
+			    },
+			    legend: {
+			        orient: 'vertical',
+			        left: 'left',
+			        data: ['智慧医疗系统', '智慧养老系统', '智慧交通系统']
+			    },
+			    series: [
+			        {
+			            name: '项目总工单数',
+			            type: 'pie',
+			            radius: '55%',
+			            center: ['50%', '60%'],
+			            data: [
+			                {value: 335, name: '智慧医疗系统'},
+			                {value: 310, name: '智慧养老系统'},
+			                {value: 234, name: '智慧交通系统'}
+			            ],
+			            emphasis: {
+			                itemStyle: {
+			                    shadowBlur: 10,
+			                    shadowOffsetX: 0,
+			                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+			                }
+			            }
+			        }
+			    ]
+			};
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+		</script>
+	</body>
+</html>

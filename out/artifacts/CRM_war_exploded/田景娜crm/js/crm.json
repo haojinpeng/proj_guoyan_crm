@@ -1,0 +1,85 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 30,
+	"data": [{
+			"station": "研发助理",
+			"employee_number": "1",
+			"project_name": "养老院服务系统",
+			"join_time": "2020-01-12",
+			"join_project": "1",
+			"implementationp_project": "2",
+			"accept_work": "1",
+			"solve_work": "2"
+		},
+		{
+			"station": "架构师",
+			"employee_number": "1",
+			"project_name": "养老院服务系统",
+			"join_time": "2020-02-12",
+			"join_project": "1",
+			"implementationp_project": "2",
+			"accept_work": "1",
+			"solve_work": "2"
+		},
+		{
+			"station": "项目经理",
+			"employee_number": "1",
+			"project_name": "养老院服务系统",
+			"join_time": "2020-01-12",
+			"join_project": "1",
+			"implementationp_project": "2",
+			"accept_work": "1",
+			"solve_work": "1"
+		},
+		{
+			"station": "小组长",
+			"employee_number": "1",
+			"project_name": "养老院服务系统",
+			"join_time": "2020-01-12",
+			"join_project": "1",
+			"implementationp_project": "2",
+			"accept_work": "1",
+			"solve_work": "2"
+		},
+		{
+			"station": "研发助理",
+			"employee_number": "1",
+			"project_name": "养老院服务系统",
+			"join_time": "2020-01-12",
+			"join_project": "1",
+			"implementationp_project": "2",
+			"accept_work": "1",
+			"solve_work": "2"
+		},
+		{"station": "web前端",
+			"employee_number": "1",
+			"project_name": "养老院服务系统",
+			"join_time": "2020-01-25",
+			"join_project": "1",
+			"implementationp_project": "2",
+			"accept_work": "1",
+			"solve_work": "2"
+		},
+		{
+			"station": "配置管理员",
+			"employee_number": "1",
+			"project_name": "养老院服务系统",
+			"join_time": "2020-01-28",
+			"join_project": "1",
+			"implementationp_project": "2",
+			"accept_work": "1",
+			"solve_work": "2"
+		},
+		{
+			"station": "UI设计师",
+			"employee_number": "1",
+			"project_name": "养老院服务系统",
+			"join_time": "2020-01-01",
+			"join_project": "1",
+			"implementationp_project": "2",
+			"accept_work": "1",
+			"solve_work": "2"
+		}
+	]
+}

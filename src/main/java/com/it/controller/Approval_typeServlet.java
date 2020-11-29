@@ -1,0 +1,151 @@
+package com.it.controller;
+
+import com.it.bean.Approval_type;
+import com.it.bean.PageBean;
+
+import com.it.services.IApproval_typeServices;
+import com.it.services.impl.Approval_typeSerivcesImpl;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+@WebServlet(name = "Approval_typeServlet", urlPatterns = "/approval_type.do")
+public class Approval_typeServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //处理乱码
+        response.setContentType("application/json; charset=utf-8");
+//        response.setCharacterEncoding("utf-8");
+        request.setCharacterEncoding("utf-8");
+
+        //获取页面上的值
+        String opt = request.getParameter("opt");
+        System.out.println("opt==========" + opt);
+        String id = request.getParameter("id");
+        String name = request.getParameter("name");
+        //page 当前页码
+        String page = request.getParameter("page");
+        //limit pageSize
+        String rows = request.getParameter("limit");
+
+        PrintWriter out = response.getWriter();
+
+        //创建对象
+        Approval_type approval_type = new Approval_type();
+        JSONObject result = new JSONObject();
+
+        // 存放集合内容
+        List<Approval_type> approval_typeList = null;
+
+        // 判 "" null
+        if (id != null && !"".equals(id)) {
+            approval_type.setId(Long.parseLong(id));
+        }
+        if (name != null && !"".equals(name)) {
+            approval_type.setName(name);
+        }
+        System.out.println("approval_type==========" + approval_type);
+
+        //service
+        IApproval_typeServices approval_typeServices = new Approval_typeSerivcesImpl();
+
+        // 判别flag
+        int flag = 0;
+
+        //增
+        if ("add".equals(opt)) {
+            System.out.println("===========add==========");
+            flag = approval_typeServices.add(approval_type);
+//            if(flag==1){
+//                result.put("success", "保存成功！！！");
+//            }else{
+//                result.put("success", false);
+//                result.put("errorMsg", "保存失败");
+//            }
+            out.print(flag);
+            return;
+        }
+
+        //删
+        if ("delete".equals(opt)) {
+            //获取前端页面的id集合
+            String delIds = request.getParameter("delArray");
+            System.out.println("delIds--->" + delIds);
+            //{key:value,key:value....}
+            int delNums = 0;
+            //获取前端页面的Sno
+            if (!"".equals(id) && id != null) {
+                approval_typeServices.del(id);
+                delNums = 1;
+            } else {
+                delNums = approval_typeServices.del(delIds);
+            }
+//            if (delNums > 0) {
+//                result.put("success", true);
+//                result.put("delNums", delNums);
+//            } else {
+//                result.put("errorMsg", "删除失败");
+//            }
+            out.print(delNums);
+//            out.print(result);
+            return;
+        }
+
+        //改
+        if ("update".equals(opt)) {
+            try {
+                flag = approval_typeServices.upd(approval_type);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            out.print(flag);
+            return;
+        }
+
+        //模糊查询所有
+        if ("queryAll".equals(opt)) {
+            //查询所有信息默认分页
+            PageBean pageBean = new PageBean(Integer.parseInt(page), Integer.parseInt(rows));
+            approval_typeList = approval_typeServices.queryAll(pageBean, approval_type);
+            //查询总记录数
+            int total = approval_typeServices.count(approval_type);
+//            System.out.println("total=========="+total);
+            // jsonArray
+            JSONArray jsonArray = JSONArray.fromObject(approval_typeList);
+            result.put("code", 0);
+            result.put("msg", "正在加载....");
+            result.put("count", total);
+            result.put("data", jsonArray);
+            System.out.println(result.toString());
+            out.print(result);
+            return;
+        }
+
+        // 查询单个
+        if ("select".equals(opt)) {
+            try {
+                Approval_type approval_type1 = approval_typeServices.select(approval_type);
+                if (approval_type1 != null) {
+                    flag = 1;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            out.print(flag);
+            return;
+        } else {
+            System.out.println("无opt");
+        }
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
+    }
+}

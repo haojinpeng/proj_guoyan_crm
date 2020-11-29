@@ -1,0 +1,308 @@
+{
+	"clearInfo": {
+		"clearUrl": "api/clear.json"
+	},
+	"homeInfo": {
+		"title": "工作台",
+		"icon": "fa fa-home",
+		"href": "./page/welcome-1.html"
+	},
+	"logoInfo": {
+		"title": "CRM管理系统",
+		"image": "images/logo.png",
+		"href": ""
+	},
+	"menuInfo": {
+		"currency": {
+			"title": "CRM客户管理",
+			"icon": "fa fa-address-book",
+			"child": [
+				{
+					"title": "客户管理",
+					"href": "customer.html",
+					"icon": "fa fa-home",
+					"target": "_self"
+				
+				},
+				
+				{
+					"title": "商机管理",
+					"href": "",
+					"icon": "fa fa-home",
+					"target": "_self",
+					"child": [{
+							"title": "商机管理首页",
+							"href": "content.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "商机跟进管理",
+							"href": "follow.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "商机费用管理",
+							"href": "price.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "费用审核管理",
+							"href": "check.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						}
+					]
+				},
+				{
+					"title": "项目管理",
+					"href": "user.html",
+					"icon": "fa fa-window-maximize",
+					"target": "_self"
+				},
+				{
+							"title": "合同管理",
+							"href": "",
+							"icon": "fa fa-home",
+							"target": "_self",
+							"child": [{
+									"title": "合同信息管理",
+									"href": "合同信息管理.html",
+									"icon": "fa fa-tachometer",
+									"target": "_self"
+								},
+								{
+									"title": "开票管理",
+									"href": "开票管理.html",
+									"icon": "fa fa-tachometer",
+									"target": "_self"
+								}
+								
+							]
+						},
+						
+						{
+							"title": "工时管理",
+							"href": "",
+							"icon": "fa fa-tachometer",
+							"target": "_self",
+							"child": [{
+									"title": "项目工时管理",
+									"href": "章展负责模块/项目工时管理.html",
+									"icon": "fa fa-tachometer",
+									"target": "_self"
+								},
+								{
+									"title": "项目任务管理",
+									"href": "章展负责模块/项目任务管理.html",
+									"icon": "fa fa-tachometer",
+									"target": "_self"
+								},
+								{
+									"title": "日报管理",
+									"href": "章展负责模块/日报管理.html",
+									"icon": "fa fa-tachometer",
+									"target": "_self"
+								},
+								{
+									"title": "延期管理",
+									"href": "章展负责模块/延期管理.html",
+									"icon": "fa fa-tachometer",
+									"target": "_self"
+								}
+							]
+						},
+				{
+					"title": "采购管理",
+					"href": "",
+					"icon": "fa fa-home",
+					"target": "_self",
+					"child": [{
+							"title": "采购信息管理",
+							"href": "郝进鹏负责模块项目/采购信息管理.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "采购审核",
+							"href": "郝进鹏负责模块项目/采购审核.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						}
+					]
+				},
+				{
+							"title": "实施管理",
+							"href": "",
+							"icon": "fa fa-home",
+							"target": "_self",
+							"child": [{
+									"title": "实施信息管理",
+									"href": "黎英涛proj.xiangmu/information.html",
+									"icon": "fa fa-tachometer",
+									"target": "_self"
+								},
+								{
+									"title": "实施费用管理",
+									"href": "黎英涛proj.xiangmu/cost.html",
+									"icon": "fa fa-tachometer",
+									"target": "_self"
+								},
+								{
+									"title": "实施日报管理",
+									"href": "黎英涛proj.xiangmu/daily.html",
+									"icon": "fa fa-tachometer",
+									"target": "_self"
+								},
+								{
+									"title": "实施体验管理",
+									"href": "黎英涛proj.xiangmu/experence.html",
+									"icon": "fa fa-tachometer",
+									"target": "_self"
+								}
+							]
+					},
+				{
+					"title": "售后管理",
+					"href": "",
+					"icon": "fa fa-home",
+					"target": "_self",
+					"child": [{
+							"title": "工单处理",
+							"href": "李晨proj_项目/工单处理.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "工单回访",
+							"href": "李晨proj_项目/工单回访.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "工单记录",
+							"href": "李晨proj_项目/工单记录.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						}
+					]
+				},
+				{
+					"title": "统计管理",
+					"href": "",
+					"icon": "fa fa-home",
+					"target": "_self",
+					"child": [{
+							"title": "项目成本统计",
+							"href": "吴新宇08-06CRM/项目成本统计1_1.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "员工贡献统计",
+							"href": "田景娜crm/员工贡献.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "商机统计",
+							"href": "follow.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "项目工单统计",
+							"href": "郝进鹏负责模块项目/项目工单统计.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						}
+					]
+				},
+				
+				{
+					"title": "系统维护",
+					"href": "",
+					"icon": "fa fa-home",
+					"target": "_self",
+					"child": [{
+							"title": "角色管理",
+							"href": "吴新宇08-06CRM/角色管理1_1.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "资源管理",
+							"href": "吴新宇08-06CRM/资源管理1_1.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "权限管理",
+							"href": "吴新宇08-06CRM/权限管理1_1.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "审批流程",
+							"href": "吴新宇08-06CRM/审批流程1_1.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "类型管理",
+							"href": "类型管理/main.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "用户管理",
+							"href": "user.html",
+							"icon": "fa fa-window-maximize",
+							"target": "_self"
+				        }
+					]
+				},
+				{
+					"title": "客户拜访",
+					"href": "",
+					"icon": "fa fa-home",
+					"target": "_self",
+					"child": [{
+							"title": "客户拜访",
+							"href": "李丹迪crm-ldd/ClientVisit.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "审核管理",
+							"href": "李丹迪crm-ldd/AuditManagement.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						},
+						{
+							"title": "拜访日程",
+							"href": "李丹迪crm-ldd/vs.html",
+							"icon": "fa fa-tachometer",
+							"target": "_self"
+						}
+						
+					]
+				},
+				{
+					"title": "通讯录",
+					"href": "通讯录.html",
+					"icon": "fa fa-window-maximize",
+					"target": "_self"
+				},
+				{
+					"title": "知识库",
+					"href": "李倩楠-crm-0805/knowledge.html",
+					"icon": "fa fa-window-maximize",
+					"target": "_self"
+				}
+			]
+		}
+	}
+}

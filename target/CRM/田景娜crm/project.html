@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>项目管理</title>
+    <link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+</head>
+<body>
+<!-- 搜索条件开始 -->
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>项目信息</legend>
+</fieldset>
+<form action="#" class="layui-form" method="post">
+    <!--<div class="layui-form-item">-->
+        <!--<div class="layui-inline">-->
+            <!--<label class="layui-form-label">项目名称</label>-->
+            <!--<div class="layui-input-block">-->
+                <!--<select id="project_names" name="project_name" lay-filter="pname">-->
+                    <!--<option value="0" selected disabled>请选择</option>-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="layui-form-item" style="text-align: center;">-->
+        <!--<div class="layui-input-block">-->
+            <!--<button type="button" data-type="reload" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-search" id="doSearch">查询</button>-->
+            <!--<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>-->
+        <!--</div>-->
+    <!--</div>-->
+</form>
+<!-- 搜索条件结束 -->
+<!-- 数据表格开始 -->
+<table class="layui-hide" id="FinanceTable" lay-filter="FinanceTable"></table>
+<div style="display: none;" id="rosToolBar">
+    <button type="button" class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+    <button type="button" class="layui-btn layui-btn-sm" lay-event="batchDelete">批量删除</button>
+</div>
+<div  id="rosBar" style="display: none;">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="detailed">详细</a>
+</div>
+<!-- 数据表格结束 -->
+<!-- 添加和修改的弹出层开始 -->
+<div style="display: none;padding: 20px" id="saveOrUpdateRos" >
+<form class="layui-form " action="" lay-filter="dataForm" id="dataForm">
+<div class="layui-form-item">
+<div class="layui-inline" >
+<label class="layui-form-label">Id</label>
+<div class="layui-input-inline">
+<input type="text" id="id" name="id" lay-verify="" autocomplete="off" placeholder="" class="layui-input">
+</div>
+</div>
+<div class="layui-inline">
+<label class="layui-form-label">项目编号</label>
+    <div class="layui-input-inline">
+        <input type="text" class="layui-input" name="identifier" id="identifier" placeholderv placeholder="项目编号">
+    </div>
+</div>
+<div class="layui-inline">
+<label class="layui-form-label">项目名称</label>
+<div class="layui-input-block">
+<select id="project_name" name="project_name" lay-filter="project_name">
+<option value="0">请选择</option>
+</select>
+</div>
+</div>
+</div>
+<div class="layui-form-item">
+<div class="layui-inline">
+<label class="layui-form-label">项目对应商机</label>
+<div class="layui-input-inline">
+<input type="text" class="layui-input" name="business_id" id="business_id" placeholderv placeholder="项目对应商机">
+</div>
+</div>
+<div class="layui-inline">
+<label class="layui-form-label">申请人id</label>
+    <div class="layui-input-inline">
+        <input type="text" id="createp_id" name="createp_id"  autocomplete="off" placeholder="申请人id" class="layui-input">
+    </div>
+</div>
+</div>
+<div class="layui-form-item layui-form-text">
+<div class="layui-inline">
+<label class="layui-form-label">项目状态</label>
+<div class="layui-input-inline">
+<input type="text" id="status" name="status" lay-verify="" autocomplete="off" placeholder="项目状态1或2" class="layui-input">
+</div>
+</div>
+<div class="layui-inline">
+<label class="layui-form-label">上线时间</label>
+<div class="layui-input-block">
+<input type="text" id="uptime" name="uptime" autocomplete="off" placeholder="yyyy-MM-dd" class="layui-input">
+</div>
+</div>
+</div>
+<div class="layui-form-item layui-form-text">
+<div class="layui-inline">
+<label class="layui-form-label">延长上线时间</label>
+<div class="layui-input-inline">
+<input type="text" id="prolong" name="prolong" autocomplete="off" placeholder="yyyy-MM-dd" class="layui-input">
+</div>
+</div>
+<div class="layui-inline">
+<label class="layui-form-label">申请时间</label>
+<div class="layui-input-block">
+    <input type="text" class="layui-input" name="createtime" id="createtime" placeholder="yyyy-MM-dd">
+</div>
+</div>
+</div>
+    <div class="layui-form-item layui-form-text">
+        <div class="layui-inline">
+            <label class="layui-form-label">项目描述</label>
+            <div class="layui-input-inline">
+                <input type="text" id="description" name="description" lay-verify="" autocomplete="off" placeholder="请输入项目描述信息" class="layui-input">
+            </div>
+        </div>
+    </div>
+<div class="layui-form-item" style="text-align: center;">
+<div class="layui-input-block">
+<button type="button"  class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit" lay-submit="">操作</button>
+<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh" >重置</button>
+</div>
+</div>
+</form>
+</div>
+ <!--添加和修改的弹出层结束 -->
+<!--详情的弹出层开始 -->
+<div style="display: none;padding: 20px" id="details">
+
+    <table class="layui-hide" id="test1" lay-filter="test1"></table>
+
+</div>
+<!--详情的弹出层结束 -->
+</body>
+<script src="js/jquery-3.5.1.js"></script>
+<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var data;
+    var index =0;
+    layui.use(['jquery','element','layer','slider','table','laydate','form'],function(){
+        var $ = layui.jquery,
+            layer = layui.layer,
+            table = layui.table,
+            form = layui.form,
+            laydate = layui.laydate;
+        layer.ready(function () {
+            $.getJSON("project1.do?opt=selectProjName",function (Project) {
+                $.each(Project,function (i,p) {
+                    $("#project_names").append("<option value='"+p.project_name+"'>"+p.project_name +"</option>");
+                });
+                form.render();
+            });
+        })
+        laydate.render({
+            elem:'#createtime'
+        });
+        laydate.render({
+            elem:'#prolong'
+        });
+        laydate.render({
+            elem:'#uptime'
+        });
+        //渲染数据表格
+        var tableIns1=table.render({
+            elem: '#FinanceTable'   //渲染的目标对象
+            ,url:'/project1.do?opt=queryAll' //数据接口
+            ,title: '项目管理'//数据导出来的标题
+            ,toolbar:"#rosToolBar"   //表格的工具条
+            ,height:'full-160'
+            ,cellMinWidth:100 //设置列的最小默认宽度
+            ,done:function(res, curr, count){
+            }
+            ,id: 'testReload'
+            ,cols: [[   //列表数据
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'id', title:'ID', sort:true,align:'center'}
+                ,{field:'identifier', title:'项目编号',align:'center'}
+                ,{field:'project_name', title:'项目名称',align:'center'}
+                ,{field:'business_id', title:'项目对应商机', sort:true,align:'center'}
+                ,{field:'createp_id', title:'申请人id', sort:true,align:'center'}
+                ,{field:'status', title:'项目状态',align:'center'}
+                ,{field:'uptime', title:'上线时间',align:'center'}
+                ,{field:'prolong', title:'延长上线时间',align:'center'}
+                ,{field:'createtime', title:'申请时间',align:'center'}
+                ,{field:'description', title:'项目描述',align:'center'}
+                ,{fixed: 'right', title:'操作', toolbar: '#rosBar', width:220,align:'center'}
+            ]]
+            , page: {layout:['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']}
+            ,id:'testReload'
+        });
+        // 查询操作
+        $('#doSearch').on('click', function() {
+            $.ajax({
+                success:function () {
+                    var project_name = $('#project_name').val();
+                    table.reload('testReload',{
+                        where:{project_name:project_name}
+                    });
+                }
+            })
+        });
+        //监听头部工具栏事件
+        table.on("toolbar(FinanceTable)",function(obj){
+            switch(obj.event){
+                case 'add':
+                    form.render();
+                    openAddRos();
+                    break;
+                case 'batchDelete':
+                    delAll();
+                    break;
+            };
+        });
+        //监听行工具事件
+        table.on('tool(FinanceTable)', function(obj){
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            if(layEvent === 'del'){ //删除
+                //layer.msg("删除");
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    //向服务端发送删除指令
+                    delFin(data.id);
+                    //layer.close(index);
+                });
+            } else if(layEvent === 'edit'){ //编辑
+                openUpdateRos(data);
+            }else if (layEvent === 'detailed'){
+                details(data);
+            }
+        });
+        // 删除
+        function delFin(id) {
+            $.post("/project1.do", { opt: "delete", id: id },
+                function(flag){
+                    if(flag==1){
+                        layer.msg("删除成功", {icon: 6});
+                        location.reload();
+                        layer.close(index);
+                    }else{
+                        layer.msg("删除失败", {icon: 5});
+                        location.reload();
+                    }
+                });
+        }
+        //批量删除
+        function delAll(){
+            //获取选中数据
+            var checkStatus = table.checkStatus('testReload'),
+                data = checkStatus.data;
+            if (data == "") {
+                layer.msg('至少也得选一个吧', {icon: 2});
+                return;
+            }
+            var delArray=[];
+            //获取单元格选中的行
+            if (data.length > 0) {
+                for(var i=0;i<data.length;i++){
+                    delArray.push(data[i].id);
+                }
+            }
+            var ids =delArray.join(",");
+            layer.confirm('确认要删除嘛？' + delArray, function (index) {
+                //发起异步请求
+                $.ajax({
+                    type: 'POST',
+                    url: '/project1.do?opt=delBatch',
+                    data: {'delArray': ids},
+                });
+                layer.msg('删除成功！', {icon: 1});
+                location.reload();
+            });
+        }
+        var url;
+        var mainIndex;
+        //打开添加页面
+        function openAddRos(){
+            mainIndex=layer.open({
+                type:1,
+                title:'添加项目信息',
+                content:$("#saveOrUpdateRos"),
+                area:['800px','400px'],
+                success:function(index){
+                    //清空表单数据
+                    $("#dataForm")[0].reset();
+                    $.getJSON("/project1.do?opt=selectProjName",function (Project) {
+                        $.each(Project,function (i,p) {
+                            $("#project_name").append("<option value='"+p.project_name+"'>"+p.project_name +"</option>");
+                        });
+                        form.render();
+                    });
+                    url='/project1.do?opt=add';
+                }
+            });
+        }
+        //打开修改页面
+        function openUpdateRos(data){
+            mainIndex=layer.open({
+                type:1,
+                title:'修改项目信息',
+                content:$("#saveOrUpdateRos"),
+                area:['800px','400px'],
+                success:function(index){
+                    form.val("dataForm",data);
+                    $.getJSON("/project1.do?opt=selectProjName",function (Project) {
+                        $.each(Project,function (i,p) {
+                            $("#project_name").append("<option value='"+p.project_name+"'>"+p.project_name +"</option>");
+                        });
+                        form.render();
+                    });
+                    url='/project1.do?opt=update';
+                }
+            });
+        }
+        var tableContent = new Array();
+        table.render({
+            elem: '#test1'
+            ,url:'/project_task1.do?opt=query'
+            ,title: '任务详情'
+            ,cellMinWidth:200
+            ,cols: [[
+                {type:'checkbox',fixed:'left'}
+                ,{field:'name', title: '任务名称', sort: true,align:'center',width:185}
+                ,{field:'username',  title: '责任人',sort: true,align:'center',width:185}
+                ,{field:'description',  title: '任务描述',align:'center',width:185}
+            ]]
+            /*,page: {layout:['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']}*/
+            ,id:'testR'
+        });
+        var total_amount;
+        /**
+         * 详情页面弹出层
+         * */
+        function details(data) {
+            layer.open({
+                    type: 1
+                    , skin: 'layui-layer-lan'
+                    , title: '任务详情' //不显示标题栏
+                    , closeBtn: 1
+                    , area: ['800px', '400px'] //控制弹窗大小
+                    , offset: 'auto' /*offset: ['20px', '300px']*/ //具体位置 顶部，左侧
+                    , btnAlign: 'c'
+                    , code: '0'
+                    , content: $("#details")   //调用任务详情页面
+                    , moveType: 1 //拖拽模式，0或者1
+                    , success: function () {
+                        table.reload("testR",{
+                            where:{project_name:data.project_name},
+                        });
+                    },
+                    end:function () {
+                        window.location.href = "project.html";
+                    }
+                }
+            )
+        }
+        //保存
+        form.on("submit(doSubmit)",function(obj){
+            //alert(JSON.stringify(obj.field));
+            $.get(
+                url,
+                {"id":$("#id").val(),
+                    "identifier":$("#identifier").val(),
+                    "project_name":$("#project_name").val(),
+                    "business_id":$("#business_id").val(),
+                    "createp_id":$("#createp_id").val(),
+                    "status":$("#status").val(),
+                    "uptime":$("#uptime").val(),
+                    "prolong":$("#prolong").val(),
+                    "createtime":$("#createtime").val(),
+                    "description":$("#description").val()},
+                function (flag){
+                    if(flag==0){
+                        alert("恭喜您操作成功!");
+                        window.location.href="project.html";
+                    }else{
+                        alert("操作失败!");
+                        window.location.href="project.html";
+                    }
+                },"json");
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>
+</html>

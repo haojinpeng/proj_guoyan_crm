@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>工单处理</title>
+	<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+</head>
+<style type="text/css">
+	/**自定义滚动条样式 */
+	::-webkit-scrollbar {width: 4px;height: 4px}
+	::-webkit-scrollbar-track {background-color: transparent;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em;}
+	::-webkit-scrollbar-thumb {background-color: #9c9da0;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em}
+</style>
+
+
+<!-- 搜索条件结束 -->
+
+<!-- 数据表格开始 -->
+<table class="layui-hide" id="userTable" lay-filter="userTable"></table>
+<div style="display: none;" id="userToolBar" >
+	<form action="" class="layui-form" method="post">
+		<form class="layui-form " action="" lay-filter="dataFrm1" id="dataFrm1">
+			<div class="layui-form-item" >
+
+				<label class="layui-form-label" style="width: auto;">工单编号:</label>
+				<div class="layui-input-inline" >
+					<input type="tel" name="number" id="number"  autocomplete="off" class="layui-input">
+				</div>
+
+				<label class="layui-form-label">状态：</label>
+				<div class="layui-input-inline">
+					<select name="status"  lay-verify="required" lay-filter="selectfilter">
+						<option value="0"></option>
+						<option value="1">已处理</option>
+						<option value="2">待处理</option>
+					</select>
+				</div>
+
+				<button type="button" class="layui-btn layui-btn-sm layui-icon layui-icon-search"  id="doSearch" data-type="reload">查询</button>&nbsp;&nbsp;&nbsp;
+				<button type="reset" class="layui-btn layui-btn-primary layui-btn-sm ">重置</button>&nbsp;&nbsp;
+				<!--				<button type="button" class="layui-btn layui-btn-sm" id="btn1">添加记录</button>-->
+
+
+
+			</div>
+
+		</form>
+
+	</form>
+</div>
+<div id="userBar" style="display: none;">
+
+	<button class="layui-btn layui-btn-xs btn" id="btn" lay-event="edit">处理</button>
+
+</div>
+<!-- 数据表格结束 -->
+
+
+<!--添加-->
+<div style="display: none;padding: 20px;line-height:20px" id="addDiv">
+	<form class="layui-form " action="" lay-filter="dataFrm2" id="dataFrm2">
+		<div class="layui-block">
+			<label class="layui-form-label">客户名称:</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" name="customer_name" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">项目名称:</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" name="project_name" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">接受时间：</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" class="layui-input" name="receive_time" id="receive_time" placeholder="yyyy-MM-dd">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">处理期限：</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" class="layui-input" name="require_time" id="require_time" placeholder="yyyy-MM-dd">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">接受人：</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" name="username" id="username" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">问题描述：</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" name="problem_description" id="problem_description" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">当前状态：</label>
+			<div class="layui-input-block">
+				<input type="radio" name="status" value="1" title="已处理">
+				<input type="radio" name="status" value="2" title="未处理" checked>
+			</div>
+		</div>
+
+
+		<div class="layui-block">
+			<div class="layui-input-block" style="margin-left: 100px;">
+				<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+						lay-submit="">提交</button>
+				<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+
+
+<!--处理-->
+<div style="display: none;padding: 20px;line-height:20px" id="doDiv">
+	<form class="layui-form " action="" lay-filter="dataFrm3" id="dataFrm3">
+		<div class="layui-block">
+			<label class="layui-form-label">工单编号:</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" name="number" id="number2" autocomplete="off" class="layui-input" title="只读"  disabled="disabled">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">客户名称:</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" name="customer_name" autocomplete="off" class="layui-input" title="只读"  disabled="disabled">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">项目名称:</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" name="project_name" autocomplete="off" class="layui-input" title="只读"  disabled="disabled">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">接受时间：</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" class="layui-input" name="receive_time"  placeholder="yyyy-MM-dd" title="只读"  disabled="disabled">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">处理期限：</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" class="layui-input" name="require_time"  placeholder="yyyy-MM-dd" title="只读"  disabled="disabled">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">接受人:</label>
+			<div class="layui-input-inline">
+				<select name="username" id="usernames" lay-verify="required" >	</select>
+
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">问题描述：</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" name="problem_description"  autocomplete="off" class="layui-input" title="只读"  disabled="disabled">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">处理方案：</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" name="problem_solve"  autocomplete="off" class="layui-input" title="只读"  disabled="disabled">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">备注：</label>
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" name="remarks"  autocomplete="off" class="layui-input" title="只读"  disabled="disabled">
+			</div>
+		</div>
+		<div class="layui-block">
+			<label class="layui-form-label">当前状态：</label>
+			<div class="layui-input-block" id="LAY_layedit_code">
+				<input type="radio" name="status" value="1" title="已处理">
+				<input type="radio" name="status" value="2" title="未处理">
+			</div>
+		</div>
+
+
+		<div class="layui-block">
+			<div class="layui-block" style="margin-left: 100px;">
+				<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+						lay-submit="" class="layui-input-inline" >确认转发</button>
+				<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+
+</body>
+
+<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table', 'layer', 'laydate', 'form'], function() {
+
+		var $ = layui.jquery,
+				slider = layui.slider,
+				element = layui.element,
+				form = layui.form,
+				table = layui.table,
+				laydate = layui.laydate,
+				rate = layui.rate,
+				layer = layui.layer,
+				carousel = layui.carousel;
+
+		laydate.render({
+			elem:'#createtime'
+		});
+
+
+
+
+
+		//渲染数据表格
+		table.render({
+			elem: '#userTable',
+			url:'../workorder.do?opt=queryalldoit',//数据接口
+			toolbar: '#userToolBar',
+			cellMinWidth: 40,
+			title: '用户数据表',
+			cols: [[
+				{
+					type: 'checkbox',
+					fixed: 'left'
+				},{
+					field: 'id',
+					title: 'ID',
+					sort: true,
+					align: 'center'
+				},{
+					field: 'number',
+					title: '工单编号',
+					sort: true,
+					align: 'center'
+				}, {
+					field: 'recive_uer',
+					title: '委托人员工号',
+					sort: true,
+					align: 'center'
+				}, {
+					field: 'username',
+					title: '接受人',
+					align: 'center'
+				}, {
+					field: 'problem_solve',
+					title: '解决方案',
+					align: 'center'
+				}, {
+					field: 'remarks',
+					title: '备注',
+					align: 'center'
+				},{
+					field: 'status',
+					title: '当前状态',
+					align: 'center',
+					templetl:function(d){
+						return d.status = 1?'已处理':'待处理';
+					}
+
+				},{
+					fixed: 'right',
+					title: '操作',
+					toolbar: '#userBar',
+					width: 280,
+					align: 'center'
+				}
+			]]
+			, page: {layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']}
+			, id: 'testReload'
+		});
+
+
+
+
+		//模糊查询
+		var status;
+		form.on('select(selectfilter)', function (data) {
+			status = data.value;
+		});
+
+		$("#doSearch").click(function () {
+
+			var number = $("#number").val();
+			//只重载数据
+			alert(number,status);
+			table.reload('testReload', {
+				where: { //设定异步数据接口的额外参数，任意设
+
+					status:status,
+					number:number,
+				}
+				, page: {
+					curr: 1 //重新从第 1 页开始
+				}
+			});
+		});
+
+		/**
+		 * 监听头工具栏事件
+		 * */
+		table.on('toolbar(userTable)', function (obj) {
+			var checkStatus = table.checkStatus(obj.config.id);
+
+		});
+		//处理不可用
+		// var radio=$("#LAY_layedit_code input[type='radio']").val();
+		// alert(radio);
+		// $(function () {
+		// 	if(radio==1){
+		// 		$(".btn").attr({"disabled":"disabled"});
+		// 	}
+		//
+		// });
+
+
+
+		//监听行工具事件
+		table.on('tool(userTable)', function (obj) {
+			var data = obj.data; //获得当前行数据
+			var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+			if (obj.event === 'del') { //删除
+				layer.msg("删除");
+				layer.confirm('是否删除记录！', function (index) {
+					obj.del();
+					//向服务端发送删除指令
+
+					delOne(obj.data.identifier);
+
+					layer.close(index);
+				});
+			} else if(layEvent === 'edit') {//处理
+
+
+				$.ajax({
+					type:'post',
+					url:'../workorder.do?opt=doshow',
+					data:{"number2":data.number},
+
+					success: function (jsonArray) {
+						//alert("data.number"+data.number);
+						//alert(JSON.stringify(jsonArray));
+						$.each(jsonArray,function (i,item){
+							//alert(JSON.stringify(item));
+							//alert(item.customer_name);
+							form.val("dataFrm3",{"customer_name":item.customer_name,
+										"project_name":item.project_name,
+										"receive_time":item.receive_time,
+										"require_time":item.require_time,
+										"problem_description":item.problem_description,
+									}
+
+							);
+
+						});
+
+					}
+				});
+
+
+				openshow(data);
+
+
+
+			}
+		});
+
+
+
+		//打开处理页面
+		function openshow(data) {
+
+			layer.open({
+				type: 1,
+				title: '处理工单信息',
+				content: $("#doDiv"),
+				area: ['400px', '400px'],
+				success: function(index) {
+					alert("open");
+					form.val("dataFrm3", data);
+					$.getJSON("../workorder.do?opt=finduser", function (types2) {
+						// $("#usernames").empty();
+						$("#usernames").append("<option value=123>请选择 </option>");
+						$.each(types2, function (i, type2) {
+							$("#usernames").append("<option value=" + type2.username + ">" + type2.username + "</option>");
+						});
+						form.render();
+					});
+
+					alert("kkkkkkkk");
+					url="../workorder.do?opt=update";
+					alert(url);
+
+				}
+			});
+		}
+
+		/**
+		 * 监听提交
+		 * */
+
+		form.on('submit(doSubmit)', function (data) {
+
+			alert("开始修改");
+			alert(JSON.stringify(data.field)+"kkkkkkkkkkk");
+			alert(url);
+			$.get(
+					url,
+					data.field,
+					function (flag) {
+						if (flag == 1) {
+							alert("恭喜您操作成功!");
+							window.location.href = "工单处理.html";
+						} else {
+							alert("操作失败!");
+							window.location.href = "工单处理.html";
+						}
+					}, "json");
+
+		});
+		return false;
+
+	});
+</script>
+
+</html>

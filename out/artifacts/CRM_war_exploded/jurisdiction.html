@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>权限管理</title>
+    <link rel="stylesheet" href="resources/layui/css/layui.css">
+</head>
+<style>
+    /**自定义滚动条样式 */
+    ::-webkit-scrollbar {
+        width: 4px;
+        height: 4px
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+        -webkit-border-radius: 2em;
+        -moz-border-radius: 2em;
+        border-radius: 2em;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #9c9da0;
+        -webkit-border-radius: 2em;
+        -moz-border-radius: 2em;
+        border-radius: 2em
+    }
+</style>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>权限管理</legend>
+</fieldset>
+
+<!-- 数据表格开始 -->
+<table class="layui-hide" id="updatePowerTable" lay-filter="updatePowerTable"></table>
+
+<div style="display: none;" id="updatePowerToolBar">
+    <form action="" class="layui-form" method="post">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">权限名:</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="power_name" name="power_name" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"><span>权限路径:</span></label>
+                <div class="layui-input-inline">
+                    <input type="text" id="power_path" name="power_path" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline" id="buttonOfForm">
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-search"
+                        id="doSearch" lay-event="doSearch">查询
+                </button>
+<!--                <button type="button" class="layui-btn layui-btn-sm" lay-event="add">增加</button>-->
+<!--                <button type="button" class="layui-btn layui-btn-sm" lay-event="batchDelete">批量删除</button>-->
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="updatePowerBar" style="display: none;">
+<!--    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+<!--    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+</div>
+<!-- 数据表格结束 -->
+
+<!-- 添加的弹出层开始 -->
+<div style="display: none;padding: 20px" id="powerAddDiv">
+    <form class="layui-form " action="" lay-filter="powerAddFrm" id="powerAddFrm">
+        <div class="layui-form-item" style="display: none">
+            <div class="layui-inline">
+                <input type="text" id="id" name="id" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">权限名:</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="name" name="name" lay-verify="required" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label"><span>权限路径:</span></label>
+                <div class="layui-input-inline">
+                    <input type="text" id="path" name="path" lay-verify="required" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center;">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release"
+                        lay-filter="doSubmit" lay-submit="">提交
+                </button>
+                <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- 添加的弹出层结束 -->
+
+<script src="resources/layui/layui.js"></script>
+
+
+<script>
+    layui.use(['jquery', 'form'], function () {
+        var $ = layui.jquery,
+            form = layui.form;
+        //分配权限
+        $(function () {
+            $.ajax({
+                url: "resource.do?opt=quanxian",
+                type: "GET",
+                dataType: "json",
+                cache: false,
+                asyns: false,
+                success: function (data) {
+                    $.each(data, function (k, v) {
+                        // alert("name=====" + v.name);
+
+                        if ('添加' == v.name) {
+                            $("#buttonOfForm").append(
+                                ' <button type="button" class="layui-btn layui-btn-sm" lay-event="add">增加</button>'
+                                // "<button type=\"button\" class=\"layui-btn layui-btn-sm\" lay-event=\"add\" id=\"add\">增加</button>"
+                            )
+                        }
+                        if ('批量删除' == v.name) {
+                            $("#buttonOfForm").append(
+                                '<button type="button" class="layui-btn layui-btn-sm" lay-event="batchDelete">批量删除</button>'
+                                // "<button type=\"button\" class=\"layui-btn layui-btn-sm\" lay-event=\"batchDelete\" id=\"deleteAll\">批量删除</button>"
+                            )
+                        }
+
+                        if ('编辑' == v.name) {
+                            $("#updatePowerBar").append(
+                            '<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>'
+
+                                // '<button class="layui-btn layui-btn-xs" lay-event="edit" id="edit">编辑</button>'
+                            )
+                        }
+                        if ('删除' == v.name) {
+                            $("#updatePowerBar").append(
+                                ' <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>'
+                                // '<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" id="del">删除</button>'
+                            )
+                        }
+                    })
+                },
+                error: function (e) {
+                    alert("无权限，请重新刷新");
+                }
+            });
+
+        });
+    })
+</script>
+
+
+<script type="text/html" id="no">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
+<script type="text/javascript">
+    layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table', 'layer', 'laydate', 'form'], function () {
+
+        var $ = layui.jquery,
+            slider = layui.slider,
+            element = layui.element,
+            form = layui.form,
+            table = layui.table,
+            laydate = layui.laydate,
+            rate = layui.rate,
+            layer = layui.layer,
+            carousel = layui.carousel;
+
+        //渲染数据表格
+        setTimeout(function () {
+            var tableIns = table.render({
+                    elem: '#updatePowerTable' //渲染的目标对象
+                    , url: 'jurisdiction.do?opt=queryAll' //数据接口
+                    , title: '权限数据表' //数据导出来的标题
+                    , toolbar: "#updatePowerToolBar" //表格的工具条
+                    // , height: 'full-300'
+                    , cellMinWidth: 100 //设置列的最小默认宽度
+                    , done: function (res, curr, count) {
+                    }
+                    // , page: true //是否启用分页
+                    , cols: [[ //列表数据
+                        {type: 'checkbox', fixed: 'left'}
+                        , {field: 'no', title: '序号', sort: true, type: 'numbers', width: 220, align: 'center'}
+                        , {field: 'id', title: 'ID', sort: true, align: 'center'}
+                        , {field: 'name', title: '权限名', sort: true, align: 'center'}
+                        , {field: 'path', title: '权限访问路径', align: 'center'}
+                        , {fixed: 'right', title: '操作', toolbar: '#updatePowerBar', width: 220, align: 'center'}
+                    ]]
+                    , page: {layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']}
+                    , id: 'testReload'
+                })
+            ;
+        }, 500);
+
+        //监听头部工具栏事件
+        table.on("toolbar(updatePowerTable)", function (obj) {
+            switch (obj.event) {
+                case 'doSearch':
+                    queryLike();
+                    break;
+                case 'add':
+                    openAddPower();
+                    break;
+                case 'batchDelete':
+                    // layer.msg('批量删除');
+                    delAll();
+                    break;
+            }
+            ;
+        });
+
+        //监听行工具事件
+        table.on('tool(updatePowerTable)', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            if (layEvent === 'del') { //删除
+                // layer.msg("删除");
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    del(obj.data.id);
+                    // layer.close(index);
+                    //向服务端发送删除指令
+                });
+            } else if (layEvent === 'edit') { //编辑
+                openUpdatePower(data);
+            }
+        });
+
+        var url;
+        var mainIndex;
+
+        //模糊查询
+        function queryLike() {
+            var name = $("#power_name").val(), path = $("#power_path").val();
+            //alert(search_name);
+            table.reload('testReload', {
+                where: {name: name, path: path}
+            });
+        }
+
+        //打开添加页面
+        function openAddPower() {
+            mainIndex = layer.open({
+                type: 1,
+                title: '添加权限',
+                content: $("#powerAddDiv"),
+                area: ['800px', '400px'],
+                success: function (index) {
+                    //清空表单数据
+                    $("#powerAddFrm")[0].reset();
+                    url = "jurisdiction.do?opt=add";
+                }
+            });
+        }
+
+        //批量删除
+        function delAll() {
+            //获取选中数据
+            var checkStatus = table.checkStatus('testReload'),
+                data = checkStatus.data;
+            if (data == "") {
+                layer.msg('至少也得选一个吧', {icon: 2});
+                return;
+            }
+            var delArray = [];
+            //获取单元格选中的行
+            if (data.length > 0) {
+                for (var i = 0; i < data.length; i++) {
+                    delArray.push(data[i].id);
+                }
+            }
+            var ids = delArray.join(",");
+            layer.confirm('确认要删除嘛？' + delArray, function (index) {
+                //发起异步请求
+                $.ajax({
+                    type: 'POST',
+                    url: 'jurisdiction.do?opt=delete',
+                    data: {'delArray': ids},
+                });
+                // layer.msg('删除成功！', {icon: 1});
+                location.reload();
+            });
+        }
+
+        //删除操作
+        function del(id) {
+            $.post(
+                "jurisdiction.do",
+                {opt: "delete", id: id},
+                function (flag) {
+                    if (flag == 1) {
+                        layer.msg("删除成功", {icon: 6});
+                        location.reload();
+                        layer.close(index);
+                    } else {
+                        layer.msg("删除失败", {icon: 5});
+                        location.reload();
+                    }
+                }
+            );
+        }
+
+        //打开修改页面
+        function openUpdatePower(data) {
+            mainIndex = layer.open({
+                type: 1,
+                title: '修改权限',
+                content: $("#powerAddDiv"),
+                area: ['800px', '400px'],
+                success: function (index) {
+                    form.val("powerAddFrm", data);
+                    url = "jurisdiction.do?opt=update";
+                }
+            });
+        }
+
+        //添加和修改的具体操作
+        form.on('submit(doSubmit)', function (data) {
+            // alert(JSON.stringify(data.field));
+            layer.close(mainIndex);
+            $.get(
+                url,
+                {"id": $("#id").val(), "name": $("#name").val(), path: $("#path").val()},
+                // {"sno":$("#sno").val(),"sname":$("#sname").val(),"ssex":$("#ssex").val(),"sbirthday":$("#sbirthday").val(),"classs":$("#classs").val()},
+                function (flag) {
+                    if (flag == 1) {
+                        alert("恭喜您操作成功!");
+                        // window.location.href="query.html";
+                    } else {
+                        alert("操作失败!");
+                        // window.location.href="query.html";
+                    }
+                    window.location.href = "jurisdiction.html";
+                }
+            );
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>
+</body>
+
+</html>

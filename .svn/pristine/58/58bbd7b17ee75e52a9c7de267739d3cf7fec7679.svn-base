@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+
+	</head>
+	<style>
+		/**自定义滚动条样式 */
+		
+		 ::-webkit-scrollbar {
+			width: 4px;
+			height: 4px
+		}
+		
+		 ::-webkit-scrollbar-track {
+			background-color: transparent;
+			-webkit-border-radius: 2em;
+			-moz-border-radius: 2em;
+			border-radius: 2em;
+		}
+		
+		 ::-webkit-scrollbar-thumb {
+			background-color: #9c9da0;
+			-webkit-border-radius: 2em;
+			-moz-border-radius: 2em;
+			border-radius: 2em
+		}
+	</style>
+
+	<body>
+		<!--用户管理-->
+
+		<div class="layui-tab" lay-filter="demo" lay-allowclose="true">
+			
+			<div class="layui-tab-content">
+				<div class="layui-tab-item layui-show">
+				
+					<form action="" class="layui-form" method="post">
+						<div class="layui-form-item" style="margin-top: -10px;">
+							<div class="layui-inline">
+								<label class="layui-form-label">客户编号:</label>
+								<div class="layui-input-inline" style="margin-top: 5px;">
+									<input type="text" name="id" autocomplete="off" class="layui-input" style="width: 120px;height: 30px;">
+								</div>
+							</div>
+							<div class="layui-inline" style="margin-left: -110px;">
+								<label class="layui-form-label">客户名称:</label>
+								<div class="layui-input-inline" style="margin-top: 5px;">
+									<input type="text" name="username" autocomplete="off" class="layui-input" style="width: 120px;height: 30px;">
+								</div>
+							</div>
+							<div class="layui-inline" style="margin-left: -110px;">
+								<label class="layui-form-label">所在国家:</label>
+								<div class="layui-input-inline" style="margin-top: 5px;">
+									<input type="text" name="age" autocomplete="off" class="layui-input" style="width: 120px;height: 30px;">
+								</div>
+							</div>
+
+						</div>
+
+						<div class="layui-form-item" style="text-align: center;">
+							<div class="layui-input-block" style="margin-top: -54px;margin-left: 700px;width: 150px;">
+								<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-search" id="doSearch">查询</button>
+								<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+							</div>
+						</div>
+					</form>
+					<!-- 数据表格开始 -->
+					<table class="layui-hide" id="userTable" lay-filter="userTable"></table>
+					<div style="display: none;" id="userToolBar">
+
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="add">增加</button>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="batchDelete">批量删除</button>
+					</div>
+					<div id="userBar" style="display: none;">
+						<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+						<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+						<a class="layui-btn layui-btn-xs" lay-event="edit" href="guest.html">预览</a>
+					</div>
+					<!-- 数据表格结束 -->
+
+					<!-- 添加和修改的弹出层开始 -->
+					<div style="display: none;padding: 20px" id="saveOrUpdateDiv">
+						<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									<label class="layui-form-label">编号:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="id" lay-verify="required" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+
+								<div class="layui-inline">
+									<label class="layui-form-label">客户名称:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="username" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									<label class="layui-form-label">所在国家:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="age" lay-verify="required" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								
+								<div class="layui-inline">
+									<label class="layui-form-label">所在省:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="user" lay-verify="required" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<br><br>
+
+								<div class="layui-inline">
+									<label class="layui-form-label">所在城市:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="password" lay-verify="required" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-inline">
+									<label class="layui-form-label">详细地址:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="password" lay-verify="required" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<br><br>
+
+								<div class="layui-inline">
+									<label class="layui-form-label">客户类型:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="password" lay-verify="required" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-inline">
+									<label class="layui-form-label">联系人:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="password" lay-verify="required" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+							
+							</div>
+							
+							<div class="layui-form-item" style="text-align: center;">
+								<div class="layui-input-block">
+									<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit" lay-submit="">提交</button>
+									<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+								</div>
+							</div>
+						</form>
+
+					</div>
+					<!-- 添加和修改的弹出层结束 -->
+				</div>
+
+			</div>
+
+		</div>
+
+		<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/user.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+
+</html>

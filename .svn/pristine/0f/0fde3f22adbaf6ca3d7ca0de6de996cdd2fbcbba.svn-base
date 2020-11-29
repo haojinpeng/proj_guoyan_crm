@@ -1,0 +1,247 @@
+<!DOCTYPE html >
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>采购审批</title>
+		<link rel="stylesheet" href="resources/layui/css/layui.css">
+	</head>
+
+	<body class="layui-layout-body">
+
+		<!-- 身体部分开始 -->
+<div style="margin-top: 20px; margin-bottom: 10px; margin-left: 10px; margin-right: 10px;">
+
+	<!-- 数据表格开始 -->
+	<table class="layui-hide" id="shenhetable" lay-filter="shenhetable"></table>
+	<div style="display: none;" id="userToolBar">
+		<div class="layui-form-item" style="height: 30px;">
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: auto;">审核人</label>
+				<input type="text" name="cainame" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入关键字"
+				 style="width: 180px;">
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: auto;">费用申请表</label>
+				<input type="text" name="caitype" id="caitype" lay-verify="required" placeholder="请输入关键字" autocomplete="off" class="layui-input"
+				 style="width: 180px;">
+			</div>
+			<div class="layui-inline">
+				<div class="layui-input-block" style="margin-left: 5px;">
+				<label class="layui-form-label" style="width: auto;">审核时间</label>
+				<input type="text" name="time" class="layui-input" id="test1" placeholder="yyyy-MM-dd" style="width: 180px;">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<button type="submit" class="layui-btn layui-btn" style="margin-left: 10px;">查询</button>
+
+			</div>
+		</div>
+	</div>
+	<div id="userBar" style="display: none;">
+		<a class="layui-btn layui-btn-xs" lay-event="tijiao">处理审核</a>
+		<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="liuchengtu">审核流程</a>
+	</div>
+	<!-- 数据表格结束 -->
+</div>
+<!-- 身体部分结束 -->
+
+<!-- 添加和修改的弹出层开始 -->
+<div style="display: none;padding: 10px" id="saveOrUpdateDiv">
+	<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">审核状态:</label>
+				<div class="layui-input-inline">
+					<input type="radio" name="sta" value="1" checked="checked" title="同意">
+					<input type="radio" name="sta" value="0" title="驳回">
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-form-item ">
+			<div class="layui-inline">
+				<label class="layui-form-label" style="margin-left: -2px;">审核人员</label>
+				<div class="layui-input-inline layui-form-pane">
+					<div class="layui-input-block layui-form" style="margin-left: 0px;">
+						<select name="audit_people" lay-filter="audit_people">
+							<option value="" selected="">请选择</option>
+							<option value="0">审核人1</option>
+							<option value="1">审核人2</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-form-item layui-input-inline">
+			<label class="layui-form-label" style="margin-left: -5px;">审核时间:</label>
+			<div class="layui-input-block" style="margin-left: 110px; margin-top: 0px;">
+				<input type="text" class="layui-input" id="test2" placeholder="请选择审核时间">
+			</div>
+		</div>
+
+		<div class="layui-form-item ">
+			<label class="layui-form-label" style="margin-left: -5px;">审核描述:</label>
+		</div>
+		<div class="layui-form-item layui-form-text">
+
+			<div class="layui-input-block" style="margin-left: 140px; margin-top: 0px;">
+				<textarea placeholder="添加审批批注" class="layui-textarea" style="margin-left: -110px; margin-top: -12px;" name="text"></textarea>
+			</div>
+		</div>
+
+		<div class="layui-form-item" style="text-align: center;">
+			<div class="layui-input-block">
+				<button type="submit" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+				 lay-submit="">提交</button>
+				<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+<!-- 添加和修改的弹出层结束 -->
+
+<script src="resources/layui/layui.js"></script>
+<script>
+	layui.use(['jquery', 'layer', 'form', 'table', 'laydate', 'element'], function() {
+		var $ = layui.jquery;
+		var layer = layui.layer;
+		var element = layui.element;
+		var form = layui.form;
+		var table = layui.table;
+		var laydate = layui.laydate;
+
+		//日期范围
+		laydate.render({
+			elem: '#test1',
+		});
+		laydate.render({
+			elem: '#test2',
+		});
+
+		//绑定时间选择器
+		laydate.render({
+			elem: '#startTime'
+		});
+		laydate.render({
+			elem: '#endTime'
+		})
+
+
+		//渲染数据表格
+		table.render({
+			elem: '#shenhetable', //渲染的目标对象
+
+			url: 'js/shenhe.json' //数据接口
+				,
+			title: '采购审核表' //数据导出来的标题
+				/* ,toolbar:"<div>xxx</div>" */
+				,
+			toolbar: "#userToolBar" //表格的工具条
+				,
+			defaultToolbar: ['filter', 'print', 'exports', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+					title: '提示',
+					layEvent: 'LAYTABLE_TIPS',
+					icon: 'layui-icon-tips'
+				}]
+				/* ,height:300 */
+				,
+			height: 'full-110',
+			cellMinWidth: 100 //设置列的最小默认宽度
+				,
+			done: function(res, curr, count) {
+				/* alert(res);//后台url返回的json串
+				alert(curr);//当前页
+				alert(count);//数据总条数 */
+			},
+			totalRow: true //开启合并行
+				,
+			page: true //是否启用分页
+				/*   ,limit:20 //设置每页显示条数 默认为10
+				  ,limits:[20,40,60,80] */
+				,
+			text: {
+				none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+			},
+			cols: [
+				[ //列表数据
+					{
+						type: 'checkbox',
+						fixed: 'left'
+					}, {
+						field: 'id',
+						title: 'ID',
+						
+						sort: true,
+						align: 'center'
+					}, {
+						field: 'expenses_id',
+						title: '费用审核表',
+						
+						sort: true,
+						align: 'center'
+					}, {
+						field: 'reviewer_id',
+						title: '审核人',
+						
+						align: 'center'
+					}, {
+						field: 'createtime',
+						title: '审核时间',
+						
+						align: 'center'
+					}, {
+						field: 'status',
+						title: '审核状态',
+						
+						align: 'center'
+					}, {
+						field: 'description',
+						title: '审核描述',
+						align: 'center'
+						
+					}, {
+						fixed: 'right',
+						title: '操作',
+						
+						align: 'center',
+						toolbar: '#userBar'
+					}
+				]
+			]
+		});
+
+
+
+		//监听行工具事件
+		table.on('tool(shenhetable)', function(obj) {
+			var data = obj.data; //获得当前行数据
+			var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+			if (layEvent === 'edit') { //编辑
+				openUpdateUser(data);
+			} else if (layEvent === 'tijiao') {
+				openAddUser();
+			}
+		});
+
+		var url;
+		var mainIndex;
+		//打开审核页面
+		function openAddUser() {
+			mainIndex = layer.open({
+				type: 1,
+				title: '处理审核',
+				content: $("#saveOrUpdateDiv"),
+				area: ['600px', '400px'],
+				success: function(index) {
+					//清空表单数据       
+					$("#dataFrm")[0].reset();
+					url = "user/addUser.action";
+				}
+			});
+		}
+	});
+</script>
+</body>
+</html>

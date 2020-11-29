@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+        <link rel="stylesheet" type="text/css" href="resrouces/layui/layui/css/layui.css"/>
+        <style type="text/css">
+            .container{
+                padding: 20px;
+            }
+            .vs-left{
+                
+            }
+            .vscontent{
+                width: 95%;
+                padding-left: 10px;
+                height: 50px;
+                line-height: 50px;
+                border-left: 3px solid #009688;
+                background-color: #F2F2F2;
+            }
+            .a1{
+                color: #666666;
+                text-decoration: none;
+            }
+            .a1:hover{
+                color: #666666;
+                 text-decoration: none;
+            }
+        </style>
+	</head>
+	<body>
+        <div class="layui-row container">
+            <!-- 左侧时间线 -->
+            <div class="layui-col-md4 " style="float: left;">
+                <ul class="layui-timeline">
+                    <li class="layui-timeline-item">
+                      <i class="layui-icon layui-timeline-axis"></i>
+                      <div class="layui-timeline-content layui-text">
+                        <h3 class="layui-timeline-title">2020年8月1日</h3>
+                        <div class="vscontent">
+                            <a class="a1" href="vsdemo1.html" target="f2" style="color: #666666;text-decoration: none;cursor: pointer;">
+                                XX公司负责人来我司洽谈合作事宜。
+                            </a>
+                            </div>
+                      </div>
+                    </li>
+                    <li class="layui-timeline-item">
+                      <i class="layui-icon layui-timeline-axis"></i>
+                      <div class="layui-timeline-content layui-text">
+                        <h3 class="layui-timeline-title">2020年7月27日</h3>
+                        <div class="vscontent">
+                            <a class="a1" href="vsdemo2.html" target="f2" style="color: #666666;text-decoration: none;cursor: pointer;">
+                                XX公司负责人来我司洽谈合作事宜。
+                            </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="layui-timeline-item">
+                      <i class="layui-icon layui-timeline-axis"></i>
+                      <div class="layui-timeline-content layui-text">
+                        <h3 class="layui-timeline-title">2020年7月24日</h3>
+                        <div class="vscontent">
+                            <a class="a1" href="vsdemo1.html" target="f2" style="color: #666666;text-decoration: none;cursor: pointer;">
+                                XX公司负责人来我司洽谈合作事宜。
+                            </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="layui-timeline-item">
+                      <i class="layui-icon layui-timeline-axis"></i>
+                      <div class="layui-timeline-content layui-text">
+                        <h3 class="layui-timeline-title">2020年7月23日</h3>
+                        <div class="vscontent">
+                            <a class="a1" href="vsdemo2.html" target="f2" style="color: #666666;text-decoration: none;cursor: pointer;">
+                                XX公司负责人来我司洽谈合作事宜。
+                            </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="layui-timeline-item">
+                      <i class="layui-icon layui-timeline-axis"></i>
+                      <div class="layui-timeline-content layui-text">
+                        <h3 class="layui-timeline-title">2020年7月21日</h3>
+                        <div class="vscontent">
+                            <a class="a1" href="vsdemo1.html" target="f2" style="color: #666666;text-decoration: none;cursor: pointer;">
+                                XX公司负责人来我司洽谈合作事宜。
+                            </a>
+                        </div>
+                      </div>
+                    </li>
+                  <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                      <h3 class="layui-timeline-title">2020年7月19日</h3>
+                      <div class="vscontent">
+                          <a class="a1" href="vsdemo2.html" target="f2" style="color: #666666;text-decoration: none;cursor: pointer;">
+                              XX公司负责人来我司洽谈合作事宜。
+                          </a>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                      <h3 class="layui-timeline-title">2020年7月18日</h3>
+                      <div class="vscontent">
+                          <a class="a1" href="vsdemo1.html" target="f2" style="color: #666666;text-decoration: none;cursor: pointer;">
+                              XX公司负责人来我司洽谈合作事宜。
+                          </a>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                      <h3 class="layui-timeline-title">2020年7月12日</h3>
+                      <div class="vscontent">
+                          <a class="a1" href="vsdemo1.html" target="f2" style="color: #666666;text-decoration: none;cursor: pointer;">
+                              XX公司负责人来我司洽谈合作事宜。
+                          </a>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                      <h3 class="layui-timeline-title">2020年6月20日</h3>
+                      <div class="vscontent">
+                          <a class="a1" href="vsdemo1.html" target="f2" style="color: #666666;text-decoration: none;cursor: pointer;">
+                              XX公司负责人来我司洽谈合作事宜。
+                          </a>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                      <h3 class="layui-timeline-title">2020年6月18日</h3>
+                      <div class="vscontent">
+                          <a class="a1" href="vsdemo1.html" target="f2" style="color: #666666;text-decoration: none;cursor: pointer;">
+                              XX公司负责人来我司洽谈合作事宜。
+                          </a>
+                      </div>
+                    </div>
+                  </li>
+                </ul> 
+            </div>
+            <!-- 左侧结束 -->
+            
+            <!-- 右侧详情 -->
+            <div class="layui-col-md7">
+                <div  style="width: 60%;margin-left: 30px;margin-top: 30px; background-color: #F2F2F2;position: fixed;">
+                    <div class="fly-panel">
+                        <!--<div class="fly-none">没有权限</div>-->
+                        <div class="layui-form layui-form-pane">
+                            <div class="layui-tab layui-tab-brief" lay-filter="user">
+                                <ul class="layui-tab-title">
+                                    <li class="layui-this">拜访日程</li>
+                                </ul>
+                                <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+                                    <div class="layui-tab-item layui-show">
+                                        <form action="" method="post">
+                                            <div class="layui-row layui-col-space15 layui-form-item">
+<!--                                                <div class="layui-col-md3">
+                                                    <label class="layui-form-label">拜访类型</label>
+                                                    <div class="layui-input-block">
+                                                        <select lay-verify="required" name="class" lay-filter="column">
+                                                            <option></option>
+                                                            <option value="0">请客</option>
+                                                            <option value="1">打车</option>
+                                                            <option value="2">其他</option>
+                                                        </select>
+                                                    </div>
+                                                </div> -->
+                                                <div class="layui-col-md11">
+                                                    <label for="L_title" class="layui-form-label">标题</label>
+                                                    <div class="layui-input-block">
+                                                        <input type="text" id="L_title" name="title" required
+                                                            lay-verify="required" placeholder="xx公司负责人来我司洽谈合作事宜" autocomplete="off" class="layui-input">
+                                                        <!-- <input type="hidden" name="id" value="{{d.edit.id}}"> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item layui-form-text">
+                                               
+                                                    
+                                                		
+                                               <div class="layui-input-block">
+                                                   <!-- 内容主体区域 -->
+                                                   <iframe name="f2" src="vsdemo1.html" frameborder="0"  style="min-height:350px;width: 95%;height: 100%;margin: 0px 15px;">
+                                                   </iframe>
+                                                   <!-- <div class="main_page">
+                                                   	 <iframe scrolling="no" id="main" name="main" frameborder="0"  src="vsdemo.html" 
+                                                           style="min-height:600px;width:100%;height:100%;"></iframe>
+                                                   </div> -->
+                                               </div>
+                                            </div> 
+                                           
+                                           <!-- <div class="layui-form-item layui-form-text">
+                                               
+                                                <label class="layui-form-label">备注</label>
+                                                <div class="layui-input-block">
+                                                    <textarea id="vs_content" name="content" required lay-verify="required"
+                                                        placeholder="备注" class="layui-textarea" style="height: 100px;"></textarea>
+                                                </div>
+                                               
+                                            </div> -->
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</body>
+    <script src="resrouces/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+      // 计算页面的实际高度，iframe自适应会用到
+      function calcPageHeight(doc) {
+          var cHeight = Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
+          var sHeight = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight)
+          var height  = Math.max(cHeight, sHeight)
+          return height
+      }
+      //根据ID获取iframe对象
+      var ifr = document.getElementById('main')
+      ifr.onload = function() {
+      	  //解决打开高度太高的页面后再打开高度较小页面滚动条不收缩
+      	  ifr.style.height='0px';
+          var iDoc = ifr.contentDocument || ifr.document
+          var height = calcPageHeight(iDoc)
+          if(height < 850){
+          	height = 850;
+          }
+          ifr.style.height = height + 'px'
+      }
+    </script>
+</html>

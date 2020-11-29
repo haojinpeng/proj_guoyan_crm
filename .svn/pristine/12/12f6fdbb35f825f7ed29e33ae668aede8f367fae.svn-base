@@ -1,0 +1,8 @@
+package com.it.services;
+
+import com.it.bean.User;
+
+public interface IUserServices {
+    //登陆
+    public boolean logion(User user);
+}

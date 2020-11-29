@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>CRM系统</title>
+		<link rel="stylesheet" href="resources/layui/css/layui.css">
+	<style type="text/css">
+		 /**自定义滚动条样式 */
+    ::-webkit-scrollbar {width: 4px;height: 4px}
+    ::-webkit-scrollbar-track {background-color: transparent;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em;}
+    ::-webkit-scrollbar-thumb {background-color: #9c9da0;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em}
+	</style>
+
+	</head>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin ">
+			<div class="layui-header">
+				<!-- 右上角logo -->
+				<div class="layui-logo">CRM系统</div>
+				<!-- 头部区域（可配合layui已有的水平导航） -->
+
+				<ul class="layui-nav layui-layout-right">
+					<li class="layui-nav-item">
+						<a href="javascript:;">
+							<img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+							用户
+						</a>
+						<dl class="layui-nav-child">
+							<dd><a href="">基本资料</a></dd>
+						</dl>
+					</li>
+					<li class="layui-nav-item"><a href="">退出系统</a></li>
+				</ul>
+			</div>
+
+			<!-- 左侧导航背景颜色 -->
+			<div class="layui-side layui-bg-black">
+				<div class="layui-side-scroll">
+					<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+					<ul class="layui-nav layui-nav-tree" lay-filter="test">
+						<li class="layui-nav-item layui-nav-itemed">
+							<a class="" href="javascript:;">客户管理</a>
+						</li>
+						<li class="layui-nav-item">
+							<a href="#商机管理">商机管理</a>
+							<dl class="layui-nav-child">
+								<dd><a href="#商机信息管理">商机信息管理</a></dd>
+								<dd><a href="#商机跟进管理" id="ToshowSJGJ">商机跟进管理</a></dd>
+								<dd><a href="#商机费用管理" id="ToshowSJFY">商机费用管理</a></dd>
+							</dl>
+						</li>
+						<li class="layui-nav-item">
+							<a href="javascript:;">项目管理</a>
+							<dl class="layui-nav-child"> 
+								
+								<a href="javascript:;">工时管理</a>                                                                                              
+							<dl class="layui-nav-child">
+								<dd><a href="项目工时管理.html" target="t1">项目工时管理</a></dd>
+							 	<dd><a href="项目任务管理.html" target="t1" >项目任务管理</a></dd>
+								<dd><a href="日报管理.html" target="t1">日报管理</a></dd>
+								<dd><a href="延期管理.html" target="t1">延期管理</a></dd>
+							</dl>
+								<a>合同管理</a>							
+								<a>实施管理</a>
+							</dl>
+						</li>
+						<li class="layui-nav-item">
+							<a href="javascript:;">采购管理</a>
+							<dl class="layui-nav-child">
+								<dd><a href="">采购申请</a></dd>
+								<dd><a href="">采购审核</a></dd>
+							</dl>
+						</li>
+						<li class="layui-nav-item">
+							<a href="javascript:;">售后管理</a>
+							<dl class="layui-nav-child">
+								<dd><a href="">工单管理</a></dd>
+							</dl>
+
+						</li>
+						<li class="layui-nav-item">
+							<a href="javascript:;">统计管理</a>
+							<dl class="layui-nav-child">
+								<dd><a href="">项目成本统计</a></dd>
+								<dd><a href="">员工贡献统计</a></dd>
+								<dd><a href="">商机统计</a></dd>
+								<dd><a href="">项目工单统计</a></dd>
+							</dl>
+						</li>
+
+						<li class="layui-nav-item">
+							<a href="javascript:;">用户管理</a>
+							<dl class="layui-nav-child">
+								<dd><a href="">角色管理</a></dd>
+								<dd><a href="">资源管理</a></dd>
+								<dd><a href="">权限管理</a></dd>
+							</dl>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+
+			<div class="layui-body">
+				<!-- 内容主体区域 -->
+				<iframe name="t1" style="width: 100%;height: 150%;" noresize="noresize" scrolling="no"></iframe>
+				<iframe name="t1" style="width: 100%;height: 150%;" noresize="noresize" scrolling="no" ></iframe>
+				<iframe name="t1" style="width: 100%;height: 150%;" noresize="noresize" scrolling="no"></iframe>
+				<iframe name="t1" style="width: 100%;height: 150%;" noresize="noresize" ></iframe>
+
+			</div>
+
+			<div class="layui-footer">
+				<!-- 底部固定区域 -->
+				欢迎使用CRM系统
+			</div>
+		</div>
+		<script src="resources/layui/layui.js"></script>
+		<script>
+			//JavaScript代码区域
+			//布局必须
+			layui.use('element', function() {
+				var element = layui.element;
+
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>审核管理</title>
+        <link rel="stylesheet" type="text/css" href="resrouces/layui/css/layui.css" />
+    </head>
+    <body>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>审核管理</legend>
+        </fieldset>
+        <!-- 数据表格开始 -->
+        <table class="layui-hide" id="AMTable" lay-filter="AMTable"></table>
+        <div id="AMBar" style="display: none;">
+            <a class="layui-btn layui-btn-xs" lay-event="auditManagement">审核管理</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="check" href="am.html">查看</a>
+        </div>
+        <!-- 数据表格结束 -->
+        <!-- 审核意见弹出层开始 -->
+        <div style="display: none;padding: 20px" id="auditOpinion">
+           
+            <form class="layui-form " action="" lay-filter="dataForm" id="dataForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">审核意见</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="am_condition" value="0" title="驳回" checked="">
+                        <input type="radio" name="am_condition" value="1" title="通过">
+                        <!-- <input type="radio" name="sex" value="禁" title="禁用" disabled=""> -->
+                    </div> 
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-inline">
+                        <input type="checkbox" name="am_condition" id="am_condition" autocomplete="off" class="layui-input"
+                            lay-skin="switch" lay-text="已通过|未通过">
+                    
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">审核人</label>
+                    <div class="layui-input-block">
+                      <select name="approver" lay-filter="">
+                        <option value=""></option>
+                        <option value="0" selected="">项目经理</option>
+                        <option value="1">会计</option>
+                        <option value="2">总裁</option>
+                      </select>
+                    </div>
+                  </div>
+                <div class="layui-form-item" >
+                    <div class="layui-input-block" style="text-align: center;">
+                        <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release"
+                            lay-filter="doSubmit" lay-submit="">提交</button>
+                        <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <!-- 审核意见弹出层结束 -->
+    </body>
+    <script src="resrouces/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var data;
+        var index = 0;
+
+        layui.use(['jquery', 'element', 'layer', 'slider', 'colorpicker', 'table', 'laydate', 'form'], function() {
+            var $ = layui.jquery,
+                element = layui.element,
+                slider = layui.slider,
+                layer = layui.layer,
+                table = layui.table,
+                form = layui.form,
+                laydate = layui.laydate,
+                colorpicker = layui.colorpicker;
+
+            //渲染数据表格
+            var tableIns1 = table.render({
+                elem: '#AMTable' //渲染的目标对象
+                    ,
+                url: 'js/auditManagement.json' //数据接口
+                    ,
+                title: '客户拜访审核表' //数据导出来的标题
+                    //     ,
+                    // toolbar: "#CVToolBar" //表格的工具条
+                    ,
+                height: 'full-80',
+                cellMinWidth: 125 //设置列的最小默认宽度
+                    ,
+                done: function(res, curr, count) {
+
+                    }
+                    //,id: 'testReload'
+                    ,
+                page: true //是否启用分页
+                    ,
+                limit: 10,
+                cols: [
+                    [ //列表数据
+                        {
+                            type: 'checkbox',
+                            fixed: 'left'
+                        }, {
+                            field: 'cv_id',
+                            title: '拜访编号',
+                            sort: true,
+                            align: 'center'
+                        }, {
+                            field: 'applicant',
+                            title: '申请人',
+                            align: 'center'
+                        }, {
+                            field: 'am_condition',
+                            title: '状态',
+                            width: 100,
+                            templet:function(d){
+                                var html = "<input type='checkbox' lay-skin='switch' lay-text='已通过|未通过'";
+                                if(d.am_condition == 1){
+                                    html += " checked ";
+                                }
+                                html += ">";
+                                return html;
+                            }
+                        }, {
+                            field: 'visit_cost',
+                            title: '金额',
+                            sort: true,
+                            align: 'center'
+                        }, {
+                            field: 'affair',
+                            title: '事由',                           
+                            align: 'center'
+                        }, {
+                            fixed: 'right',
+                            title: '操作',
+                            toolbar: '#AMBar',
+                            width: 220,
+                            align: 'center'
+                        }
+                    ]
+                ]
+
+            });
+
+            //监听行工具事件
+            table.on('tool(AMTable)', function(obj) {
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                switch (layEvent) {
+                    case 'auditManagement':
+                        openAuditOpinion(data);
+                        break;
+                    case 'apply':
+                        openApplyCV(data);
+                        break;
+                }
+
+            });
+
+            function openAuditOpinion(data) {
+                mainIndex = layer.open({
+                    type: 1,
+                    title: '审核意见',
+                    content: $("#auditOpinion"),
+                    area: ['400px', '400px'],
+                    success: function(index) {
+                        //清空表单数据       
+                        $("#dataForm")[0].reset();
+                        url = "user/addUser.action";
+                    }
+                });
+            }
+
+        });
+    </script>
+</html>

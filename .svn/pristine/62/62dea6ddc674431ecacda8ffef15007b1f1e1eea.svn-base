@@ -1,0 +1,18 @@
+package com.it.services;
+
+import com.it.bean.PageBean;
+import com.it.bean.User;
+
+import java.util.List;
+
+public interface IUserServices {
+    //登陆
+    public boolean logion(User user);
+    //查询所有
+
+
+    //带分页查询所有
+    public List<User> queryAllUser(PageBean pageBean, User user);
+    //查询总记录数
+    public int userCount(User user);
+}

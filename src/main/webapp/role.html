@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>角色管理</title>
+    <link rel="stylesheet" href="resources/layui/css/layui.css">
+</head>
+<style>
+    /**自定义滚动条样式 */
+    ::-webkit-scrollbar {
+        width: 4px;
+        height: 4px
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+        -webkit-border-radius: 2em;
+        -moz-border-radius: 2em;
+        border-radius: 2em;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #9c9da0;
+        -webkit-border-radius: 2em;
+        -moz-border-radius: 2em;
+        border-radius: 2em
+    }
+</style>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend>
+        <a name="角色管理">角色管理</a>
+    </legend>
+</fieldset>
+<!-- 搜索条件开始 -->
+<form action="" class="layui-form" method="post">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">角色:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="roleName" name="roleName" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">资源:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="resourceName" name="resourceName" autocomplete="off" class="layui-input">
+            </div>
+            <!--            <div class="layui-input-block">-->
+            <!--                <select id="resourceName" name="resourceName" lay-filter="resourceType">-->
+            <!--                    <option value="">请选择</option>-->
+            <!--                    <option value="C">目录</option>-->
+            <!--                </select>-->
+            <!--            </div>-->
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">权限:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="jurisdictionName" name="jurisdictionName" autocomplete="off" class="layui-input">
+            </div>
+            <!--            <div class="layui-input-inline">-->
+            <!--                <select id="jurisdictionName" name="jurisdictionName" lay-filter="resourceType">-->
+            <!--                    <option value="">请选择</option>-->
+            <!--                </select>-->
+            <!--            </div>-->
+        </div>
+    </div>
+    <div class="layui-form-item" style="text-align: center;">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-search"
+                    id="doSearch" lay-filter="doSearch">查询
+            </button>
+            <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+        </div>
+    </div>
+</form>
+<!-- 搜索条件结束 -->
+
+<!-- 数据表格开始 -->
+<table class="layui-hide" id="updateResourcesTable" lay-filter="updateResourcesTable"></table>
+
+<div style="display: none;" id="updateResourcesToolBar">
+<!--    <a class="layui-btn layui-btn-sm" lay-event="add" href="role_AddOrUpdate.html">添加</a>-->
+<!--    <button type="button" class="layui-btn layui-btn-sm" lay-event="batchDelete">批量删除</button>-->
+</div>
+
+<script id="updateResourcesBar" type="text/html">
+    {{#  }}
+    <!--    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+
+
+    <a href="role_AddOrUpdate.html?id={{d.id}}&name={{d.name}}&res_name={{d.res_name}}&jur_name={{d.jur_name}}"
+       class="layui-table-link">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{}}
+</script>
+<!-- 数据表格结束 -->
+<script src="resources/layui/layui.js"></script>
+
+
+<script>
+    layui.use(['jquery', 'form'], function () {
+        var $ = layui.jquery,
+            form = layui.form;
+        //分配权限
+        $(function () {
+            $.ajax({
+                url: "resource.do?opt=quanxian",
+                type: "GET",
+                dataType: "json",
+                cache: false,
+                asyns: false,
+                success: function (data) {
+                    $.each(data, function (k, v) {
+                        // alert("name=====" + v.name);
+
+                        if ('添加' == v.name) {
+                            $("#updateResourcesToolBar").append(
+                                ' <a class="layui-btn layui-btn-sm" lay-event="add" href="role_AddOrUpdate.html">添加</a>'
+                                // "<button type=\"button\" class=\"layui-btn layui-btn-sm\" lay-event=\"add\" id=\"add\">增加</button>"
+                            )
+                        }
+                        if ('批量删除' == v.name) {
+                            $("#updateResourcesToolBar").append(
+                                '<button type="button" class="layui-btn layui-btn-sm" lay-event="batchDelete">批量删除</button>'
+                                // "<button type=\"button\" class=\"layui-btn layui-btn-sm\" lay-event=\"batchDelete\" id=\"deleteAll\">批量删除</button>"
+                            )
+                        }
+
+
+                        // if ('编辑' == v.name) {
+                        //     $("#updateResourcesBar").append(
+                        //         '<button class="layui-btn layui-btn-xs" lay-event="edit" id="edit">编辑</button>'
+                        //     )
+                        // }
+                        // if ('删除' == v.name) {
+                        //     $("#updateResourcesBar").append(
+                        //         '<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" id="del">删除</button>'
+                        //     )
+                        // }
+                    })
+                },
+                error: function (e) {
+                    alert("无权限，请重新刷新");
+                }
+            });
+
+        });
+    })
+</script>
+
+
+<script type="text/html" id="no">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
+<script type="text/javascript">
+    layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table', 'layer', 'laydate', 'form'], function () {
+
+        var $ = layui.jquery,
+            slider = layui.slider,
+            element = layui.element,
+            form = layui.form,
+            table = layui.table,
+            laydate = layui.laydate,
+            rate = layui.rate,
+            layer = layui.layer,
+            carousel = layui.carousel;
+
+        //渲染数据表格
+        setTimeout(function () {
+            var tableIns = table.render({
+                elem: '#updateResourcesTable' //渲染的目标对象
+                , url: 'role.do?opt=queryAll' //数据接口
+                , title: '资源数据表' //数据导出来的标题
+                , toolbar: "#updateResourcesToolBar" //表格的工具条
+                // , height: 'full-300'
+                , cellMinWidth: 100 //设置列的最小默认宽度
+                , done: function (res, curr, count) {
+                }
+                // , page: true //是否启用分页
+                , cols: [[ //列表数据
+                    {type: 'checkbox', fixed: 'left'}
+                    , {field: 'no', title: '序号', sort: true, type: 'numbers', width: 80, align: 'center'}
+                    , {field: 'id', title: 'ID', sort: true, align: 'center'}
+                    , {field: 'name', title: '角色', sort: true, align: 'center'}
+                    , {field: 'res_name', title: '资源', align: 'center'}
+                    , {field: 'jur_name', title: '权限', align: 'center'}
+                    , {fixed: 'right', title: '操作', toolbar: '#updateResourcesBar', width: 220, align: 'center'}
+                ]]
+                , page: {layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']}
+                , id: 'testReload'
+            });
+        }, 500);
+
+        //模糊查询
+        $("#doSearch").click(function () {
+            var resource_name = $("#resourceName").val(), role_name = $("#roleName").val(),
+                jurisdiction_name = $("#jurisdictionName").val();
+            table.reload('testReload', {
+                where: {role_name: role_name, res_name: resource_name, jur_name: jurisdiction_name}
+            });
+        });
+
+        //监听头部工具栏事件
+        table.on("toolbar(updateResourcesTable)", function (obj) {
+            switch (obj.event) {
+                // case 'add':
+                //     openAddResources();
+                //     break;
+                case 'batchDelete':
+                    // layer.msg('批量删除');
+                    delAll();
+                    break;
+            }
+            ;
+        });
+
+        //监听行工具事件
+        table.on('tool(updateResourcesTable)', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            if (layEvent === 'del') { //删除
+                layer.msg("删除");
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    del(obj.data.id);
+                    // layer.close(index);
+                    //向服务端发送删除指令
+                });
+            }
+            // else if (layEvent === 'edit') { //编辑
+            //     // openUpdateResources(obj.data.id);
+            // }
+        });
+
+        // //添加页面
+        // function openAddResources() {
+        //     $.get(
+        //         "role.do?opt=newRole",
+        //     );
+        // }
+
+        //批量删除
+        function delAll() {
+            //获取选中数据
+            var checkStatus = table.checkStatus('testReload'),
+                data = checkStatus.data;
+            if (data == "") {
+                layer.msg('至少也得选一个吧', {icon: 2});
+                return;
+            }
+            var delArray = [];
+            //获取单元格选中的行
+            if (data.length > 0) {
+                for (var i = 0; i < data.length; i++) {
+                    delArray.push(data[i].id);
+                }
+            }
+            var ids = delArray.join(",");
+            layer.confirm('确认要删除嘛？' + delArray, function (index) {
+                //发起异步请求
+                $.ajax({
+                    type: 'POST',
+                    url: 'role.do?opt=delete',
+                    data: {'delArray': ids},
+                });
+                // layer.msg('删除成功！', {icon: 1});
+                location.reload();
+            });
+        }
+
+        //删除操作
+        function del(id) {
+            $.post(
+                "role.do",
+                {opt: "delete", role_id: id},
+                function (flag) {
+                    if (flag == 1) {
+                        layer.msg("删除成功", {icon: 6});
+                        location.reload();
+                        layer.close(index);
+                    } else {
+                        layer.msg("删除失败", {icon: 5});
+                        location.reload();
+                    }
+                }
+            );
+        }
+
+        // //修改页面
+        // function openUpdateResources(id) {
+
+        // $.get(
+        //     "role.do?opt=queryResAndJur",
+        //     {"role_id": id}
+        // );
+        // }
+
+        // //单选框与复选框
+        // $(function () {
+        //     $.getJSON(
+        //         "resource.do?opt=queryAllJurisdiction",
+        //         function (date) {
+        //             var str = "";
+        //             $.each(date, function (k, v) {
+        //                 //单选下拉框
+        //                 $("#resourceJurisdiction").append(
+        //                     "<option value='" + v.name + "'>" + v.name + "</option>"
+        //                 );
+        //                 //复选框
+        //                 if (k == 0) {
+        //                     str += "<dd><input type=\"checkbox\" name='checkboxJ' value='" + v.id + "' title='" + v.name + "'>";
+        //                 } else if (k == date.length) {
+        //                     str += "<input type=\"checkbox\" name='checkboxJ' value='" + v.id + "' title='" + v.name + "'></dd>";
+        //                 } else if (k % 6 == 0) {
+        //                     str += "</dd><dd><input type=\"checkbox\" name='checkboxJ' value='''" + v.id + "' title='" + v.name + "'>";
+        //                 } else {
+        //                     str += "<input type=\"checkbox\" name='checkboxJ' value='" + v.id + "' title='" + v.name + "'>";
+        //                 }
+        //             });
+        //             $("#jurisdiction_name").append(
+        //                 str
+        //             );
+        //             // form.rander('checkbox');
+        //             form.render('select')
+        //         }
+        //     )
+        // });
+    })
+</script>
+</body>
+
+</html>

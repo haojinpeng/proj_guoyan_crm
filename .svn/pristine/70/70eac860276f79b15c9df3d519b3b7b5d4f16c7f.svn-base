@@ -1,0 +1,79 @@
+package com.it.controller;
+
+import com.it.bean.User;
+import com.it.services.IUserServices;
+import com.it.services.UserServicesImpl;
+import com.it.utils.MD5Util;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+@WebServlet(name = "regiterServlet",urlPatterns = {"/reg.do"})
+public class regiterServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //处理乱码
+        response.setContentType("application/json; charset=utf-8");
+//        response.setCharacterEncoding("utf-8");
+        PrintWriter out = response.getWriter();
+
+        String opt = request.getParameter("opt");
+        String employee_number=request.getParameter("employee_number");
+        String username = request.getParameter("username");
+        String payroll=request.getParameter("payroll");
+        String tel = request.getParameter("tel");
+        String address=request.getParameter("address");
+        String login_name = request.getParameter("login_name");
+        String password = request.getParameter("password");
+        //生成对象
+        User user = new User();
+        IUserServices services = new UserServicesImpl();
+        String flags = "1";
+        //添加功能
+        System.out.println("注册！！！");
+        if("reg".equals(opt)){
+            // "" null
+            //判断
+
+            if (!"".equals(employee_number) && employee_number != null) {
+                user.setEmployee_number(employee_number);
+            }
+            if (!"".equals(login_name) && login_name != null) {
+                user.setLogin_name(login_name);
+            }
+            if (!"".equals(password) && password != null) {
+                user.setPassword(MD5Util.getMD5(password,"assfs","UTF-8"));
+            }
+            if (!"".equals(username) && username != null) {
+                user.setUsername(username);
+            }
+            if (!"".equals(payroll) && payroll != null) {
+                user.setPayroll(payroll);
+            }
+            if (!"".equals(tel) && tel != null) {
+                user.setTel(tel);
+            }
+            if (!"".equals(address) && address != null) {
+                user.setAddress(address);
+            }
+
+            boolean flag = services.add(user);
+
+            if(!flag){
+                flags="0";
+
+            }
+            System.out.println(flags);
+            out.print(flags);
+
+        }
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      doPost(request,response);
+    }
+}

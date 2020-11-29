@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+		<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/event.js" type="text/javascript" charset="utf-8"></script>
+		<title>商机费用管理</title>
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+				<fieldset class="table-search-fieldset" style="border-bottom: 1px solid darkgrey;border-top: white;border-left: white;border-right: white;">
+					<div style="margin: 20px 10px 10px 10px">
+						<form class="layui-form layui-form-pane" action="">
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									<label class="layui-form-label" style="width: 120px;">商机名称&nbsp;</label>
+									<div class="layui-input-inline ">
+										<input type="text" name="id" autocomplete="off" class="layui-input layui-input-sm">
+									</div>
+								</div>
+								<div class="layui-inline">
+									<button type="submit" class="layui-btn " lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
+										查询</button>
+									<button  class="layui-btn   data-add1-btn" lay-filter="data-add-btn"><i class="layui-icon"></i>
+											添加费用申请</button>
+									<button  class="layui-btn layui-btn-danger data-delete-btn" lay-filter="data-delete-btn"><i class="layui-icon"></i>
+												批量删除</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</fieldset>
+				<!-- 搜索条件结束 -->
+				<table class="layui-hide" id="userTable2" lay-filter="userTable2"></table>
+				<div id="userBar2" class="layui-hide">
+					<a class="layui-btn layui-btn-xs" lay-event="updateprice">修改</a>
+					<a class="layui-btn layui-btn-xs" lay-event="check">查看审批进度</a>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			layui.use(['form', 'table'], function() {
+				var $ = layui.jquery,
+					form = layui.form,
+					table = layui.table,
+					layuimini = layui.layuimini;
+				// 监听搜索操作
+				form.on('submit(data-search-btn)', function(data) {
+					var result = JSON.stringify(data.field);
+					layer.alert(result, {
+						title: '最终的搜索信息'
+					});
+				});
+				$(".data-add1-btn").on("click", function () {
+				
+				    mainIndex = layer.open({
+				    	type: 1,
+				    	title: '添加商机跟进信息',
+				    	content: $("#openUpdatePrice"),
+				    	area: ['800px', '400px'],
+				    	success: function(index) {
+				    		//清空表单数据       
+				    		$("#dataFrmPrice")[0].reset();
+				    		url = "user/addUser.action";
+				    	}
+				    });
+				    return false;
+				});
+				// 监听删除操作
+				$(".data-delete-btn").on("click", function () {
+				    var checkStatus = table.checkStatus('userTable')
+				        , data = checkStatus.data;
+				    layer.confirm("你确定要删除么？", {
+				    		btn: ['是的,我确定', '我再想想']
+				    	},
+				    	function() {
+				    		var oldData = table.cache["userTable"];
+				    		oldData.splice(obj.tr.data('index'), 1);
+				    		layer.msg("删除成功", {
+				    			time: 10
+				    		}, function() {
+				    			table.reload('userTable', {
+				    				data: oldData
+				    			});
+				    		});
+				    	}
+				    )
+					return false;
+				});
+				
+			});
+		</script>
+		<!--添加费用申请信息弹出层开始-->
+		<div style="display: none;padding: 20px" id="openUpdatePrice">
+			<form class="layui-form " action="" lay-filter="dataFrmPrice" id="dataFrmPrice">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">商机名称&nbsp;</label>
+						<div class="layui-input-inline">
+							<input type="text" name="id" placeholder="请选择" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">费用金额&nbsp;</label>
+						<div class="layui-input-inline">
+							<input type="text" name="status" placeholder="请输入费用金额" lay-verify="required|email" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">审核人 &nbsp;</label>
+						<div class="layui-inline">
+							<select name="city" lay-verify="required">
+								<option value="">请选择</option>
+								<option value="0">主管</option>
+								<option value="1">经理</option>
+								<option value="2">项目经理</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">备注&nbsp;</label>
+					<div class="layui-input-block">
+						<textarea name="desc" placeholder="请输入备注" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item" style="text-align: center;">
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+						 lay-submit="">提交</button>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+					</div>
+				</div>
+
+			</form>
+
+		</div>
+		<!--添加费用申请信息弹出层结束-->
+	</body>
+</html>

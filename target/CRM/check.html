@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+		<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/buscheck.js" type="text/javascript" charset="utf-8"></script>
+		<title>费用审核管理</title>
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+				<fieldset class="table-search-fieldset" style="border-bottom: 1px solid darkgrey;border-top: white;border-left: white;border-right: white;">
+					<div style="margin: 20px 10px 10px 10px">
+						<form class="layui-form layui-form-pane" action="">
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									<label class="layui-form-label" style="width: 120px;">商机名称&nbsp;</label>
+									<div class="layui-input-inline ">
+										<input type="text" id="business_name2" name="business_name" autocomplete="off" class="layui-input layui-input-sm">
+									</div>
+								</div>
+								<div class="layui-inline">
+									<label class="layui-form-label" style="width: 120px;">商机状态&nbsp;</label>
+									<div class="layui-input-inline ">
+										<input type="text" id="status" name="status" autocomplete="off" class="layui-input layui-input-sm">
+									</div>
+								</div>
+								<div class="layui-inline">
+									<a type="submit" class="layui-btn" id="searchSubmit"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
+										查询</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</fieldset>
+				<!-- 内容主体区域 -->
+				<table class="layui-hide" id="userTable" lay-filter="userTable"></table>
+				<!--<div id="userBar" class="layui-hide">-->
+					<!--<a class="layui-btn  layui-btn-xs" id="view" lay-event="view">查看</a>-->
+					<!--<button type="button" class="layui-btn  layui-btn-xs" id="addSuggestion" lay-event="addSuggestion">审核</button>-->
+					<!--<a class="layui-btn  layui-btn-xs" lay-event="check">查看进度</a>-->
+				<!--</div>-->
+			</div>
+		</div>
+		<!--添加审核弹出层开始-->
+		<div style="display: none;padding: 20px" id="saveOrUpdateDiv">
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">商机名称&nbsp;</label>
+						<div class="layui-input-inline">
+							<input readonly="true" type="text" id="business_id" name="business_id" placeholder="请输入商机名称"  lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">审核意见 &nbsp;</label>
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input" id="check_idea" name="check_idea" placeholder="请输入审核意见">
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">审核日期</label>
+						<div class="layui-input-inline">
+							<input type="text" class="layui-input" id="check_date" name="check_date" placeholder="请选择审核日期">
+						</div>
+					</div>
+					<div class="layui-inline" id="person">
+						<label class="layui-form-label">审核人&nbsp;</label>
+						<div class="layui-input-inline">
+							<select id="user_name" name="user_name" autocomplete="off" lay-search >
+								<option name="user_name" selected="selected" >--请选择--</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">备注&nbsp;</label>
+					<div class="layui-input-block">
+						<textarea id="remarks" name="remarks" placeholder="请输入备注" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item" style="text-align: center;">
+					<div class="layui-input-block">
+						<a type="submit" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+						   lay-submit="">通过</a	>
+						<a type="submit" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmitOut"
+						 lay-submit="">驳回</a>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!--添加审核弹出层结束-->
+		<!--添加费用申请信息弹出层开始-->
+		<div style="display: none;padding: 20px" id="reviewcost">
+			<form class="layui-form " action="" lay-filter="dataFrmC" id="dataFrmC">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">申请编号&nbsp;</label>
+						<div class="layui-input-inline">
+							<input type="text" id="id" name="id" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">商机名称&nbsp;</label>
+						<div class="layui-input-inline">
+							<input type="text" id="business_name" name="business_name" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">跟进编号&nbsp;</label>
+						<div class="layui-input-inline">
+							<input type="text" id="business_tracking" name="business_tracking" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+					<label class="layui-form-label">消费类型&nbsp;</label>
+					<div class="layui-input-inline">
+						<input type="text" id="type_name" name="type_name"  autocomplete="off" class="layui-input">
+					</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">实际消费&nbsp;</label>
+						<div class="layui-input-inline">
+							<input type="text" id="reality_consume" name="reality_consume"  autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">计划消费&nbsp;</label>
+						<div class="layui-input-inline">
+							<input type="text" id="perdict_consume" name="perdict_consume"  autocomplete="off" class="layui-input">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">费用申报人&nbsp;</label>
+						<div class="layui-input-inline">
+							<input type="text" id="username" name="username"  autocomplete="off" class="layui-input">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">备注&nbsp;</label>
+					<div class="layui-input-block">
+						<textarea id="cost_description" name="cost_description"  class="layui-textarea"></textarea>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!--添加费用申请信息弹出层结束-->
+	</body>
+	<script type="text/html" id="checkedaa">
+		<a class="layui-btn  layui-btn-xs" id="view" lay-event="view">查看</a>
+        {{#  if(d.check_condition == '0'){ }}
+    <button type="button" class="layui-btn layui-btn-xs" lay-event="addSuggestion" >审核</button>
+    {{#  } else { }}
+		<button type="button" class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="addSuggestion"   disabled>审核</button>
+    {{#  } }}
+		<a class="layui-btn  layui-btn-xs" lay-event="check">查看进度</a>
+</script>
+</html>

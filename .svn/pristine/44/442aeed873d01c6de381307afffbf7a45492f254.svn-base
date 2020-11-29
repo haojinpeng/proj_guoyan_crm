@@ -1,0 +1,286 @@
+package com.it.dao;
+
+import com.it.bean.*;
+import com.it.utils.JDBCUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+
+import java.sql.SQLException;
+import java.util.List;
+
+public class EmployeeContrDAOImpl implements EmployeeContrDAO {
+    QueryRunner queryRunner = new QueryRunner(JDBCUtils.getDataSourcde());
+    //添加
+    @Override
+    public boolean add(EmployeeContribution ec) {
+        String sql = "INSERT INTO employeeContribution(`user_id`,\n" +
+                "             `station_id`,\n" +
+                "             `project_id`,\n" +
+                "             `projWork_id`,\n" +
+                "             `projApply_id`,\n" +
+                "             `projImpl_id`,\n" +
+                "             `workProcess_id`,\n" +
+                "             `workoders_id`)+\n" +
+                "VALUES(?,?,?,?,?,?,?,?)";
+        System.out.println(sql);
+        Object []params = {ec.getProject_id(),ec.getUser_id(),ec.getStation_id(),ec.getWorkoders_id(),ec.getProjApply_id(),ec.getProjImpl_id(),ec.getProjWork_id(),ec.getWorkProcess_id()};
+
+        System.out.println(ec.getProject_id()+","+ec.getUser_id()+","+ec.getStation_id()+","+ec.getWorkoders_id()+","+ec.getProjApply_id()+","+ec.getProjImpl_id()+","+ec.getProjWork_id()+","+ec.getWorkProcess_id());
+        try {
+            int rs = queryRunner.update(sql,params);
+            if (rs>0){
+                System.out.println("操作成功");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("操作失败");
+        }
+        return false;
+    }
+    //删除功能
+    @Override
+    public boolean delete(EmployeeContribution ec) {
+        String sql = "delete from employeeContribution where id=?";
+        System.out.println(sql);
+        Object []params = {ec.getId()};
+        try {
+            int rs = queryRunner.update(sql,params);
+            if (rs>0){
+                System.out.println("操作成功");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("操作失败");
+        }
+        return false;
+    }
+    //按id查找
+    @Override
+    public EmployeeContribution selectById(EmployeeContribution ec) {
+        String sql = "SELECT `employeecontribution`.`id`,user.`employee_number`,project.`project_name`,station.`station_name`,`workorder_process`.`workorder_id`,workorder.`number`,`project_implementation`.`cycle`,`project_work`.`actual_working_hours`,`project_expenses_apply`.`createtime`\n" +
+                "FROM `user`,`project`,`station`,`workorder_process`,`workorder`,`project_implementation`,`project_work`,`project_expenses_apply`,employeeContribution \n" +
+                "WHERE user.`id`=employeeContribution.`user_id`\n" +
+                "AND project.`id`=employeeContribution.`project_id`\n" +
+                "AND station.`id`=employeeContribution.`station_id`\n" +
+                "AND workorder_process.`id`=employeeContribution.`workProcess_id`\n" +
+                "AND workorder.`id`=employeeContribution.`workoders_id` \n" +
+                "AND project_implementation.`id`=employeeContribution.`projImpl_id`\n" +
+                "AND project_work.`id`=employeeContribution.`projWork_id`\n" +
+                "AND project_expenses_apply.`id`=employeeContribution.`projApply_id`\n" +
+                "AND employeecontribution.`id`=?";
+        //System.out.println(sql);
+        Object []params = {ec.getId()};
+        List<EmployeeContribution> list = null;
+        try {
+            list = queryRunner.query(sql,new BeanListHandler<>(EmployeeContribution.class),params);
+            if (list.size()>0 && list!=null){
+                return (EmployeeContribution) list;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    //按id修改
+    @Override
+    public boolean update(EmployeeContribution ec) {
+        String sql = "update `employeecontribution`,`user`,`project`,`project_expenses_apply`,`project_implementation`,`project_work`,`station`,`workorder_process`,`workorder`\n" +
+                "SET  `employee_number` ="+ec.getEmployee_number()+",\n" +
+                "  `project_name` ="+ec.getProject_name()+",\n" +
+                "  `project_expenses_apply`.`createtime` ="+ec.getCreatetime()+",\n" +
+                "  `cycle` = "+ec.getCycle()+",\n" +
+                "  `actual_working_hours` = "+ec.getActual_working_hours()+",\n" +
+                "  `station_name` = "+ec.getStation_name()+",\n" +
+                "  `workorder_id` =  "+ec.getWorkorder_id()+",\n" +
+                "  `number` = "+ec.getNumber()+"\n" +
+                "WHERE `employeecontribution`.`id`= "+ec.getId()+"\n" +
+                "and `user`.`id`=`employeecontribution`.`user_id`\n" +
+                "AND `project`.`id`=`employeecontribution`.`project_id`\n" +
+                "AND `station`.`id`=`employeecontribution`.`station_id`\n" +
+                "AND `workorder_process`.`id`=`employeecontribution`.`workProcess_id`\n" +
+                "AND `workorder`.`id`=`employeecontribution`.`workoders_id` \n" +
+                "AND `project_implementation`.`id`=`employeecontribution`.`projImpl_id`\n" +
+                "AND `project_work`.`id`=`employeecontribution`.`projWork_id`\n" +
+                "AND `project_expenses_apply`.`id`=`employeecontribution`.`projApply_id`\n";
+
+        System.out.println(sql);
+//        System.out.println(ec.getProject_id()+","+ec.getUser_id()+","+ec.getStation_id()+","+ec.getWorkoders_id()+","+ec.getProjApply_id()+","+ec.getProjImpl_id()+","+ec.getProjWork_id()+","+ec.getWorkProcess_id());
+
+//        Object []params = {ec.getUser_id(),ec.getProject_id(),ec.getStation_id(),ec.getWorkProcess_id(),ec.getWorkoders_id(),ec.getProjImpl_id(),ec.getProjWork_id(),ec.getProjApply_id(),ec.getId()};
+        try {
+            int rs = queryRunner.update(sql);
+            return rs>0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    //按项目名称查询
+    @Override
+    public List<Project> selectProjName(Project project) {
+        String sql="SELECT `project_name` FROM `project`";
+        System.out.println(sql);
+        List<Project> list =null;
+        try {
+            list = queryRunner.query(sql,new BeanListHandler<>(Project.class));
+            if (list.size()>0 && list!=null){
+                return list;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    //按照岗位名称查询
+    @Override
+    public List<Station> selectStatName(Station station) {
+        String sql = "SELECT station_name FROM station";
+        System.out.println(sql);
+        List<Station> list = null;
+        try {
+            list = queryRunner.query(sql,new BeanListHandler<>(Station.class));
+            if (list.size()>0 && list!=null){
+                return  list;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    //按员工号查询
+    @Override
+    public List<User> selectEmploNum(User user) {
+        String sql = "SELECT employee_number FROM USER";
+        System.out.println(sql);
+        List<User> list = null;
+        try {
+            list = queryRunner.query(sql,new BeanListHandler<>(User.class));
+            if (list.size()>0 && list!=null){
+                return  list;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    //查询所有
+    @Override
+    public List<EmployeeContribution> queryAll(EmployeeContribution ec, String beginTime, String endTime) {
+        StringBuffer sql = new StringBuffer("SELECT `employeecontribution`.`id`,user.`employee_number`,project.`project_name`,station.`station_name`,`workorder_process`.`workorder_id`,workorder.`number`,`project_implementation`.`cycle`,`project_work`.`actual_working_hours`,`project_expenses_apply`.`createtime`\n" +
+                "FROM `user`,`project`,`station`,`workorder_process`,`workorder`,`project_implementation`,`project_work`,`project_expenses_apply`,employeeContribution \n" +
+                "WHERE user.`id`=employeeContribution.`user_id`\n" +
+                "AND project.`id`=employeeContribution.`project_id`\n" +
+                "AND station.`id`=employeeContribution.`station_id`\n" +
+                "AND workorder_process.`id`=employeeContribution.`workProcess_id`\n" +
+                "AND workorder.`id`=employeeContribution.`workoders_id` \n" +
+                "AND project_implementation.`id`=employeeContribution.`projImpl_id`\n" +
+                "AND project_work.`id`=employeeContribution.`projWork_id`\n" +
+                "AND project_expenses_apply.`id`=employeeContribution.`projApply_id`");
+        if (ec!=null){
+            if (ec.getUser_id()!=null && ec.getUser_id()!=0){
+                sql.append("and user.id="+ec.getUser_id());
+            }
+            if (ec.getProject_id()!=null && ec.getProject_id()!=0){
+                sql.append("and project.id="+ec.getProject_id());
+            }
+            if (ec.getStation_id()!=null && ec.getStation_id()!=0){
+                sql.append("and station.id="+ec.getStation_id());
+            }
+            if (ec.getWorkProcess_id()!=null && ec.getWorkProcess_id()!=0){
+                sql.append("and workorder_process.id="+ec.getWorkProcess_id());
+            }
+            if (ec.getWorkoders_id()!=null && ec.getWorkoders_id()!=0){
+                sql.append("and workorder.`id`="+ec.getWorkoders_id());
+            }
+            if (ec.getProjImpl_id()!=null && ec.getProjImpl_id()!=0){
+                sql.append("and project_implementation.`id`="+ec.getProjImpl_id());
+            }
+            if (ec.getProjWork_id()!=null && ec.getProjWork_id()!=0){
+                sql.append("and project_work.`id`="+ec.getProjWork_id());
+            }
+            if (ec.getProjApply_id()!=null && ec.getProjApply_id()!=0){
+                sql.append("and project_expenses_apply.`id`="+ec.getProjApply_id());
+            }
+        }
+        if(beginTime != null && !"".equals(beginTime)){
+            sql.append(" AND project_expenses_apply.createtime > '"+beginTime+"'");
+        }
+        if(endTime != null && !"".equals(endTime)){
+            sql.append(" AND project_expenses_apply.createtime < '"+endTime+"'");
+        }
+        //System.out.println("sql-->"+sql);
+        List<EmployeeContribution> list = null;
+        try {
+            list = queryRunner.query(String.valueOf(sql),new BeanListHandler<>(EmployeeContribution.class));
+            if (list!=null && list.size()>0){
+                //System.out.println("没分页"+list);
+                return list;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    //带分页的查询
+    @Override
+    public List<EmployeeContribution> queryAll(EmployeeContribution ec,String beginTime,String endTime, PageBean pageBean) {
+        StringBuffer sql = new StringBuffer("SELECT `employeecontribution`.`id`,user.`employee_number`,project.`project_name`,station.`station_name`,`workorder_process`.`workorder_id`,workorder.`number`,`project_implementation`.`cycle`,`project_work`.`actual_working_hours`,`project_expenses_apply`.`createtime`\n" +
+                "FROM `user`,`project`,`station`,`workorder_process`,`workorder`,`project_implementation`,`project_work`,`project_expenses_apply`,employeeContribution \n" +
+                "WHERE user.`id`=employeeContribution.`user_id`\n" +
+                "AND project.`id`=employeeContribution.`project_id`\n" +
+                "AND station.`id`=employeeContribution.`station_id`\n" +
+                "AND workorder_process.`id`=employeeContribution.`workProcess_id`\n" +
+                "AND workorder.`id`=employeeContribution.`workoders_id` \n" +
+                "AND project_implementation.`id`=employeeContribution.`projImpl_id`\n" +
+                "AND project_work.`id`=employeeContribution.`projWork_id`\n" +
+                "AND project_expenses_apply.`id`=employeeContribution.`projApply_id`");
+        if (ec!=null){
+            if (ec.getUser_id()!=null && ec.getUser_id()!=0){
+                sql.append("and user.id="+ec.getUser_id());
+            }
+            if (ec.getProject_id()!=null && ec.getProject_id()!=0){
+                sql.append("and project.id="+ec.getProject_id());
+            }
+            if (ec.getStation_id()!=null && ec.getStation_id()!=0){
+                sql.append("and station.id="+ec.getStation_id());
+            }
+            if (ec.getWorkProcess_id()!=null && ec.getWorkProcess_id()!=0){
+                sql.append("and workorder_process.id="+ec.getWorkProcess_id());
+            }
+            if (ec.getWorkoders_id()!=null && ec.getWorkoders_id()!=0){
+                sql.append("and workorder.`id`="+ec.getWorkoders_id());
+            }
+            if (ec.getProjImpl_id()!=null && ec.getProjImpl_id()!=0){
+                sql.append("and project_implementation.`id`="+ec.getProjImpl_id());
+            }
+            if (ec.getProjWork_id()!=null && ec.getProjWork_id()!=0){
+                sql.append("and project_work.`id`="+ec.getProjWork_id());
+            }
+            if (ec.getProjApply_id()!=null && ec.getProjApply_id()!=0){
+                sql.append("and project_expenses_apply.`id`="+ec.getProjApply_id());
+            }
+        }
+        if(beginTime != null && !"".equals(beginTime)){
+            sql.append(" AND project_expenses_apply.createtime > '"+beginTime+"'");
+        }
+        if(endTime != null && !"".equals(endTime)){
+            sql.append(" AND project_expenses_apply.createtime < '"+endTime+"'");
+        }
+        if (pageBean!=null){
+            sql.append(" limit " + pageBean.getStart() + ","
+                    + pageBean.getRows());
+        }
+        //System.out.println("sql-->"+sql);
+        List<EmployeeContribution> list = null;
+        try {
+            list = queryRunner.query(String.valueOf(sql),new BeanListHandler<>(EmployeeContribution.class));
+            if (list.size()>0 && list!=null){
+                System.out.println("已分页"+list);
+                return list;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}

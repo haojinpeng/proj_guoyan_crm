@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>权限管理</title>
+		<link rel="stylesheet" href="resources/layui/css/layui.css">
+	</head>
+<style>
+	 /**自定义滚动条样式 */
+    ::-webkit-scrollbar {width: 4px;height: 4px}
+    ::-webkit-scrollbar-track {background-color: transparent;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em;}
+    ::-webkit-scrollbar-thumb {background-color: #9c9da0;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em}
+</style>
+	<body>
+		<!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+			<legend>
+				<a name="权限管理">权限管理</a>
+			</legend>
+		</fieldset>-->
+
+		
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+			<legend>查询条件</legend>
+		</fieldset>
+		
+		<!-- 搜索条件开始 -->
+		<form action="" class="layui-form" method="post">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">权限名:</label>
+					<div class="layui-input-inline">
+						<input type="text" name="powerName" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">权限类别:</label>
+					<div class="layui-input-inline">
+						<input type="text" name="powerType" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">权限路径:</label>
+					<div class="layui-input-inline">
+						<input type="text" name="powerURL" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">备注:</label>
+					<div class="layui-input-inline">
+						<input type="text" name="powerRemarks" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+			</div>
+
+			<div class="layui-form-item" style="text-align: center;">
+				<div class="layui-input-block">
+					<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-search" id="doSearch">查询</button>
+					<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+				</div>
+			</div>
+		</form>
+
+		<!-- 搜索条件结束 2-->
+
+		<!-- 数据表格开始 2-->
+		<table class="layui-hide" id="updatePowerTable" lay-filter="updatePowerTable"></table>
+
+		<div style="display: none;" id="updatePowerToolBar">
+			<button type="button" class="layui-btn layui-btn-sm" lay-event="add">增加</button>
+			<button type="button" class="layui-btn layui-btn-sm" lay-event="batchDelete">批量删除</button>
+		</div>
+
+		<div id="updatePowerBar" style="display: none;">
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+		</div>
+		<!-- 数据表格结束 -->
+
+		<!-- 添加的弹出层开始 -->
+		<div style="display: none;padding: 20px" id="powerAddDiv">
+			<form class="layui-form " action="" lay-filter="powerAddFrm" id="powerAddFrm">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">权限名:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="powerName" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+
+						<label class="layui-form-label">权限类型</label>
+						<div class="layui-input-block">
+							<select name="powerType" lay-filter="aihao">
+								<option value="">权限类型</option>
+								<option value="0">添加</option>
+								<option value="1">删除</option>
+								<option value="2">修改</option>
+								<option value="3">查看</option>
+								<option value="4">审批</option>
+							</select>
+						</div>
+
+						<!--<label class="layui-form-label">权限类别:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="powerType" lay-verify="required" autocomplete="off" class="layui-input">
+							</div>-->
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">权限路径:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="powerURL" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">备注:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="powerRemarks" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item" style="text-align: center;">
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit" lay-submit="">提交</button>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!-- 添加的弹出层结束 -->
+
+		<!-- 修改的弹出层开始 -->
+		<div style="display: none;padding: 20px" id="savePowerUpdateDiv">
+			<form class="layui-form " action="" lay-filter="powerUpdateFrm" id="powerUpdateFrm">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">权限名:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="powerName" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">权限类型</label>
+						<div class="layui-input-block">
+							<select name="powerType" lay-filter="aihao">
+								<option value="">权限类型</option>
+								<option value="0">添加</option>
+								<option value="1">删除</option>
+								<option value="2">修改</option>
+								<option value="3">查看</option>
+								<option value="4">审批</option>
+							</select>
+						</div>
+						<!--<label class="layui-form-label">权限类别:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="powerType" lay-verify="required" autocomplete="off" class="layui-input">
+							</div>-->
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">权限路径:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="powerURL" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">备注:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="powerRemarks" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item" style="text-align: center;">
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit" lay-submit="">提交</button>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!-- 修改的弹出层结束 -->
+
+		<script src="resources/layui/layui.js"></script>
+		<script type="text/javascript">
+			layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table', 'layer', 'laydate', 'form'], function() {
+
+				var $ = layui.jquery,
+					slider = layui.slider,
+					element = layui.element,
+					form = layui.form,
+					table = layui.table,
+					laydate = layui.laydate,
+					rate = layui.rate,
+					layer = layui.layer,
+					carousel = layui.carousel;
+
+				//渲染数据表格2
+				var tableIns2 = table.render({
+					elem: '#updatePowerTable' //渲染的目标对象
+						,
+					url: 'js/权限.json' //数据接口
+						,
+					title: '权限数据表' //数据导出来的标题
+						,
+					toolbar: "#updatePowerToolBar" //表格的工具条
+						,
+					height: 'full-300',
+					cellMinWidth: 100 //设置列的最小默认宽度
+						,
+					done: function(res, curr, count) {
+
+					},
+					page: true //是否启用分页
+						,
+					cols: [
+						[ //列表数据
+							{
+								type: 'checkbox',
+								fixed: 'left'
+							}, {
+								field: 'powerName',
+								title: '权限名',
+								sort: true,
+								align: 'center'
+							}, {
+								field: 'powerType',
+								title: '权限类别',
+								align: 'center'
+							}, {
+								field: 'powerURL',
+								title: '权限访问路径',
+								align: 'center'
+							}, {
+								field: 'powerRemarks',
+								title: '备注',
+								align: 'center'
+							}, {
+								fixed: 'right',
+								title: '操作',
+								toolbar: '#updatePowerBar',
+								width: 220,
+								align: 'center'
+							}
+						]
+					]
+				});
+				//监听头部工具栏事件2
+				table.on("toolbar(updatePowerTable)", function(obj) {
+					switch(obj.event) {
+						case 'add':
+							openAddPower();
+							break;
+						case 'batchDelete':
+							layer.msg('批量删除');
+							break;
+					};
+				});
+				//监听行工具事件2
+				table.on('tool(updatePowerTable)', function(obj) {
+					var data = obj.data; //获得当前行数据
+					var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+					if(layEvent === 'del') { //删除
+						layer.msg("删除");
+						layer.confirm('真的删除行么', function(index) {
+							obj.del();
+							layer.close(index);
+							//向服务端发送删除指令
+						});
+					} else if(layEvent === 'edit') { //编辑
+						openUpdatePower(data);
+					}
+				});
+				var url;
+				var mainIndex;
+				//打开添加页面1
+				function openAddPower() {
+					mainIndex1 = layer.open({
+						type: 1,
+						title: '添加用户',
+						content: $("#powerAddDiv"),
+						area: ['800px', '400px'],
+						success: function(index) {
+							//清空表单数据       
+							$("#powerAddFrm")[0].reset();
+							url1 = "power/addPower.action";
+						}
+					});
+				}
+				//打开修改页面
+				function openUpdatePower(data) {
+					mainIndex = layer.open({
+						type: 1,
+						title: '修改用户',
+						content: $("#savePowerUpdateDiv"),
+						area: ['800px', '400px'],
+						success: function(index) {
+							form.val("powerUpdateFrm", data);
+							url = "power/updatePower.action";
+						}
+					});
+				}
+			});
+		</script>
+	</body>
+
+</html>

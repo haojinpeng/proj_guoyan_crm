@@ -1,0 +1,126 @@
+package com.it.bean;
+
+public class Project_cost_statistics {
+    private Long id;
+    private String project_id;
+    private String projectName;
+    private String customerName;
+    private String startTime;
+    private String endTime;
+    private Double businessOpportunityCost;
+    private Double projectProcurementCost;
+    private Long workHourCost;
+    private Double implementCost;
+
+    @Override
+    public String toString() {
+        return "Project_cost_statistics{" +
+                "id=" + id +
+                ", project_id='" + project_id + '\'' +
+                ", projectName='" + projectName + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", businessOpportunityCost=" + businessOpportunityCost +
+                ", projectProcurementCost=" + projectProcurementCost +
+                ", workHourCost=" + workHourCost +
+                ", implementCost=" + implementCost +
+                '}';
+    }
+
+    public Project_cost_statistics() {
+    }
+
+    public Project_cost_statistics(Long id, String project_id, String projectName, String customerName, String startTime, String endTime, Double businessOpportunityCost, Double projectProcurementCost, Long workHourCost, Double implementCost) {
+        this.id = id;
+        this.project_id = project_id;
+        this.projectName = projectName;
+        this.customerName = customerName;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.businessOpportunityCost = businessOpportunityCost;
+        this.projectProcurementCost = projectProcurementCost;
+        this.workHourCost = workHourCost;
+        this.implementCost = implementCost;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(String project_id) {
+        this.project_id = project_id;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public Double getBusinessOpportunityCost() {
+        return businessOpportunityCost;
+    }
+
+    public void setBusinessOpportunityCost(Double businessOpportunityCost) {
+        this.businessOpportunityCost = businessOpportunityCost;
+    }
+
+    public Double getProjectProcurementCost() {
+        return projectProcurementCost;
+    }
+
+    public void setProjectProcurementCost(Double projectProcurementCost) {
+        this.projectProcurementCost = projectProcurementCost;
+    }
+
+    public Long getWorkHourCost() {
+        return workHourCost;
+    }
+
+    public void setWorkHourCost(Long workHourCost) {
+        this.workHourCost = workHourCost;
+    }
+
+    public Double getImplementCost() {
+        return implementCost;
+    }
+
+    public void setImplementCost(Double implementCost) {
+        this.implementCost = implementCost;
+    }
+}

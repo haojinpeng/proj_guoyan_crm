@@ -1,0 +1,47 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 4,
+	"data": [
+		{
+			"number": "鄂A66666",
+			"type": "SUV",
+			"color": "白色",
+			"rent": "0",
+			"payMoney": "280000",
+			"rentPrice": "500",
+			"rentMoney": "5000",
+			"description":"宝马X1"
+		},
+		{
+			"number": "鄂A77777",
+			"type": "SUV",
+			"color": "白色",
+			"rent": "0",
+			"payMoney": "350000",
+			"rentPrice": "1500",
+			"rentMoney": "12000",
+			"description":"宝马X3"
+		},
+		{
+			"number": "鄂A88888",
+			"type": "轿车",
+			"color": "黑色",
+			"rent": "0",
+			"payMoney": "880000",
+			"rentPrice": "1000",
+			"rentMoney": "10000",
+			"description":"保时捷 卡宴"
+		},
+		{
+			"number": "鄂A99999",
+			"type": "轿车",
+			"color": "白色",
+			"rent": "0",
+			"payMoney": "880000",
+			"rentPrice": "1000",
+			"rentMoney": "10000",
+			"description":"保时捷 卡宴"
+		}
+	]
+}  

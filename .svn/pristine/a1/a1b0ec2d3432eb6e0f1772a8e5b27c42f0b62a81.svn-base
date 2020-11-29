@@ -1,0 +1,4 @@
+package com.it.dao;
+
+public class Project_cost_statisticsDAOImpl implements Project_cost_statisticsDAO{
+}

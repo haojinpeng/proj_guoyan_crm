@@ -1,0 +1,16 @@
+#mysql连接数据库
+driverClassName=com.mysql.jdbc.Driver
+url=jdbc:mysql://192.168.1.188:3306/crm?characterEncoding=UTF-8
+username=root
+password=root
+#基本项（扩展）
+#最大连接数量
+maxActive=8
+#最大空闲连接
+maxIdle=8
+#最小空闲连接
+minIdle=0
+#初始化连接
+initialSize=0
+#等待时间  maxWait 请求连接时，最长的等待时间。ms
+maxWait=50

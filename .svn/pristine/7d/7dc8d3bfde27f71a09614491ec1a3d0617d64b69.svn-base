@@ -1,0 +1,104 @@
+package com.it.bean;
+
+public class Business_tracking {
+    private Long id;
+    private Long business;
+    private Long type;
+    private Long creatdate;
+    private Long recorder;
+    private Long message;
+    private Long feedback_result;
+    private Long remarks;
+
+    public Business_tracking() {
+    }
+
+    public Business_tracking(Long id, Long business, Long type, Long creatdate, Long recorder, Long message, Long feedback_result, Long remarks) {
+        this.id = id;
+        this.business = business;
+        this.type = type;
+        this.creatdate = creatdate;
+        this.recorder = recorder;
+        this.message = message;
+        this.feedback_result = feedback_result;
+        this.remarks = remarks;
+    }
+
+    @Override
+    public String toString() {
+        return "Business_tracking{" +
+                "id=" + id +
+                ", business=" + business +
+                ", type=" + type +
+                ", creatdate=" + creatdate +
+                ", recorder=" + recorder +
+                ", message=" + message +
+                ", feedback_result=" + feedback_result +
+                ", remarks=" + remarks +
+                '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getBusiness() {
+        return business;
+    }
+
+    public void setBusiness(Long business) {
+        this.business = business;
+    }
+
+    public Long getType() {
+        return type;
+    }
+
+    public void setType(Long type) {
+        this.type = type;
+    }
+
+    public Long getCreatdate() {
+        return creatdate;
+    }
+
+    public void setCreatdate(Long creatdate) {
+        this.creatdate = creatdate;
+    }
+
+    public Long getRecorder() {
+        return recorder;
+    }
+
+    public void setRecorder(Long recorder) {
+        this.recorder = recorder;
+    }
+
+    public Long getMessage() {
+        return message;
+    }
+
+    public void setMessage(Long message) {
+        this.message = message;
+    }
+
+    public Long getFeedback_result() {
+        return feedback_result;
+    }
+
+    public void setFeedback_result(Long feedback_result) {
+        this.feedback_result = feedback_result;
+    }
+
+    public Long getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(Long remarks) {
+        this.remarks = remarks;
+    }
+}

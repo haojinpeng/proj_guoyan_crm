@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>采购信息管理</title>
+		<link rel="stylesheet" href="resources/layui/css/layui.css">
+	</head>
+
+	<body class="layui-layout-body">
+		<!-- 身体部分开始 -->
+		<div style="margin-top: 20px; margin-bottom: 10px; margin-left: 10px; margin-right: 10px;">
+			<!-- 数据表格开始 -->
+			<table class="layui-hide" id="caigoutable" lay-filter="caigoutable"></table>
+
+			<div style="display: none;" id="userToolBar">
+				<div class="layui-form-item" style="height: 30px;">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: auto;">项目名称:</label>
+						<div class="layui-input-inline layui-form-pane" style="width: 180px;">
+							<select name="project_id" lay-filter="project_id">
+								<option value="" selected="">请选择</option>
+								<option value="0">智慧医疗系统</option>
+								<option value="1">智慧养老系统</option>
+								<option value="2">智慧交通系统</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: auto;">申请状态</label>
+						<div class="layui-input-inline layui-form-pane" style="width: 180px;">
+							<select>
+								<option value="">请选择申请状态</option>
+								<option>审核中</option>
+								<option>成功</option>
+								<option>驳回</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: auto;">日期</label>
+						<input type="text" class="layui-input" id="test1" placeholder="yyyy-MM-dd" style="width: 180px;">
+					</div>
+					<div class="layui-inline">
+						<button type="button" class="layui-btn layui-btn btnsearch" data-type="reload" style="margin-left: 0px;">查询</button>
+					</div>
+					<div class="layui-inline">
+						<button type="button" class="layui-btn layui-btn" lay-event="add" style="margin-right: -17px;">添加采购</button>
+					</div>
+				</div>
+			</div>
+
+			<div id="barDemo" style="display: none;">
+				<a class="layui-btn layui-btn layui-btn-xs" lay-event="submit">申请</a>
+				<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit">修改</a>
+				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+				<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="look_phone">预览流程图</a>
+			</div>
+			<!-- 数据表格结束 -->
+		</div>
+		<!-- 身体部分结束 -->
+
+		<!-- 添加的弹出层开始 -->
+		<div style="display: none;padding: 10px" id="addDiv">
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">申请人:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="apply_user" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入申请人">
+						</div>
+					</div>
+
+					<div class="layui-inline">
+						<label class="layui-form-label">所属项目:</label>
+						<div class="layui-input-inline layui-form-pane">
+							<div class="layui-input-block layui-form" style="margin-left: 0px;">
+								<select name="project_id" lay-filter="project_id">
+									<option value="" selected="">请选择</option>
+									<option value="0">智慧医疗系统</option>
+									<option value="1">智慧养老系统</option>
+									<option value="2">智慧交通系统</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">申请类型:</label>
+						<div class="layui-input-inline">
+							<input type="radio" name="apply_type" value="1" checked="checked" title="硬件">
+							<input type="radio" name="apply_type" value="0" title="软件">
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">申请金额:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="apply_money" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入申请金额">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">商品信息:</label>
+						<div class="layui-input-inline">
+							<input type="text" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入商品信息">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="margin-left: -2px;">审核人员</label>
+						<div class="layui-input-inline layui-form-pane">
+							<div class="layui-input-block layui-form" style="margin-left: 0px;">
+								<select name="audit_people" lay-filter="audit_people">
+									<option value="" selected="">请选择</option>
+									<option value="0">审核人1</option>
+									<option value="1">审核人2</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">创建日期:</label>
+						<div class="layui-input-inline">
+							<input type="text" lay-verify="required" id="test2" autocomplete="off" class="layui-input" placeholder="请选择创建日期">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">申请描述:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="apply_description" lay-verify="required" autocomplete="off" class="layui-input"
+							 placeholder="请输入申请描述">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">申请凭证:</label>
+						<button type="button" class="layui-btn layui-btn" id="test3"><i class="layui-icon"></i>请上传申请凭证</button>
+					</div>
+				</div>
+
+				<div class="layui-form-item" style="text-align: center;">
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+						 lay-submit="" style="margin-left: 100px;">保存</button>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh" style="margin-right: 200px;">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!-- 添加的弹出层结束 -->
+		<!-- 修改的弹出层开始 -->
+		<div style="display: none;padding: 10px" id="updateDiv">
+			<form class="layui-form " action="" lay-filter="dataFrm" id="">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">申请人:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="apply_user" lay-verify="required" autocomplete="off" class="layui-input" placeholder="(不可修改)申请人"
+							 readonly>
+						</div>
+					</div>
+
+					<div class="layui-inline">
+						<label class="layui-form-label">所属项目:</label>
+						<div class="layui-input-inline layui-form-pane">
+							<div class="layui-input-block layui-form" style="margin-left: 0px;">
+								<select name="project_id" lay-filter="project_id">
+									<option value="" selected="">请选择</option>
+									<option value="0">智慧医疗系统</option>
+									<option value="1">智慧养老系统</option>
+									<option value="2">智慧交通系统</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">申请类型:</label>
+						<div class="layui-input-inline">
+							<input type="radio" name="apply_type" value="1" checked="checked" title="硬件">
+							<input type="radio" name="apply_type" value="0" title="软件">
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">申请金额:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="apply_money" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">商品信息:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="commodity" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label" style="margin-left: -2px;">审核人员</label>
+						<div class="layui-input-inline layui-form-pane">
+							<div class="layui-input-block layui-form" style="margin-left: 0px;">
+								<select name="audit_people" lay-filter="audit_people">
+									<option value="" selected="">请选择</option>
+									<option value="0">审核人1</option>
+									<option value="1">审核人2</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">创建日期:</label>
+						<div class="layui-input-inline">
+							<input type="text" lay-verify="required" autocomplete="off" class="layui-input" name="createtime" placeholder="(不可修改)创建日期"
+							 readonly>
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">申请描述:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="apply_description" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">申请凭证:</label>
+						<button type="button" class="layui-btn layui-btn" id="test5"><i class="layui-icon"></i>请上传申请凭证</button>
+					</div>
+				</div>
+
+				<div class="layui-form-item" style="text-align: center;">
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+						 lay-submit="" style="margin-left: 100px;">保存</button>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh" style="margin-right: 200px;">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!-- 修改的弹出层结束 -->
+
+		<script src="resources/layui/layui.js"></script>
+		<script>
+			var data;
+			var index = 0;
+			layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table', 'layer', 'laydate', 'form', 'upload'],
+				function() {
+					var slider = layui.slider,
+						element = layui.element,
+						form = layui.form,
+						table = layui.table,
+						laydate = layui.laydate,
+						rate = layui.rate,
+						layer = layui.layer,
+						upload = layui.upload,
+						carousel = layui.carousel;
+
+					//日期范围
+					laydate.render({
+						elem: '#test1',
+					});
+					laydate.render({
+						elem: '#test2',
+					});
+
+					//渲染数据表格
+					table.render({
+						elem: '#caigoutable', //渲染的目标对象
+						url: 'js/caigou.json', //数据接口
+						title: '采购信息管理表', //数据导出来的标题						
+						toolbar: "#userToolBar", //表格的工具条
+						defaultToolbar: ['filter', 'exports'],
+						height: 'full-110',
+						cellMinWidth: 100, //设置列的最小默认宽度	
+						done: function(res, curr, count) {
+							/* alert(res);//后台url返回的json串
+							alert(curr);//当前页
+							alert(count);//数据总条数 */
+						},
+						totalRow: true, //开启合并行	
+						page: true, //是否启用分页
+						/*   ,limit:20 //设置每页显示条数 默认为10
+						  ,limits:[20,40,60,80] */
+						text: {
+							none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+						},
+						cols: [
+							[ //列表数据
+								{
+									type: 'checkbox',
+									fixed: 'left'
+								}, {
+									field: 'id',
+									title: 'ID',
+									sort: true,
+									align: 'center'
+								}, {
+									field: 'project_id',
+									title: '所属项目',
+									width: 130,
+									sort: true,
+									align: 'center'
+								}, {
+									field: 'apply_user',
+									title: '申请人',
+									hide:true,
+									align: 'center'
+								}, {
+									field: 'process_id',
+									title: '审批流程',
+									hide:true,
+									align: 'center',
+									width: 120
+								}, {
+									field: 'createtime',
+									title: '创建日期',
+									width: 130,
+									hide:true,
+									align: 'center'
+								}, {
+									field: 'apply_money',
+									title: '申请金额',
+									align: 'center'
+								}, {
+									field: 'apply_type',
+									title: '申请类型',
+									align: 'center',
+								}, {
+									field: 'apply_status',
+									title: '申请状态',
+									align: 'center'
+								}, {
+									field: 'apply_description',
+									title: '申请描述',
+									
+									align: 'center'
+								}, {
+									field: 'gistaddr',
+									title: '申请凭证',
+									align: 'center'
+								}, {
+									field: 'commodity',
+									title: '商品信息',
+									align: 'center'
+								}, {
+									fixed: 'right',
+									title: '操作',
+									width: 250,
+									align: 'center',
+									toolbar: '#barDemo'
+								}
+							]
+						],
+						done: function(res, curr, count) {
+							merge(res, curr, count);
+						},
+						id: 'pushReload',
+						done: function(res, curr, count) {
+							index++;
+							if (index == 1)
+								data = res.data;
+						}
+					});
+
+					//查询项目名称
+					var $ = layui.$,
+						active = {
+							reload: function() {
+								var selectData = new Array();
+								var cainameReload = $('#cainameReload');
+								data.forEach(function(value) {
+									if (value.project_id == cainameReload.val())
+										selectData.push(value);
+								})
+								//执行重载
+								table.reload('pushReload', {
+									page: {
+										curr: 1 //重新从第 1 页开始
+									},
+									data: selectData,
+									url: ""
+								});
+							}
+						};
+
+					$('.demoTable .btnsearch').on('click', function() {
+						var type = $(this).data('type');
+						active[type] ? active[type].call(this) : '';
+					});
+
+
+					//合并单元格
+					function merge(res, curr, count) {
+						var data = res.data;
+						var mergeIndex = 0; //定位需要添加合并属性的行数
+						var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
+						var columsName = ['project_id']; //需要合并的列名称
+						var columsIndex = [2]; //需要合并的列索引值
+
+						for (var k = 0; k < columsName.length; k++) //这里循环所有要合并的列
+						{
+							var trArr = $(".layui-table-body>.layui-table").find("tr"); //所有行
+							for (var i = 1; i < res.data.length; i++) { //这里循环表格当前的数据
+								var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]); //获取当前行的当前列
+								var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]); //获取相同列的第一列
+								if (data[i][columsName[k]] === data[i - 1][columsName[k]]) { //后一行的值与前一行的值做比较，相同就需要合并
+									console.log(data[i][columsName[k]]);
+									console.log(data[i - 1][columsName[k]]);
+									mark += 1;
+									tdPreArr.each(function() { //相同列的第一列增加rowspan属性
+										$(this).attr("rowspan", mark);
+									});
+									tdCurArr.each(function() { //当前行隐藏
+										$(this).css("display", "none");
+									});
+								} else {
+									mergeIndex = i;
+									mark = 1; //一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+								}
+							}
+						}
+					}
+
+
+					//监听头部工具栏事件
+					table.on("toolbar(caigoutable)", function(obj) {
+						switch (obj.event) {
+							case 'add':
+								openAddUser(data);
+								break;
+						};
+					})
+
+
+
+					//监听行工具事件
+					table.on('tool(caigoutable)', function(obj) {
+						var data = obj.data; //获得当前行数据
+						var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+						if (layEvent === 'del') { //删除
+							layer.msg("删除");
+							layer.confirm('真的删除行么', function(index) {
+								obj.del();
+								layer.close(index);
+								//向服务端发送删除指令
+							});
+						} else if (layEvent === 'edit') { //编辑
+							openUpdateUser(data);
+						} else if (layEvent === 'submit') {
+							layer.confirm('确定提交申请吗', function(index) {
+
+								layer.close(index);
+							});
+						} else if (layEvent === 'look_phone') {
+							layer.msg("流程图")
+						}
+					});
+
+					var url;
+					var mainIndex;
+					//打开添加页面
+					function openAddUser(data) {
+						mainIndex = layer.open({
+							type: 1,
+							title: '添加采购',
+							content: $("#addDiv"),
+							area: ['700px', '400px'],
+							success: function(index) {
+								//清空表单数据       
+								$("#dataFrm")[0].reset();
+								url = "user/addUser.action";
+
+							}
+						});
+					}
+
+					//打开修改页面
+					function openUpdateUser(data) {
+						mainIndex = layer.open({
+							type: 1,
+							title: '修改采购',
+							content: $("#updateDiv"),
+							area: ['700px', '400px'],
+							success: function(index) {
+								form.val("dataFrm", data);
+								url = "user/updateUser.action";
+
+							}
+						});
+					}
+
+					//保存
+					form.on("submit(doSubmit)", function(obj) {
+						//序列化表单数据
+						var params = $("#dataFrm").serialize();
+						$.post("index.jsp", params, function(obj) {
+							layer.msg(obj);
+							//关闭弹出层
+							layer.close(mainIndex)
+							//刷新数据 表格
+							tableIns.reload();
+						})
+					});
+					//设定文件大小限制
+					upload.render({
+						elem: '#test3',
+						url: 'https://httpbin.org/post' //改成您自己的上传接口
+							,
+						done: function(res) {
+							layer.msg('上传成功');
+							console.log(res)
+						}
+					});
+					//设定文件大小限制
+					upload.render({
+						elem: '#test5',
+						url: 'https://httpbin.org/post' //改成您自己的上传接口
+							,
+						done: function(res) {
+							layer.msg('上传成功');
+							console.log(res)
+						}
+					});
+				});
+		</script>
+	</body>
+</html>

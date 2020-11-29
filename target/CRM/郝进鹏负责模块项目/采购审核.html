@@ -1,0 +1,330 @@
+<!DOCTYPE html >
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>采购审批</title>
+	<link rel="stylesheet" href="resources/layui/css/layui.css">
+</head>
+
+<body class="layui-layout-body">
+<!-- 身体部分开始 -->
+<div style="margin-top: 20px; margin-bottom: 10px; margin-left: 10px; margin-right: 10px;">
+	<!-- 数据表格开始 -->
+	<table class="layui-hide" id="approvalTable" lay-filter="approvalTable"></table>
+	<div style="display: none;" id="userToolBar">
+		<div class="layui-form-item" style="height: 30px;">
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: auto;">费用申请表</label>
+				<input type="text" name="apply_id" id="Apply_id" lay-verify="required" placeholder="请输入申请表号" autocomplete="off" class="layui-input" style="width: 180px;">
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: auto;">审核状态</label>
+				<div class="layui-input-inline layui-form-pane" style="width: 180px;">
+					<select name="approval_Status" id="Approval_Status">
+						<option value="">请选择申请状态</option>
+						<option value="1">同意</option>
+						<option value="2">驳回</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-inline">
+				<div class="layui-input-block" style="margin-left: 5px;">
+					<label class="layui-form-label" style="width: auto;">审核时间</label>
+					<input type="text" name="timeHead" class="layui-input" id="TimeHead" placeholder="yyyy-MM-dd" style="width: 180px;">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<button class=" layui-btn" lay-event="Submit" lay-filter="Submit" lay-submit>查询
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<!--0为待审核-->
+	<!--1为同意-->
+	<!--2为驳回-->
+	<script type="text/html" id="userBar">
+		{{#  if(d.status =="0"){ }}
+		<button class="layui-btn layui-btn-xs" lay-event="deal">处理审核</button>
+		<button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="liuchengtu">审核流程</button>
+		{{# } }}
+		{{#  if(d.status =="1"){ }}
+		<button class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="">处理审核</button>
+		<button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="liuchengtu">审核流程</button>
+		{{# } }}
+		{{#  if(d.status =="2"){ }}
+		<button class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="">处理审核</button>
+		<button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="liuchengtu">审核流程</button>
+		{{# } }}
+	</script>
+
+	<!-- 数据表格结束 -->
+</div>
+<!-- 身体部分结束 -->
+
+<!-- 添加和修改的弹出层开始 -->
+<div style="display: none;padding: 10px" id="saveOrUpdateDiv">
+	<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+		<div class="layui-form-item layui-input-inline">
+			<label class="layui-form-label" style="margin-left: -5px;">审核表编号:</label>
+			<div class="layui-input-block" style="margin-left: 110px; margin-top: 0px;">
+				<input type="text" class="layui-input" name="expenses_id" id="Expenses_id" readonly="readonly">
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">审核状态:</label>
+				<div class="layui-input-inline">
+					<input type="radio" name="sta" id="Sta" value="1" lay-filter="sta" title="同意">
+					<input type="radio" name="sta" id="Sta" value="2" lay-filter="sta" title="驳回">
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-form-item layui-input-inline">
+			<label class="layui-form-label" style="margin-left: -5px;">审核时间:</label>
+			<div class="layui-input-block" style="margin-left: 110px; margin-top: 0px;">
+				<input type="text" class="layui-input" name="time" id="Time" placeholder="请选择审核时间">
+			</div>
+		</div>
+
+		<div class="layui-form-item layui-inline" style="display:block" id="App">
+			<label class="layui-form-label" style="margin-left: -5px;">上级审核人</label>
+			<div class="layui-input-inline layui-form-pane">
+				<div class="layui-input-block layui-form" style="margin-left: 0px;">
+					<select name="parentReviewer" id="ParentReviewer" lay-filter="parentReviewer">
+						<option value="" selected="">请选择</option>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-form-item ">
+			<label class="layui-form-label" style="margin-left: -5px;">审核描述:</label>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<div class="layui-input-block" style="margin-left: 140px; margin-top: 0px;">
+						<textarea placeholder="添加审批批注" dirname="des" id="Des" class="layui-textarea" style="margin-left: -110px; margin-top: -12px;"
+								  name="text"></textarea>
+			</div>
+		</div>
+
+		<div class="layui-form-item" style="text-align: center;">
+			<div class="layui-input-block">
+				<button type="submit" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+						lay-submit="">提交</button>
+				<button type="button" id="cancel" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">取消</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+<!-- 添加和修改的弹出层结束 -->
+
+<script src="resources/layui/layui.js"></script>
+<script>
+	layui.use(['jquery', 'layer', 'form', 'table', 'laydate', 'element'], function() {
+		var $ = layui.jquery;
+		var layer = layui.layer;
+		var element = layui.element;
+		var form = layui.form;
+		var table = layui.table;
+		var laydate = layui.laydate;
+
+		//日期范围
+		laydate.render({
+			elem: '#TimeHead'
+		});
+		laydate.render({
+			elem: '#Time'
+		});
+
+		//渲染数据表格
+		table.render({
+			elem: '#approvalTable', //渲染的目标对象
+			url: '/approval.do?opt=queryAll', //数据接口
+			title: '采购审核表', //数据导出来的标题
+			toolbar: "#userToolBar", //表格的工具条
+			defaultToolbar: ['filter', 'print', 'exports', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+				title: '提示',
+				layEvent: 'LAYTABLE_TIPS',
+				icon: 'layui-icon-tips'
+			}],
+			height: 'full-110',
+			cellMinWidth: 100, //设置列的最小默认宽度
+			done: function(res, curr, count) {
+				/* alert(res);//后台url返回的json串
+                alert(curr);//当前页
+                alert(count);//数据总条数 */
+			},
+			totalRow: true, //开启合并行
+			page: true, //是否启用分页
+			/*   ,limit:20 //设置每页显示条数 默认为10
+              ,limits:[20,40,60,80] */
+			text: {
+				none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+			},
+			cols: [
+				[ //列表数据
+					{
+						type: 'checkbox',
+						fixed: 'left'
+					}, {
+					field: 'id',
+					title: 'ID',
+					sort: true,
+					align: 'center'
+				}, {
+					field: 'expenses_id',
+					title: '费用审核表',
+					sort: true,
+					align: 'center'
+				}, {
+					field: 'approvalUsername',
+					title: '待审核人',
+					align: 'center'
+				}, {
+					field: 'createtime',
+					title: '审核时间',
+					align: 'center'
+				}, {
+					field: 'status',
+					title: '审核状态',
+					align: 'center',
+					templet: function(d) {
+						if (d.status == '1') {
+							return '同意'
+						} else if (d.status == '2') {
+							return '驳回'
+						} else if (d.status == '0') {
+							return '待审核'
+						}
+					}
+				}, {
+					field: 'description',
+					title: '审核描述',
+					align: 'center'
+				}, {
+					fixed: 'right',
+					title: '操作',
+					width: 170,
+					align: 'center',
+					toolbar: '#userBar'
+				}
+				]
+			],
+			id: 'pushReload',
+		});
+
+		//监听头部工具栏事件
+		table.on("toolbar(approvalTable)", function(obj) {
+			switch (obj.event) {
+				case 'Submit':
+					Submit();
+					break;
+			};
+
+			function Submit() {
+				//模糊查询
+				var Apply_id = $("#Apply_id").val();
+				var Approval_Status = $("#Approval_Status").val();
+				var TimeHead = $("#TimeHead").val();
+				table.reload('pushReload', {
+					where: {
+						apply_id: Apply_id,
+						approval_status: Approval_Status,
+						timeHead: TimeHead
+					}
+				});
+			}
+		});
+
+		//监听行工具事件
+		table.on('tool(approvalTable)', function(obj) {
+			var data = obj.data; //获得当前行数据
+			var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+			if (layEvent === 'deal') {
+				openDeal(data.id, data);
+			}
+		});
+
+		//监听弹出层单选框选中事件
+		form.on('radio(sta)', function(data) {
+			console.log(data)
+			if (data.value == 2) {
+				//如果弹出层单选框为驳回2，则上级不可选
+				document.getElementById("App").style.display = "none";
+			} else if (data.value == 1) {
+				document.getElementById("App").style.display = "block";
+			}
+		});
+
+		var url;
+		var mainIndex;
+		//打开审核页面
+		function openDeal(id, data) {
+			console.log(data);
+			mainIndex = layer.open({
+				type: 1,
+				title: '处理审核',
+				content: $("#saveOrUpdateDiv"),
+				area: ['600px', '400px'],
+				success: function(index) {
+					//添加一个审核表，实现类似编辑的功能，用于将此值传给后端，用于审核通过后，添加上级记录
+					form.val("dataFrm", data);
+					//审核人员下拉框
+					$.getJSON(
+							"/apply.do?opt=queryApprovalUser",
+							function(date) {
+								console.log(date),
+										$("#ParentReviewer").empty(),
+										$("#ParentReviewer").append(
+												"<option value=''>请选择</option>"
+										);
+								$.each(date, function(k, v) {
+									$("#ParentReviewer").append(
+											"<option value='" + v.id + "'>" + v.username + "</option>"
+									);
+								});
+								form.render('select');
+							});
+					url = "/approval.do?opt=update&id=" + id + "";
+				}
+			});
+		}
+		//监听submit提交
+		form.on('submit(doSubmit)', function(data) {
+			console.log(data)
+			console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+			alert(JSON.stringify(data.field));
+			var sta = $("input[type='radio']:checked").val();
+			$.get(
+					url, {
+						"sta": sta,
+						"time": $("#Time").val(),
+						"des": $("#Des").val(),
+						"parentReviewer": $("#ParentReviewer").val(),
+						"expenses_id": $("#Expenses_id").val()
+					},
+					function(flag) {
+						if (flag == 1) {
+							alert("恭喜您操作成功!");
+							window.location.href = "approval.html";
+						} else {
+							alert("操作失败!");
+							window.location.href = "approval.html";
+						}
+					}, "json");
+			return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+		});
+
+		//弹出层取消按钮绑定
+		$("#cancel").click(function() {
+			location.reload();
+		});
+
+	});
+</script>
+</body>
+</html>

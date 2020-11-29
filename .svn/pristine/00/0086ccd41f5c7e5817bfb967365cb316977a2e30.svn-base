@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>统计管理</title>
+		<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+		<script src="js/echarts.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			/**自定义滚动条样式 */
+			::-webkit-scrollbar {
+				width: 4px;
+				height: 4px
+			}
+
+			::-webkit-scrollbar-track {
+				background-color: transparent;
+				-webkit-border-radius: 2em;
+				-moz-border-radius: 2em;
+				border-radius: 2em;
+			}
+
+			::-webkit-scrollbar-thumb {
+				background-color: #9c9da0;
+				-webkit-border-radius: 2em;
+				-moz-border-radius: 2em;
+				border-radius: 2em
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 搜索条件开始 -->
+		<table class="layui-hide" id="test" lay-filter="test" style="height:20px;"></table>
+		<div class="layui-form-item" style=" display: none;" id="toolbarDemo">
+			<label class="layui-form-label" style="margin-top: 10px;"></label>
+			<div class="layui-input-inline" style="margin-left:-70px;margin-top:20px;">
+				<select name="station" lay-verify="required">
+					<option value="0">岗位1</option>
+					<option value="1">岗位2</option>
+					<option value="2">岗位3</option>
+					<option value="3">岗位4</option>
+				</select>
+			</div>
+			<div class="layui-input-inline">
+				<label class="layui-form-label"></label>
+				<div class="layui-input-inline" style="margin-top:20px;">
+					<input type="text" name="employee_number" autocomplete="off" class="layui-input" placeholder="请输入人员编号">
+				</div>
+			</div>
+			<div class="layui-input-inline">
+				<label class="layui-form-label"></label>
+				<div class="layui-input-inline" style="margin-top:20px;">
+					<input type="text" name="join_time" id="date" placeholder="请选择日期范围" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-input-inline">
+				<label class="layui-form-label"></label>
+				<div class="layui-input-inline" style="margin-top:20px;">
+					<select name="project_name" lay-verify="required">
+						<option value="0">项目名称1</option>
+						<option value="1">项目名称2</option>
+						<option value="2">项目名称3</option>
+						<option value="3">项目名称4</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-input-inline" id="queryBar" style="margin-left: 1100px;margin-top: -70px;">
+				<a class="layui-btn layui-btn-sm" lay-event="query">查询</a>
+				<a class="layui-btn layui-btn-sm" lay-event="chart" href="饼图.html">图表</a>
+			</div>
+		</div>
+		<br><br>
+		<!-- 搜索条件结束 -->
+
+		<!-- 数据表格开始 -->
+		<table class="layui-hide" id="userTable" lay-filter="userTable"></table>
+
+		<div id="userBar" style="display: none;">
+			<a class="layui-btn layui-btn-xs" lay-event="add">添加</a>
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+		</div>
+		<!-- 数据表格结束 -->
+		<!-- 弹出图表层开始 -->
+		<div style="display: none; padding: 20px" id="chartDiv">
+			<center>
+				<h2 class="title">员工贡献统计图</h2>
+				<div id="chart_area" style="height:500px;"></div>
+			</center>
+		</div>
+
+		<!-- 弹出图表层结束 -->
+		<!-- 添加和修改的弹出层开始 -->
+		<div style="display: none;padding: 20px" id="saveOrUpdateDiv">
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<select>
+							<label class="layui-form-label">
+								<option>岗位</option>
+							</label>
+						</select>
+						<!-- <div class="layui-input-inline">
+							<input type="text" name="station" lay-verify="required" autocomplete="off" class="layui-input">
+						</div> -->
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label"></label>
+						<div class="layui-input-inline">
+							<input type="text" name="employee_number" autocomplete="off" class="layui-input" placeholder="请输入人员编号">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<select lay-filter="" name="project_name">
+							<label class="layui-form-label">
+								<option>项目名称</option>
+							</label>
+						</select>
+						<!-- <div class="layui-input-inline">
+							<input type="text" name="project_name" lay-verify="required" autocomplete="off" class="layui-input">
+						</div> -->
+
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label"></label>
+						<div class="layui-input-inline">
+							<input type="text" name="join_time" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入加入时间">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label"></label>
+						<div class="layui-input-inline" style="margin-left: 0px;">
+							<input type="text" name="join_project" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入参与项目">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label"></label>
+						<div class="layui-input-inline">
+							<input type="text" name="implementationp_project" autocomplete="off" class="layui-input" placeholder="请输入实施项目">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label"></label>
+						<div class="layui-input-inline">
+							<input type="text" name="accept_work" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入接受工单">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label"></label>
+						<div class="layui-input-inline">
+							<input type="text" name="solve_work" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入解决工单">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item" style="text-align: center;">
+					<div class="layui-input-block">
+						<button type="submit" id="sub" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release"
+						 lay-filter="doSubmit" lay-submit="">提交</button>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+					</div>
+				</div>
+			</form>
+
+		</div>
+		<!-- 添加和修改的弹出层结束 -->
+
+	</body>
+	<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'element', 'table', 'laydate', 'layer', 'form'], function() {
+			var $ = layui.jquery,
+				element = layui.element,
+				table = layui.table,
+				laydate = layui.laydate,
+				layer = layui.layer,
+				form = layui.form;
+			//日期范围
+			laydate.render({
+				elem: '#test6',
+				range: true
+			});
+
+			//渲染数据表格
+			var tableIns = table.render({
+				elem: '#userTable', //渲染的目标对象
+
+				url: 'js/crm.json', //数据接口
+
+				title: '员工贡献表', //数据导出来的标题
+				toolbar: '#toolbarDemo',
+				//toolbar: "#userTable", //开启头部工具栏，并为其绑定左侧模板
+				totalRow: true,
+				height: 'full-120',
+				cellMinWidth: 100 //设置列的最小默认宽度
+					,
+				done: function(res, curr, count) {
+
+				},
+				page: true //是否启用分页
+					,
+				cols: [
+					[ //列表数据
+						{
+							type: 'checkbox',
+							fixed: 'left'
+						}, {
+							field: 'station',
+							title: '岗位',
+							sort: true
+						}, {
+							field: 'employee_number',
+							title: '人员编号',
+							sort: true,
+							align: 'center'
+						}, {
+							field: 'project_name',
+							title: '项目名称',
+							sort: true,
+							align: 'center',
+
+						}, {
+							field: 'join_time',
+							title: '加入时间',
+							align: 'center',
+
+						}, {
+							field: 'join_project',
+							title: '参与项目',
+							align: 'center',
+						}, {
+							field: 'implementationp_project',
+							title: '实施项目',
+							align: 'center',
+						}, {
+							field: 'accept_work',
+							title: '接受工单',
+							align: 'center',
+						}, {
+							field: 'solve_work',
+							title: '解决工单',
+							align: 'center'
+						}, {
+							fixed: 'right',
+							title: '操作',
+							toolbar: '#userBar',
+							width: 220,
+							align: 'center'
+						}
+					]
+				]
+
+			})
+			//渲染查询
+			/* var tableIns = table.render({
+				elem: '#userTable' //渲染的目标对象
+					,
+				toolbar: '#toolbarDemo' //表格的工具条
+			}); */
+			//监听查询事件
+			form.on('tool(queryTable)', function(obj) {
+				var data = obj.data; //获得当前行数据
+				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+				if (layEvent === 'chart') {
+					chartOpen(data);
+				}
+			});
+			//打开图表页面
+			// function chartOpen(){
+			// 	mainIndex = layer.open({
+			// 		type:1,
+			// 		title:'查看图表',
+			// 		content:$("#chartDiv"),
+			// 		area: ['1300px', '650px'],
+			// 	});
+			// }
+			//打开查询页面
+			function openQueery() {
+				mainIndex = layer.open({
+					type: 1,
+					title: '添加员工信息',
+					content: $("#saveOrUpdateDiv"),
+					area: ['800px', '400px'],
+					success: function(index) {
+						//清空表单数据       
+						$("#dataFrm")[0].reset();
+						url = "user/addUser.action";
+					}
+				});
+			}
+			//监听行工具事件
+			table.on('tool(userTable)', function(obj) {
+				var data = obj.data; //获得当前行数据
+				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+				if (layEvent === 'del') { //删除
+					layer.msg("删除");
+					layer.confirm('真的删除行么', function(index) {
+						layer.close(index);
+						obj.del();
+						//向服务端发送删除指令
+					});
+				} else if (layEvent === 'edit') { //编辑
+					openUpdateUser(data);
+				} else if (layEvent === 'add') {
+					openAddUser(data);
+				}
+			});
+
+			//打开添加页面
+			function openAddUser() {
+				mainIndex = layer.open({
+					type: 1,
+					title: '添加员工信息',
+					content: $("#saveOrUpdateDiv"),
+					area: ['800px', '400px'],
+					success: function(index) {
+						//清空表单数据       
+						$("#dataFrm")[0].reset();
+						url = "user/addUser.action";
+					}
+				});
+			}
+			//打开修改页面
+			function openUpdateUser(data) {
+				mainIndex = layer.open({
+					type: 1,
+					title: '修改用户',
+					content: $("#saveOrUpdateDiv"),
+					area: ['800px', '400px'],
+					success: function(index) {
+						form.val("dataFrm", data);
+						url = "user/updateUser.action";
+					}
+				});
+			}
+			//监听提交
+
+			form.on('submit(doSubmit)', function(data) {
+				layer.msg(JSON.stringify(data.field));
+				return false;
+			});
+			//保存
+			form.on("submit(doSubmit)", function(obj) {
+				//序列化表单数据
+				var params = $("#dataFrm").serialize();
+				$.post("index.jsp", params, function(obj) {
+					layer.msg(obj);
+					//关闭弹出层
+					layer.close(mainIndex)
+					//刷新数据 表格
+					tableIns.reload();
+				})
+			});
+
+		});
+	</script>
+</html>

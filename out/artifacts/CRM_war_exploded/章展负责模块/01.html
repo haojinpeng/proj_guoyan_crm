@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+
+	</head>
+	<body>
+		            <button type="button" onclick="reduce('count<%=goods.get(i).getGoodsInfo().getGoods_Id()%>')" style="width: 30px;height: 25px;font-size: 16px">-</button>&nbsp;&nbsp;
+            <input name="count" value="<%=goods.get(i).getCount()%>" id="count<%=goods.get(i).getGoodsInfo().getGoods_Id()%>">
+            <button type="button" onclick="add('count<%=goods.get(i).getGoodsInfo().getGoods_Id()%>')" style="width: 30px;height: 25px;font-size: 16px">+</button>
+	</body>
+		<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	 function  reduce(id) {
+
+        var count=document.getElementById(id).value;
+        if(window.parseInt(count)>1){
+            count = window.parseInt(count)-1;
+        }else{
+            count = window.parseInt(count);
+        }
+
+        document.getElementById(id).value=count;
+    }
+    function add(id) {
+
+        var count = document.getElementById(id).value();
+        count = window.parseInt(count)+1;
+        document.getElementById(id).value=count;
+    }
+</script>
+</html>

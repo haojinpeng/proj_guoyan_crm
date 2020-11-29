@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>知识库</title>
+		<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="css/main.css" />
+		<style>
+			  ::-webkit-scrollbar {width: 4px;height: 4px}
+			    ::-webkit-scrollbar-track {background-color: transparent;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em;}
+			    ::-webkit-scrollbar-thumb {background-color: #9c9da0;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em}
+             #hclick1:hover{
+				color: red;
+				cursor: pointer;
+			 } 
+			 #hclick0:hover{
+			 				color: red;
+			 				cursor: pointer;
+			 } 
+			 #hclick2:hover{
+			 				color: red;
+							cursor:pointer;
+			 } 
+			 #hclick3:hover{
+			 				color: red;
+							cursor:pointer;
+			 } 
+		</style>
+	</head>
+	<body style="background-color:  #EEF1F5;align-content: center;">
+		
+		<!-- 上面他选项卡部分开始 -->
+		<div class="layui-tab layui-tab-card" lay-filter="demo">
+			<!-- 选项卡开始 -->
+			<ul class="layui-tab-title">
+				<li class="layui-this">公司介绍</li>
+				<li>产品资料</li>
+				<li>产品文档</li>
+				<li>销售资料</li>
+				<li>会计资料</li>
+				<li>开发资料</li>
+				<li>专家库</li>
+			</ul>
+			<!-- 选项卡结束 -->
+			<!-- 导航内容开始 -->
+			<div class="layui-tab-content" style="height: 100px;background-color: white;">
+				<div class="layui-tab-item layui-show" style="background-color: white;"><br><br>
+					<h3>
+						常用标签：&nbsp;全部标签 &nbsp;测试 &nbsp;规格 &nbsp;π &nbsp;2333 &nbsp;实物 &nbsp;45 &nbsp;11</h3>
+				</div>
+				<div class="layui-tab-item"><br><br>
+					<h3>
+						常用标签：&nbsp;全部标签 &nbsp;测试 &nbsp;规格 &nbsp;π &nbsp;2333 &nbsp;实物 &nbsp;45 &nbsp;11</h3>2
+				</div>
+				<div class="layui-tab-item"><br><br>
+					<h3>
+						常用标签：&nbsp;全部标签 &nbsp;测试 &nbsp;规格 &nbsp;π &nbsp;2333 &nbsp;实物 &nbsp;45 &nbsp;11</h3>3
+				</div>
+				<div class="layui-tab-item"><br><br>
+					<h3>
+						常用标签：&nbsp;全部标签 &nbsp;测试 &nbsp;规格 &nbsp;π &nbsp;2333 &nbsp;实物 &nbsp;45 &nbsp;11</h3>4
+				</div>
+				<div class="layui-tab-item"><br><br>
+					<h3>
+						常用标签：&nbsp;全部标签 &nbsp;测试 &nbsp;规格 &nbsp;π &nbsp;2333 &nbsp;实物 &nbsp;45 &nbsp;11</h3>5
+				</div>
+				<div class="layui-tab-item"><br><br>
+					<h3>
+						常用标签：&nbsp;全部标签 &nbsp;测试 &nbsp;规格 &nbsp;π &nbsp;2333 &nbsp;实物 &nbsp;45 &nbsp;11</h3>6
+				</div>
+				<div class="layui-tab-item"><br><br>
+					<h3>
+						常用标签：&nbsp;全部标签 &nbsp;测试 &nbsp;规格 &nbsp;π &nbsp;2333 &nbsp;实物 &nbsp;45 &nbsp;11</h3>7
+				</div>
+			</div>
+			<!-- 导航内容结束 -->
+		</div>
+		<!-- 上面他选项卡部分结束 -->
+		<!-- 增加按钮开始 -->
+		<div class="site-demo-button" style="position: relative; margin-left: 93%; top: -168px; ">
+			<button class="layui-btn  site-demo-active layui-btn-normal" data-type="tabAdd">新增Tab项</button>
+		</div>
+		<!-- 增加按钮结束 -->
+		<!-- 搜索框部分开始 -->
+		<div style="width: 100%;height: 30px;">
+			
+				<button class="layui-btn layui-btn-normal"  style="margin-left: 5%;">更新时间倒序</button>
+			
+			<div style="margin-top: -32px;margin-left: 79%;">
+				<input type="text" style="height: 32px;" /><button class="layui-btn layui-btn-normal" >查询</button>
+			</div>
+		</div>
+		<!-- 搜索框部分结束 -->
+		<!-- 弹出修改层开始 -->
+		<!-- 添加和修改的弹出层开始 -->
+		<div style="display: none;padding: 20px; " id="saveOrUpdateDiv">
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+				<div class="layui-form-item">
+					<label class="layui-form-label">文章名称:</label>
+					<div class="layui-input-block">
+						<input type="text" name="id" lay-verify="required" autocomplete="off" class="layui-input" >
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">编辑器</label>
+					<div class="layui-input-block">
+						<textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor" value="哈哈哈哈"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">文章分类:</label>
+					<div class="layui-input-block">
+						<select style="width: 100px;">
+							<option value="">请选择一个类型</option>
+							<option value="010">产品资料</option>
+							<option value="021">产品文档</option>
+							<option value="0571">销售资料</option>
+							<option value="0571">会计资料</option>
+							<option value="0571">开发资料</option>
+							<option value="0571">专家库</option>
+		
+						</select>
+					</div>
+				</div>
+		
+		
+		
+				<div class="layui-form-item" style="text-align: center;">
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+						 lay-submit="">提交</button>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+					</div>
+				</div>
+			</form>
+		
+		</div>
+		<!-- 添加和修改的弹出层结束 -->
+		
+		<!-- 内容部分开始 -->
+
+		<div style="width: 90%;height: 700px;position: absolute;top:40%;margin-left: 5%;">
+			<!-- 模块一 -->
+			<div style="width: 100%;height: 60px;background-color: white;position: absolute;top:0px;box-shadow: 10px 10px 5px 5px darkgray;" class="btnclick0"><br>
+				<h2 style="color: #01AAED;"><span id="hclick0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我的文章&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></h2><br>
+				
+			</div>
+			<!-- 模块一 -->
+			<div style="width: 100%;height: 160px;background-color: white;position: absolute;top:100px;box-shadow: 10px 10px 5px 5px darkgray;" class="btnclick1"><br>
+				<h2 style="color: #01AAED;"><span id="hclick1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;知识库到底解决什么问题&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><button
+					 style="height: 20px;width: 50px;font-weight: 500;color: #01AAED;font-size: 12px;border: 1px lightgray solid;border-radius:10px;background-color: lightblue;" class="btnclick11">置顶</button></h2><br>
+				<p style="color: darkgray">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;行业资料&nbsp;&nbsp; 查看（4568）&nbsp;&nbsp;<i class="layui-icon" id="icon1">&#xe6c6;</i> (<span id="sp1">2476</span>)&nbsp;&nbsp;
+					马也&nbsp;&nbsp; 更新于 2020-05-31 13:45</p><br>
+				<p style="color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这里存了这么多信息，对于销售人员来说，到底解决他什么问题呢？</p>
+
+			</div>
+			<!-- 模块一 -->
+			<div style="width: 100%;height: 160px;background-color:white;position: absolute;top:300px;box-shadow: 10px 10px 5px 5px darkgray;"  class="btnclick2"><br>
+				<h2 style="color: #01AAED;"><span id="hclick2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;江学语录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><button style="height: 20px;width: 50px;font-weight: 500;color: #01AAED;font-size: 12px;border: 1px lightgray solid;border-radius:10px;background-color: lightblue;" class="btnclick22">置顶</button></h2><br>
+				<p style="color: darkgray">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;专家库&nbsp;&nbsp; 查看（2548）&nbsp;&nbsp;<i class="layui-icon" id="icon2">&#xe6c6;</i>(<span id="sp2">1258</span>) &nbsp;&nbsp;
+					马也&nbsp;&nbsp; 更新于 2020-04-02 12:36</p><br>
+				<p style="color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是这个道理，不可否认</p>
+			</div>
+			<!-- 模块一 -->
+			<div style="width: 100%;height: 160px;background-color:white;position: absolute;top:500px;box-shadow: 10px 10px 5px 5px darkgray;"  class="btnclick3"><br>
+				<h2 style="color: #01AAED;"><span id="hclick3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;雪&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><button style="height: 20px;width: 50px;font-weight: 500;color: #01AAED;font-size: 12px;border: 1px lightgray solid;border-radius:10px;background-color: lightblue;" class="btnclick33">置顶</button></h2><br>
+				<p style="color: darkgray">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;产品文档&nbsp;&nbsp;
+					查看（6819）&nbsp;&nbsp; <i class="layui-icon" id="icon3">&#xe6c6;</i>(<span id="sp3">3568</span>) &nbsp;&nbsp;马也&nbsp;&nbsp; 更新于 2020-03-16 08:45</p><br>
+				<p style="color: #000000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请输入</p>
+			</div>
+			
+          
+		</div>
+		
+		<!-- 内容部分结束 -->
+		<div id="demo7" style="position: absolute;top: 980px;left: 25%;"></div>
+	</body>
+	<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table', 'layer', 'laydate', 'form', 'layedit','laypage'],
+			function() {
+		
+				var $ = layui.jquery,
+					slider = layui.slider,
+					element = layui.element,
+					form = layui.form,
+					table = layui.table,
+					laydate = layui.laydate,
+					rate = layui.rate,
+					layer = layui.layer,
+					carousel = layui.carousel,
+					layedit = layui.layedit,
+					laypage = layui.laypage;
+					
+					//完整功能
+					laypage.render({
+					  elem: 'demo7'
+					  ,count: 100
+					  ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+					  ,jump: function(obj){
+					    console.log(obj)
+					  }
+					});
+				//创建一个编辑器
+				var editIndex = layedit.build('LAY_demo_editor');
+		
+				$("#div").click(function() {
+					openUpdateUser();
+				})
+		
+				var url;
+				var mainIndex;
+		
+				//打开修改页面
+				function openUpdateUser() {
+					mainIndex = layer.open({
+						type: 1,
+						title: '修改用户',
+						content: $("#saveOrUpdateDiv"),
+						area: ['800px', '400px']
+					});
+				}
+		
+
+			//触发事件
+			var active = {
+				tabAdd: function() {
+					
+					//新增一个Tab项
+					element.tabAdd('demo', {
+						title: '新选项'  //用于演示
+							,
+						content: '内容' ,
+						id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+					})
+				}
+
+			};
+			$('.site-demo-active').on('click', function() {
+				var othis = $(this),
+					type = othis.data('type');
+				active[type] ? active[type].call(this, othis) : '';
+
+			});
+
+			//Hash地址的定位
+			var layid = location.hash.replace(/^#test=/, '');
+			element.tabChange('test', layid);
+
+			element.on('tab(test)', function(elem) {
+				location.hash = 'test=' + $(this).attr('lay-id');
+			});
+			//弹出层开始
+			$('#hclick0').on('click', function() {
+				window.location.href="myKnow.html";
+			});
+			$('#hclick1').on('click', function() {		
+				window.location.href="h1.html";
+			});
+			$('#hclick2').on('click', function() {
+				window.location.href="h2.html";
+			});
+			$('#hclick3').on('click', function() {
+				window.location.href="h3.html";
+			});
+			//弹出层结束
+			// 置顶文章开始
+			$('#icon1').on('click', function() {
+				$(this).css("color", "red");
+				$(this).css("font-size", "20px");
+				var sp1=document.getElementById("sp1");
+				sp1.innerHTML=sp1.innerHTML*1+1;
+				
+			
+			});
+			$('#icon2').on('click', function() {
+				$(this).css("color", "red");
+				$(this).css("font-size", "20px");
+				
+				var sp2=document.getElementById("sp2");
+				sp2.innerHTML=sp2.innerHTML*1+1;
+		
+			
+			});
+			$('#icon3').on('click', function() {
+				$(this).css("color", "red");
+				$(this).css("font-size", "20px");
+				
+				var sp3=document.getElementById("sp3");
+				sp3.innerHTML=sp3.innerHTML*1+1;
+			
+			});
+			$('.btnclick11').on('click', function() {
+				$('.btnclick1').css("top", "100px");
+				$('.btnclick2').css("top", "300px");
+				$('.btnclick3').css("top", "500px");
+			
+			});
+		
+			$('.btnclick22').on('click', function() {
+				$('.btnclick2').css("top", "100px");
+				$('.btnclick1').css("top", "300px");
+				$('.btnclick3').css("top", "500px");
+			
+			});
+			$('.btnclick33').on('click', function() {
+				$('.btnclick3').css("top", "100px");
+				$('.btnclick1').css("top", "300px");
+				$('.btnclick2').css("top", "500px");
+			
+			});
+			// 置顶文章结束
+
+		});
+	</script>
+</html>

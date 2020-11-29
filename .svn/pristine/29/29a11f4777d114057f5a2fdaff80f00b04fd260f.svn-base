@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>角色</title>
+    <link rel="stylesheet" href="resources/layui/css/layui.css">
+</head>
+<style>
+    /**自定义滚动条样式 */
+    ::-webkit-scrollbar {
+        width: 4px;
+        height: 4px
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+        -webkit-border-radius: 2em;
+        -moz-border-radius: 2em;
+        border-radius: 2em;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #9c9da0;
+        -webkit-border-radius: 2em;
+        -moz-border-radius: 2em;
+        border-radius: 2em
+    }
+</style>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend>
+        <a name="角色管理">角色</a>
+    </legend>
+</fieldset>
+
+<!-- 添加的弹出层开始 -->
+<!--<div style="display: none;padding: 20px" id="roleAddDiv">-->
+<form class="layui-form " action="" lay-filter="roleAddFrm" id="roleAddFrm">
+    <!--        <input type="text" id="roleId" name="roleId" autocomplete="off" class="layui-input">-->
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">角色:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="roleName" name="roleName" required lay-verify="required" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <div id="regionTest"></div>
+            <div style="margin-left: 15px;">
+                您点击的地域是：<span id="addClick"></span></br>
+                提交的数据：<span id="addAll"></span>
+            </div>
+        </div>
+    </div>
+
+    <!--        <div id="regionTest"></div>-->
+    <!--        <div style="margin-left: 15px;">-->
+    <!--            您点击的地域是：<span id="click"></span></br>-->
+    <!--            提交的数据：<span id="all"></span>-->
+    <!--        </div>-->
+
+
+    <div class="layui-form-item" style="text-align: center;">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release"
+                    id="doSubmit">提交
+            </button>
+            <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置
+            </button>
+        </div>
+    </div>
+</form>
+<!--</div>-->
+<!-- 添加的弹出层结束 -->
+<!-- 修改的弹出层结束 -->
+<script src="resources/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table', 'layer', 'laydate', 'form'], function () {
+
+        var $ = layui.jquery,
+            slider = layui.slider,
+            element = layui.element,
+            form = layui.form,
+            table = layui.table,
+            laydate = layui.laydate,
+            rate = layui.rate,
+            layer = layui.layer,
+            carousel = layui.carousel;
+    })
+</script>
+<script src="resources/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: 'resources/layui_exts/' //配置组件存放的基础目录
+    }).extend({
+        regionCheckBox: 'regionCheckBox/regionCheckBox' //定义组件模块名
+    }).use(['regionCheckBox'], function () {
+        var $ = layui.$;
+        var regionCheckBox = layui.regionCheckBox;
+        //执行实例
+        regionCheckBox.render({
+            elem: '#regionTest',
+            name: 'region', //input name
+            // value: ['商机信息', '商机跟进-添加', '商机跟进-修改', '商机跟进-删除'], //赋初始值
+            width: '1100px', //默认550px
+            border: true, //默认true
+            ready: function () { //初始化完成时执行
+                $('#addAll').html(this.name + '=' + getAllChecked());
+            },
+            change: function (result) { //点击复选框时执行
+                $('#addClick').html(result.value);
+                $('#addAll').html(this.name + '=' + getAllChecked());
+            }
+        });
+
+        function getAllChecked() {
+            var all = '';
+            $("input:checkbox[name='region']:checked").each(function () {
+                all += $(this).val() + ',';
+            });
+            return all.substring(0, all.length - 1);
+        }
+
+
+        $("#doSubmit").click(function () {
+            var AllChecked = getAllChecked();
+            if (AllChecked=null||''==AllChecked||""==AllChecked){
+                alert("请选择权限")；
+            }else {
+                $.get(
+                    "role.do?opt=add",
+                    {
+                        "role_name": $("#roleName").val(),
+                        "allChecked": AllChecked
+                    },
+                    function (flag) {
+                        if (flag > 0) {
+                            alert("恭喜您操作成功!");
+                            window.location.href = "role.html";
+                        } else {
+                            alert("操作失败!");
+                            window.location.href = "role_AddOrUpdate.html";
+                        }
+
+                    }
+                );
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            }
+        })
+    });
+</script>
+
+</body>
+</html>

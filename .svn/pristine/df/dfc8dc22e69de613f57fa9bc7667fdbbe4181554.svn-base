@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>采购类型</title>
+		<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+	</head>
+	<style type="text/css">
+		 /**自定义滚动条样式 */
+    ::-webkit-scrollbar {width: 4px;height: 4px}
+    ::-webkit-scrollbar-track {background-color: transparent;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em;}
+    ::-webkit-scrollbar-thumb {background-color: #9c9da0;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em}
+	</style>
+
+	<body>
+
+		
+		
+
+			<!-- 数据表格开始 -->
+			<table class="layui-hide" id="userTable" lay-filter="userTable"></table>
+			
+<div style="display: none;" id="userToolBar">
+			
+		<form action="" class="layui-form" method="post">
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+				<div class="layui-form-item" >
+					<div class="layui-inline" style="margin-left: -10px;">
+						<label class="layui-form-label">编号:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="name" autocomplete="off" placeholder="请输入编号" class="layui-input">
+						</div>
+					</div>
+					
+				
+					<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-search" id="doSearch">查询</button>
+
+					
+				</div>
+
+			</form>
+		</div>
+			<div id="userBar" style="display: none;">
+
+				<a class="layui-btn layui-btn-xs" lay-event="add">添加</a>
+				<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+			</div>
+			<!-- 数据表格结束 -->
+
+			<div style="display: none;padding: 20px" id="openDiv2"></div>
+			<!-- 添加的弹出层开始 -->
+			<div style="display: none;padding: 20px" id="addDiv">
+				<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+					<div class="layui-form-item" >
+					<div class="layui-inline" style="margin-left: -10px;">
+						<label class="layui-form-label">编号:</label>
+						<div class="layui-input-inline">
+							<input type="text" name="name" autocomplete="off" placeholder="自动生成项" class="layui-input">
+						</div>
+					</div>
+					</div>
+					<div class="layui-form-item">
+
+						<div class="layui-inline">
+							<label class="layui-form-label">采购类型:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="name" lay-verify="required" autocomplete="off" readonly="readonly" placeholder="请输入" class="layui-input">
+							</div>
+						</div>
+
+					</div>
+				
+					<div class="layui-form-item">
+    <label class="layui-form-label">开关</label>
+    <div class="layui-input-block">
+      <input type="checkbox" name="switch" lay-skin="switch">
+    </div>
+  </div>
+					<div class="layui-form-item" style="text-align: center;">
+						<div class="layui-input-block">
+							<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit" lay-submit="">添加</button>
+							<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">取消</button>
+						</div>
+					</div>
+				</form>
+
+			</div>
+			<!-- 添加的弹出层结束 -->
+			
+<script id="kgdiv">
+	
+	<input type="checkbox" lay-skin="switch" lay-text="开启|关闭" checked />
+	
+</script>
+			<!-- 修改的弹出层开始 -->
+			<div style="display: none;padding: 20px" id="updateDiv">
+				<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">编号:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="id" lay-verify="required" autocomplete="off" placeholder="不可修改项" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+						
+
+					</div>
+					
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">采购类型:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="id" lay-verify="required" autocomplete="off" placeholder="输入修改值" class="layui-input" >
+							</div>
+						</div>
+
+					</div>
+					
+					<div class="layui-form-item">
+    <label class="layui-form-label">开关</label>
+    <div class="layui-input-block">
+      <input type="checkbox" name="switch" lay-skin="switch">
+    </div>
+  </div>
+					
+				
+
+			
+					<div class="layui-form-item" style="text-align: center;">
+						<div class="layui-input-block">
+							<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit" lay-submit="">提交可修改项</button>
+							<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">取消</button>
+						</div>
+					</div>
+				</form>
+
+			</div>
+			<!-- 修改的弹出层结束 -->
+
+			
+
+	</body>
+	
+	<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table', 'layer', 'laydate', 'form'], function() {
+
+			var $ = layui.jquery,
+				slider = layui.slider,
+				element = layui.element,
+				form = layui.form,
+				table = layui.table,
+				laydate = layui.laydate,
+				rate = layui.rate,
+				layer = layui.layer,
+				carousel = layui.carousel;
+
+			
+
+			//渲染数据表格
+			var tableIns = table.render({
+				elem: '#userTable' //渲染的目标对象
+					,
+				url: 'js/users3.json' //数据接口
+					,
+				title: '用户数据表' //数据导出来的标题
+					,
+				toolbar: "#userToolBar" //表格的工具条
+					,
+				height: '400',
+				cellMinWidth: 100 //设置列的最小默认宽度
+					,
+				done: function(res, curr, count) {
+
+				},
+				page: true //是否启用分页
+					,
+				cols: [
+					[ //列表数据
+						{
+							type: 'checkbox',
+							fixed: 'left'
+						}, {
+							field: 'id',
+							title: '编号',
+							sort: true,
+							
+							align: 'center'
+						}, {
+							field: 'names',
+							title: '采购类型',
+							sort: true,
+							align: 'center'
+						},{
+							field:'center',
+							title:'选择开关',
+							templet:"#kgdiv",
+							sort: true
+							
+						},{
+							fixed: 'right',
+							title: '操作',
+							toolbar: '#userBar',
+							
+							align: 'center'
+						}
+					]
+				]
+			});
+
+			//监听行工具事件
+			table.on('tool(userTable)', function(obj) {
+				var data = obj.data; //获得当前行数据
+				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+				if(layEvent === 'del') { //删除					
+					layer.confirm('是否删除？', function(index) {
+						obj.del();
+						layer.close(index);
+						layer.msg("删除成功！");
+						//向服务端发送删除指令
+					});
+				} else if(layEvent === 'edit') { //编辑
+					openUpdateUser(data);
+				} else if(layEvent === 'add') { //延长申请
+					openAddUser();
+				}
+			});
+			
+			var url;
+			var mainIndex;
+
+			//打开添加页面
+			function openAddUser() {
+				mainIndex = layer.open({
+					type: 1,
+					title: '添加',
+					content: $("#addDiv"),
+					area: ['400px', '330px'],
+					success: function(index) {
+						//清空表单数据 
+						$("#dataFrm")[0].reset();
+						url = "user/addUser.action";
+					}
+				});
+			};
+			//打开修改页面
+			function openUpdateUser(data) {
+				mainIndex = layer.open({
+					type: 1,
+					title: '修改',
+					content: $("#updateDiv"),
+					area: ['400px', '330px'],
+					success: function(index) {
+						//清空表单数据 
+						$("#dataFrm")[0].reset();
+						url = "user/updateUser.action";
+					}
+				});
+			}
+			
+		});
+	</script>
+
+</html>

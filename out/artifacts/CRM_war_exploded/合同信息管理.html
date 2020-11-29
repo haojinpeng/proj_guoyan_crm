@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!-- 引入 ECharts 文件 -->
+		<script src="js/项目js/echarts.js"></script>
+		<title>合同信息管理</title>
+		<link rel="stylesheet" href="resources/layui/css/layui.css">
+	</head>
+
+	<body class="layui-layout-body">
+
+		<!-- 身体部分开始 -->
+		<div style="margin-top: 20px; margin-bottom: 10px; margin-left: 10px; margin-right: 10px;">
+			<!-- 顶部内容开始 -->
+			<blockquote class="layui-elem-quote layui-text" style="height: 40px;">
+				<div class="layui-fluid">
+					<div class="layui-row">
+						<div class="layui-col-md3">
+
+							<div class="layui-inline">
+								<label class="layui-form-label" >项目名称</label>
+
+
+								<input type="text" name="cainame" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入项目名称" style="width: 120px;">
+
+
+							</div>
+						</div>
+						<div class="layui-col-md3">
+							<div class="layui-inline">
+								<label class="layui-form-label" >合同编号</label>
+
+								<input type="text" name="caitype" id="caitype" lay-verify="required" placeholder="请选择合同编号" autocomplete="off"
+								 class="layui-input" style="width: 120px;">
+
+							</div>
+						</div>
+						<div class="layui-col-md6">
+							<div class="layui-inline">
+								<label class="layui-form-label" >日期范围</label>
+								<input type="text" class="layui-input" id="test1" placeholder="yyyy-MM-dd" style="width: 120px;">
+							</div>
+							<div class="layui-inline">
+								<button type="button" class="layui-btn layui-btn-ms  layui-btn-normal layui-icon layui-icon-search" style="margin-left: 20px;">查询</button>
+								<button type="button" class="layui-btn layui-btn-ms layui-icon layui-icon-add-circle-fine" style="margin-left: 20px;" id="addcontract">添加合同</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</blockquote>
+			<!-- 顶部内容结束 -->
+
+			<!-- 数据表格开始 -->
+			<table class="layui-hide" id="gongdantable" lay-filter="gongdantable"></table>
+
+			<div id="userBar" style="display: none;">
+				<a class="layui-btn layui-btn-warm layui-btn-xs"  lay-event="edit">修改</a>
+				<a class="layui-btn layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+				<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="look">预览</a>
+				<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="addticket">添加开票</a>
+			</div>
+			<!-- 数据表格结束 -->
+			
+			<!-- 添加修改的弹出层开始 -->
+			<div style="display: none;padding: 20px" id="addDiv">
+				<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">合同编号:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="contract_id" lay-verify="required" autocomplete="off"  placeholder="请输入合同编号" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">项目名称:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="project_id" lay-verify="required" autocomplete="off" placeholder="请输入项目名称" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">客户名称:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="customer_name" lay-verify="required" autocomplete="off" placeholder="请输入客户名称" class="layui-input">
+							</div>
+						</div>
+					</div>
+			
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">上传时间:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="upload_time" lay-verify="required" autocomplete="off" id="test2" placeholder="yyyy-MM-dd" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">上传人:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="upload_people" lay-verify="required" placeholder="请输入上传人" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+			
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">签订日期:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="signing_time" lay-verify="required" id="test3" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">到期日期:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="Due_data" lay-verify="required" id="test4" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="layui-form-item" style="text-align: center;">
+						<div class="layui-input-block">
+							<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit" lay-submit="">添加</button>
+							<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">取消</button>
+						</div>
+					</div>
+				</form>
+			
+			</div>
+		</div>
+		<!-- 添加修改的弹出层结束-->
+		<!-- 预览弹出层开始 -->
+	<div style="display: none;padding: 20px" id="lookDiv">
+				<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">合同编号:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="contract_id" lay-verify="required" autocomplete="off"  placeholder="请输入合同编号" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">项目名称:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="project_id" lay-verify="required" autocomplete="off" placeholder="请输入项目名称" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">客户名称:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="customer_name" lay-verify="required" autocomplete="off" placeholder="请输入客户名称" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+			
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">上传时间:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="upload_time" lay-verify="required" autocomplete="off" id="test2" placeholder="yyyy-MM-dd" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">上传人:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="upload_people" lay-verify="required" placeholder="请输入上传人" autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+			
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">签订日期:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="signing_time" lay-verify="required" id="test3" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">到期日期:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="Due_data" lay-verify="required" id="test4" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" readonly="readonly">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">合同图示:</label>
+							<div class="layui-input-inline">
+								<img src="img/ht.jpg" >
+							</div>
+						</div>
+					</div>
+				</form>
+			
+			</div>
+		</div>
+			<!-- 预览弹出层结束 -->
+			<!-- 开票弹出层开始 -->
+			<div style="display: none;padding: 20px; " id="invoiceDiv">
+				<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+					<div class="layui-form-item">
+			
+						<label class="layui-form-label">合同编号:</label>
+						<div class="layui-input-block">
+							<input type="text" name="" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">项目名称:</label>
+						<div class="layui-input-block">
+							<input type="text" name="username" autocomplete="off" class="layui-input">
+						</div>
+			
+					</div>
+					<div class="layui-form-item">
+			
+						<label class="layui-form-label">开票人:</label>
+						<div class="layui-input-block">
+							<input type="text" name="addrs" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">开票时间:</label>
+						<div class="layui-input-block">
+							<input type="text" name="sex" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">客户名称:</label>
+						<div class="layui-input-block">
+							<input type="text" name="tel" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+			
+					</div>
+					<div class="layui-form-item">
+			
+						<label class="layui-form-label">开票描述:</label>
+						<div class="layui-input-block">
+							<input type="text" name="post" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+			
+					</div>
+					
+					
+					
+					<div class="layui-form-item" style="text-align: center;">
+						<div class="layui-input-block">
+							<button type="button" class="layui-btn layui-btn-danger layui-btn-sm" id="test7"><i class="layui-icon"></i>上传文件</button>
+							<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+							 lay-submit="" id="submitbtn">提交</button>
+							<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+						</div>
+					</div>
+				</form>
+			
+			</div>
+			<!-- 开票弹出层结束 -->
+		
+		
+		<!-- 身体部分结束 -->
+
+		<script src="resources/layui/layui.js"></script>
+		<script type="text/javascript">
+			layui.use(['jquery', 'layer', 'form', 'table', 'laydate', 'element','upload'], function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				var element = layui.element;
+				var form = layui.form;
+				var table = layui.table;
+				var laydate = layui.laydate
+				  ,upload = layui.upload;
+			
+			
+			 //设定文件大小限制
+			  upload.render({
+			    elem: '#test7'
+			    ,url: '' //改成您自己的上传接口
+			    ,size: 60 //限制文件大小，单位 KB
+			    ,done: function(res){
+			      layer.msg('上传成功');
+			      console.log(res)
+			    }
+			  });
+				//日期范围
+				  laydate.render({
+				    elem: '#test1'
+				    ,range: true
+				  });
+			
+				//绑定时间选择器
+				laydate.render({
+					elem: '#startTime'
+				});
+				laydate.render({
+					elem: '#endTime'
+				})
+				//绑定时间
+				  laydate.render({
+				elem: '#test2'
+					});
+					//绑定时间
+			  laydate.render({
+					elem: '#test3'
+						});
+						//绑定时间
+			  laydate.render({
+					elem: '#test4'
+						});
+
+				//渲染数据表格
+				table.render({
+					elem: '#gongdantable', //渲染的目标对象
+
+					url: 'js/contract.json' //数据接口
+						,
+					title: '项目工单统计表' //数据导出来的标题
+						/* ,toolbar:"<div>xxx</div>" */
+						,
+					toolbar: "#userToolBar" //表格的工具条
+						,
+					defaultToolbar: ['filter', 'print', 'exports', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+							title: '提示',
+							layEvent: 'LAYTABLE_TIPS',
+							icon: 'layui-icon-tips'
+						}]
+						,
+					height: 'full-150',
+					cellMinWidth: 400 //设置列的最小默认宽度
+						,
+					done: function(res, curr, count) {
+						/* alert(res);//后台url返回的json串
+						alert(curr);//当前页
+						alert(count);//数据总条数 */
+					},
+					totalRow: true //开启合并行
+						,
+					page: true //是否启用分页
+						/*   ,limit:20 //设置每页显示条数 默认为10
+						  ,limits:[20,40,60,80] */
+						,
+					text: {
+						none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+					},
+					cols: [
+						[ //列表数据
+							{
+								type: 'checkbox',
+								fixed: 'left'
+							}, {
+								field: 'id',
+								title: 'ID',
+								width: 120,
+								sort: true,
+								align: 'center',
+								edit: true
+							}, {
+								field: 'contract_id',
+								title: '合同编号',
+								width: 120,
+								sort: true,
+								align: 'center',
+								edit: true
+							}, {
+								field: 'project_id',
+								title: '项目名称',
+								width: 140,
+								align: 'center',
+								edit: true
+							}, {
+								field: 'customer_name',
+								title: '客户名称',
+								width: 110,
+								edit: true,
+								align: 'center'
+							}, {
+								field: 'upload_time',
+								title: '上传时间',
+								width: 180,
+								align: 'center',
+							}, {
+								field: 'upload_people',
+								title: '上传人',
+								align: 'center',
+								width: 120
+							}, {
+								field: 'signing_time',
+								title: '签订日期',
+								align: 'center',
+								width: 180,
+							}, {
+								field: 'Due_data',
+								title: '到期日期',
+								width: 100,
+								align: 'center',
+							},
+							{
+								fixed: 'right',
+								title: '操作',
+								width: 300,
+								align: 'center',
+								toolbar: '#userBar'
+							}
+
+						]
+					],
+					done: function(res, curr, count) {
+						merge(res, curr, count);
+					}
+				});
+
+				//合并单元格
+				function merge(res, curr, count) {
+					var data = res.data;
+					var mergeIndex = 0; //定位需要添加合并属性的行数
+					var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
+					var columsName = ['project_id', 'customer_name']; //需要合并的列名称
+					var columsIndex = [3, 4]; //需要合并的列索引值
+
+					for (var k = 0; k < columsName.length; k++) //这里循环所有要合并的列
+					{
+						var trArr = $(".layui-table-body>.layui-table").find("tr"); //所有行
+						for (var i = 1; i < res.data.length; i++) { //这里循环表格当前的数据
+							var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]); //获取当前行的当前列
+							var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]); //获取相同列的第一列
+							if (data[i][columsName[k]] === data[i - 1][columsName[k]]) { //后一行的值与前一行的值做比较，相同就需要合并
+								console.log(data[i][columsName[k]]);
+								console.log(data[i - 1][columsName[k]]);
+								mark += 1;
+								tdPreArr.each(function() { //相同列的第一列增加rowspan属性
+									$(this).attr("rowspan", mark);
+								});
+								tdCurArr.each(function() { //当前行隐藏
+									$(this).css("display", "none");
+								});
+							} else {
+								mergeIndex = i;
+								mark = 1; //一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+							}
+						}
+					}
+				}
+				
+				//打开添加页面
+				$("#submitbtn").click(function () {
+					window.location.href="开票管理.html";
+				});
+				
+				//打开添加页面
+				$("#addcontract").click(function openAddUser() {
+					mainIndex = layer.open({
+						type: 1,
+						title: '添加用户',
+						content: $("#addDiv"),
+						area: ['400px', '450px'],
+						success: function(index) {
+							//清空表单数据 
+							$("#dataFrm")[0].reset();
+							url = "user/addUser.action";
+						}
+					});
+				});
+				//监听行工具事件
+				table.on('tool(gongdantable)', function(obj) {
+					var data = obj.data; //获得当前行数据
+					var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+					if (layEvent === 'del') { //删除
+						layer.confirm('真的删除行么', function(index) {
+							// obj.del();
+							// 
+							layer.close(index);
+						});
+					} else if (layEvent === 'edit') { //编辑
+						openUpdateUser(data);
+					}else if (layEvent === 'look') { //预览
+						lookUser(data);
+					}else if (layEvent === 'addticket') { //开票
+						addticketUser();
+					}
+				});
+				
+				//打开修改页面
+				function openUpdateUser(data) {
+					mainIndex = layer.open({
+						type: 1,
+						title: '修改用户',
+						content: $("#addDiv"),
+						area: ['400px', '450px'],
+						success: function(index) {
+							form.val("dataFrm", data);
+							url = "user/updateUser.action";
+						}
+					});
+				}
+				
+				//打开预览页面
+				function lookUser(data) {
+					mainIndex = layer.open({
+						type: 1,
+						title: '预览',
+						content: $("#lookDiv"),
+						area: ['400px', '450px'],
+						success: function(index) {
+							form.val("dataFrm", data);
+							url = "user/updateUser.action";
+						}
+					});
+				}
+				//
+				//打开开发票页面
+				function addticketUser() {
+					mainIndex = layer.open({
+						type: 1,
+						title: '开发票',
+						content: $("#invoiceDiv"),
+						area: ['400px', '450px'],
+						success: function(index) {
+							//清空表单数据
+							$("#dataFrm")[0].reset();
+							url = "user/addUser.action";
+						}
+					});
+				}
+
+			});
+		</script>
+	</body>
+</html>

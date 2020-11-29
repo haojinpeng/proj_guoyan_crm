@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+
+	</head>
+<style>
+	 /**自定义滚动条样式 */
+    ::-webkit-scrollbar {width: 4px;height: 4px}
+    ::-webkit-scrollbar-track {background-color: transparent;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em;}
+    ::-webkit-scrollbar-thumb {background-color: #9c9da0;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em}
+</style>
+	<body>
+		<!--用户管理-->
+		<!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+			<legend>
+				<a name="用户管理">用户管理</a>
+			</legend>
+		</fieldset>-->
+
+		<div class="layui-tab" lay-filter="demo" lay-allowclose="true">
+		
+			<div class="layui-tab-content">
+				<div class="layui-tab-item layui-show">
+			<form action="" class="layui-form" method="post" >
+				<div class="layui-form-item" style="margin-top: -10px;">
+				    <div class="layui-inline">
+				      <label class="layui-form-label">员工编号:</label>
+				      <div class="layui-input-inline" style="margin-top: 5px;">
+				        <input type="text" name="id"  autocomplete="off" class="layui-input" style="width: 120px;height: 30px;">
+				      </div>
+				    </div>
+				    <div class="layui-inline" style="margin-left: -110px;">
+				      <label class="layui-form-label">姓名:</label>
+				      <div class="layui-input-inline" style="margin-top: 5px;">
+				        <input type="text" name="username"  autocomplete="off" class="layui-input" style="width: 120px;height: 30px;">
+				      </div>
+				    </div>
+				     <div class="layui-inline" style="margin-left: -110px;">
+				      <label class="layui-form-label">年龄:</label>
+				      <div class="layui-input-inline" style="margin-top: 5px;">
+				        <input type="text" name="age"  autocomplete="off" class="layui-input" style="width: 120px;height: 30px;">
+				      </div>
+				    </div>
+				 </div>
+				
+				 <div class="layui-form-item" style="text-align: center;" >
+				    <div class="layui-input-block" style="margin-top: -54px;margin-left: 700px;width: 150px;">
+				      <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-search" id="doSearch">查询</button>
+				      <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+				    </div>
+				  </div>
+			</form>
+					<!-- 数据表格开始 -->
+					<table class="layui-hide" id="userTable" lay-filter="userTable" style="height: 800px;"></table>
+					<div>
+				<!-- 工单记录开始 -->
+				<table class="layui-hide" id="userTable" lay-filter="userTable"></table>
+
+				<!-- 表头搜索-->
+				<script type="textml" id="toolbarDemo">
+					<div class="layui-form-item" style="height: 30px;" >
+						<div class="layui-inline">
+							<!--<label class="layui-form-label" style="width: auto;">项目名称:</label>
+							<div class="layui-input-inline" >
+								<input type="tel" name="xm_name"  autocomplete="off" class="layui-input">
+							</div>-->
+							<label class="layui-form-label" style="width: auto;">员工编号:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="ht_number"  autocomplete="off" class="layui-input">
+							</div>
+							<label class="layui-form-label" style="width: auto;">姓名:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="ht_number"  autocomplete="off" class="layui-input">
+							</div>
+						    <label class="layui-form-label" style="width: auto;">年龄:</label>
+							<div class="layui-input-inline">
+								<input type="text" name="ht_number"  autocomplete="off" class="layui-input">
+							</div>
+							    <!--<label class="layui-form-label">状态：</label>
+							    <div class="layui-input-inline">
+							      <select name="zt" lay-verify="required">
+							        <option value=""></option>
+							        <option value="0">已处理</option>
+							        <option value="1">待处理</option>
+							        <option value="2">已转发</option>
+							        <option value="3">未转发</option>
+							      
+							      <lect>
+							    </div>-->
+							
+							<button type="button" class="layui-btn layui-btn-sm" lay-event="add"><i  class="layui-icon layui-icon-add-circle"></i>增加<tton>
+							<button type="button" class="layui-btn layui-btn-sm" lay-event="ss">搜索<tton>
+						</div>	
+											
+					</div>
+				</script>
+				<!-- 表头-->
+				<!-- 行操作 -->
+				<script type="textml" id="barDemo" >
+					<!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="doit">处理</a> -->
+					<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="showit">预览</a>
+				</script>
+				<!-- 行操作 -->
+				<!-- 工单记录结束 -->
+			</div>
+					
+					
+					
+					<div style="display: none;" id="userToolBar">
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="add">增加</button>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="batchDelete">批量删除</button>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="add">导入</button>
+					</div>
+					<div id="userBar" style="display: none;">
+						
+						<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+						<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+					</div>
+					<!-- 数据表格结束 -->
+
+					<!-- 添加和修改的弹出层开始 -->
+					<div style="display: none;padding: 20px" id="saveOrUpdateDiv">
+						<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									<label class="layui-form-label">编号:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="id" lay-verify="required" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								
+								<div class="layui-inline">
+									<label class="layui-form-label">姓名:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="username" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									<label class="layui-form-label">年龄:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="age" lay-verify="required" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-inline">
+									<label class="layui-form-label">登录名:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="user" lay-verify="required" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+
+								<div class="layui-inline">
+									<label class="layui-form-label">密码:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="password" lay-verify="required" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<div class="layui-inline">
+									<label class="layui-form-label">性别:</label>
+									<div class="layui-input-inline">
+										<input type="radio" name="sex" value="1" checked="checked" title="男">
+										<input type="radio" name="sex" value="0" title="女">
+									</div>
+								</div>
+							</div>
+							<div class="layui-form-item" style="text-align: center;">
+								<div class="layui-input-block">
+									<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit" lay-submit="">提交</button>
+									<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+								</div>
+							</div>
+						</form>
+
+					</div>
+					<!-- 添加和修改的弹出层结束 -->
+				</div>
+				
+			</div>
+
+		</div>
+		
+		<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/us.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+
+</html>

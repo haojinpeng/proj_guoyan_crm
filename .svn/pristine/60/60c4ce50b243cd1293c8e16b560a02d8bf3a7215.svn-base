@@ -1,0 +1,67 @@
+package com.it.bean;
+
+import java.util.List;
+
+public class ResourceParent {
+    protected String name;
+    protected String path;
+    protected String type;
+    protected List<ResourceParent> child;
+    protected String href;
+
+    public String getHref() {
+        return path;
+    }
+
+    @Override
+    public String toString() {
+        return "ResourceParent{" +
+                "name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", type='" + type + '\'' +
+                ", child=" + child +
+                '}';
+    }
+
+    public ResourceParent() {
+    }
+
+    public ResourceParent(String name, String path, String type, List<ResourceParent> child) {
+        this.name = name;
+        this.path = path;
+        this.type = type;
+        this.child = child;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public List<ResourceParent> getChild() {
+        return child;
+    }
+
+    public void setChild(List<ResourceParent> child) {
+        this.child = child;
+    }
+}

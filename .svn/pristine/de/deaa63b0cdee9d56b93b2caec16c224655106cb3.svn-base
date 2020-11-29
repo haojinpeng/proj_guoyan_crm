@@ -1,0 +1,31 @@
+package com.it.services;
+
+import com.it.bean.*;
+
+import java.util.List;
+
+public interface IResourceSercices {
+    //添加资源
+    public int addResource(Resource resource);
+
+    //添加资源_权限连接
+    public int addResources_jurisdiction(Resources_jurisdiction resources_jurisdiction);
+
+    //删除多条记录
+    public int del(String delIds);
+
+//    //改资源
+//    public int upd(Resource resource);
+
+    //带分页查询所有
+    public List<ResourceAndJurisdiction> queryAll(PageBean pageBean, ResourceAndJurisdiction resourceAndJurisdiction);
+
+    //查单条资源
+    public Resource select(Resource resource);
+
+    //带分页查询所有的记录数
+    public int count(ResourceAndJurisdiction resourceAndJurisdiction);
+
+    //查询所有权限
+    public List<Jurisdiction> queryAllJurisdiction(Jurisdiction jurisdiction);
+}

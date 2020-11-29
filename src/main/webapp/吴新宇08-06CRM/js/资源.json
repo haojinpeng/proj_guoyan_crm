@@ -1,0 +1,39 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 101,
+	"data": [
+		{
+			"resourcesName": "商机",
+			"resourcesType": "001",
+			"resourcesURL": "xianxin@layui.com",
+			"resourcesPower": "添加,删除",
+			"resourcesRemarks": "1"
+		},{
+			"resourcesName": "项目",
+			"resourcesType": "001",
+			"resourcesURL": "xianxin@layui.com",
+			"resourcesPower": "添加",
+			"resourcesRemarks": "1"
+		},{
+			"resourcesName": "统计",
+			"resourcesType": "001",
+			"resourcesURL": "xianxin@layui.com",
+			"resourcesPower": "添加",
+			"resourcesRemarks": "1"
+		},{
+			"resourcesName": "权限",
+			"resourcesType": "001",
+			"resourcesURL": "xianxin@layui.com",
+			"resourcesPower": "添加",
+			"resourcesRemarks": "1"
+		},{
+			"resourcesName": "售后",
+			"resourcesType": "001",
+			"resourcesURL": "xianxin@layui.com",
+			"resourcesPower": "添加",
+			"resourcesRemarks": "1"
+		}
+		
+	]
+}  

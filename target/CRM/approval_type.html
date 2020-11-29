@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>审批类型管理</title>
+    <link rel="stylesheet" href="resources/layui/css/layui.css">
+</head>
+<style>
+    /**自定义滚动条样式 */
+    ::-webkit-scrollbar {
+        width: 4px;
+        height: 4px
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+        -webkit-border-radius: 2em;
+        -moz-border-radius: 2em;
+        border-radius: 2em;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #9c9da0;
+        -webkit-border-radius: 2em;
+        -moz-border-radius: 2em;
+        border-radius: 2em
+    }
+</style>
+
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>审批类型</legend>
+</fieldset>
+
+<!-- 数据表格开始 2-->
+<table class="layui-hide" id="approvalTypeTable" lay-filter="approvalTypeTable"></table>
+
+<div style="display: none;padding: 20px" id="approvalTypeToolBar">
+    <form class="layui-form " action="" lay-filter="approvalTypeAddFrm" id="approvalTypeAddFrom">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">编号:</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="type_id" name="type_id" lay-verify="required" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">类型:</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="type_name" name="type_name" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release"
+                        lay-event="doSearch">搜索
+                </button>
+                <button type="button" class="layui-btn layui-btn-sm" lay-event="add">增加</button>
+                <button type="button" class="layui-btn layui-btn-sm" lay-event="batchDelete">批量删除</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="approvalTypeBar" style="display: none;">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</div>
+<!-- 数据表格结束 -->
+
+<!-- 添加的弹出层开始 -->
+<div style="display: none;padding: 20px" id="approvalTypeAddDiv">
+    <form class="layui-form " action="" lay-filter="approvalTypeAddFrm" id="approvalTypeAddFrm">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">编号:</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="id" name="id" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">审批类型:</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="name" name="name" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center;">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release"
+                        lay-filter="doSubmit" lay-submit="">提交
+                </button>
+                <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- 添加的弹出层结束 -->
+
+<script src="resources/layui/layui.js"></script>
+<script type="text/html" id="no">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
+<script type="text/javascript">
+    layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table', 'layer', 'laydate', 'form'], function () {
+        var $ = layui.jquery,
+            slider = layui.slider,
+            element = layui.element,
+            form = layui.form,
+            table = layui.table,
+            laydate = layui.laydate,
+            rate = layui.rate,
+            layer = layui.layer,
+            carousel = layui.carousel;
+
+        //渲染数据表格
+        var tableIns = table.render({
+                elem: '#approvalTypeTable' //渲染的目标对象
+                , url: 'approval_type.do?opt=queryAll' //数据接口
+                , title: '审批类型数据表' //数据导出来的标题
+                , toolbar: "#approvalTypeToolBar" //表格的工具条
+                // , height: 'full-300'
+                , cellMinWidth: 100 //设置列的最小默认宽度
+                , done: function (res, curr, count) {
+                }
+                // , page: true //是否启用分页
+                , cols: [[ //列表数据
+                    {type: 'checkbox', fixed: 'left'}
+                    , {field: 'no', title: '序号', sort: true, type: 'numbers', width: 330, align: 'center'}
+                    , {field: 'id', title: '编号', sort: true, align: 'center'}
+                    , {field: 'name', title: '审批类型', align: 'center'}
+                    , {fixed: 'right', title: '操作', toolbar: '#approvalTypeBar', width: 220, align: 'center'}
+                ]]
+                , page: {layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']}
+                , id: 'testReload'
+            })
+        ;
+
+        //监听头部工具栏事件
+        table.on("toolbar(approvalTypeTable)", function (obj) {
+            switch (obj.event) {
+                case 'doSearch':
+                    queryLike();
+                    break;
+                case 'add':
+                    openAddApprovalType();
+                    break;
+                case 'batchDelete':
+                    layer.msg('批量删除');
+                    delAll();
+                    break;
+            }
+            ;
+        });
+
+        //监听行工具事件
+        table.on('tool(approvalTypeTable)', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            if (layEvent === 'del') { //删除
+                layer.msg("删除");
+                layer.confirm('真的删除么', function (index) {
+                    obj.del();
+                    del(obj.data.id);
+                    // layer.close(index);
+                    //向服务端发送删除指令
+                });
+            } else if (layEvent === 'edit') { //编辑
+                openUpdateApprovalType(data);
+            }
+        });
+
+        var url;
+        var mainIndex;
+
+        //模糊查询
+        function queryLike() {
+            var type_id = $("#type_id").val(), type_name = $("#type_name").val();
+            //alert(search_name);
+            table.reload('testReload', {
+                where: {id: type_id, name: type_name}
+            });
+        }
+
+        //打开添加页面
+        function openAddApprovalType() {
+            mainIndex = layer.open({
+                type: 1,
+                title: '添加审批类型',
+                content: $("#approvalTypeAddDiv"),
+                area: ['800px', '400px'],
+                success: function (index) {
+                    //清空表单数据
+                    $("#approvalTypeAddFrm")[0].reset();
+                    url = "approval_type.do?opt=add";
+                }
+            });
+        }
+
+        //批量删除
+        function delAll() {
+            //获取选中数据
+            var checkStatus = table.checkStatus('testReload'),
+                data = checkStatus.data;
+            if (data == "") {
+                layer.msg('至少也得选一个吧', {icon: 2});
+                return;
+            }
+            var delArray = [];
+            //获取单元格选中的行
+            if (data.length > 0) {
+                for (var i = 0; i < data.length; i++) {
+                    delArray.push(data[i].id);
+                }
+            }
+            var ids = delArray.join(",");
+            layer.confirm('确认要删除嘛？' + delArray, function (index) {
+                //发起异步请求
+                $.ajax({
+                    type: 'POST',
+                    url: 'approval_type.do?opt=delete',
+                    data: {'delArray': ids},
+                });
+                // layer.msg('删除成功！', {icon: 1});
+                location.reload();
+            });
+        }
+
+        //删除操作
+        function del(id) {
+            $.post(
+                "approval_type.do",
+                {opt: "delete", id: id},
+                function (flag) {
+                    if (flag == 1) {
+                        layer.msg("删除成功", {icon: 6});
+                        location.reload();
+                        layer.close(index);
+                    } else {
+                        layer.msg("删除失败", {icon: 5});
+                        location.reload();
+                    }
+                }
+            );
+        }
+
+
+        //打开修改页面
+        function openUpdateApprovalType(data) {
+            mainIndex = layer.open({
+                type: 1,
+                title: '修改用户',
+                content: $("#approvalTypeAddDiv"),
+                area: ['800px', '400px'],
+                success: function (index) {
+                    form.val("approvalTypeAddFrm", data);
+                    url = "approval_type.do?opt=update";
+                }
+            });
+        }
+
+        //添加和修改的具体操作
+        form.on('submit(doSubmit)', function (data) {
+            // alert(JSON.stringify(data.field));
+            layer.close(mainIndex);
+            $.get(
+                url,
+                {"id": $("#id").val(), "name": $("#name").val()},
+                // {"sno":$("#sno").val(),"sname":$("#sname").val(),"ssex":$("#ssex").val(),"sbirthday":$("#sbirthday").val(),"classs":$("#classs").val()},
+                function (flag) {
+                    if (flag == 1) {
+                        alert("恭喜您操作成功!");
+                        // window.location.href="query.html";
+                    } else {
+                        alert("操作失败!");
+                        // window.location.href="query.html";
+                    }
+                    window.location.href = "approval_type.html";
+                }
+            );
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    });
+</script>
+</body>
+
+</html>

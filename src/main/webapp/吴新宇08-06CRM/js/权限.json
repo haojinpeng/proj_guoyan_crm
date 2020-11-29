@@ -1,0 +1,37 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 101,
+	"data": [
+		{
+			"powerName": "添加",
+			"powerType": "001",
+			"powerURL": "xianxin@layui.com",
+			"powerRemarks": "1"
+		},
+		{
+			"powerName": "删除",
+			"powerType": "002",
+			"powerURL": "xianxin@layui.com",
+			"powerRemarks": "1"
+		},
+		{
+			"powerName": "修改",
+			"powerType": "003",
+			"powerURL": "xianxin@layui.com",
+			"powerRemarks": "1"
+		},
+		{
+			"powerName": "删除",
+			"powerType": "004",
+			"powerURL": "xianxin@layui.com",
+			"powerRemarks": "1"
+		},
+		{
+			"powerName": "审批",
+			"powerType": "005",
+			"powerURL": "xianxin@layui.com",
+			"powerRemarks": "1"
+		}
+	]
+}  

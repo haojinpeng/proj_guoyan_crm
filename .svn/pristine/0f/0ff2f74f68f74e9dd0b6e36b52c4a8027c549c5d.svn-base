@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理-登陆</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden
+        }
+
+        body {
+            background: #009688;
+        }
+
+        body:after {
+            content: '';
+            background-repeat: no-repeat;
+            background-size: cover;
+            -webkit-filter: blur(3px);
+            -moz-filter: blur(3px);
+            -o-filter: blur(3px);
+            -ms-filter: blur(3px);
+            filter: blur(3px);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+        }
+
+        .layui-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden
+        }
+
+        .admin-login-background {
+            width: 360px;
+            height: 300px;
+            position: absolute;
+            left: 50%;
+            top: 40%;
+            margin-left: -180px;
+            margin-top: -100px;
+        }
+
+        .logo-title {
+            text-align: center;
+            letter-spacing: 2px;
+            padding: 14px 0;
+        }
+
+        .logo-title h1 {
+            color: #009688;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .login-form {
+            background-color: #fff;
+            border: 1px solid #fff;
+            margin-left: 650px;
+            width: 350px;
+            border-radius: 3px;
+            padding: 14px 20px;
+            box-shadow: 0 0 8px #eeeeee;
+        }
+
+        .login-form .layui-form-item {
+            position: relative;
+        }
+
+        .login-form .layui-form-item label {
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 38px;
+            line-height: 36px;
+            text-align: center;
+            color: #d2d2d2;
+        }
+
+        .login-form .layui-form-item input {
+            padding-left: 36px;
+        }
+
+        .captcha {
+            width: 60%;
+            display: inline-block;
+        }
+
+        .captcha-img {
+            display: inline-block;
+            width: 34%;
+            float: right;
+        }
+
+        .captcha-img img {
+            height: 34px;
+            border: 1px solid #e6e6e6;
+            height: 36px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+<div class="layui-container">
+    <div class="admin-login-backgroun d">
+        <div class="layui-form login-form" style="margin-top: -830px">
+            <form class="layui-form" action="">
+                <div class="layui-form-item logo-title">
+                    <h1>CRM后台注册页面</h1>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">员工号:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="employee_number" id="employee_number" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="layui-inline">
+                    <label class="layui-form-label">姓名:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="username" id="username" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="layui-inline">
+                    <label class="layui-form-label">登录名:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="login_name" id="login_name" lay-verify="login_name" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="layui-inline">
+                    <label class="layui-form-label">登录密码:</label>
+                    <div class="layui-input-inline">
+                        <input type="password" name="password" id="password" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="layui-inline">
+                    <label class="layui-form-label">教育程度:</label>
+                    <div class="layui-input-inline">
+                        <select name="edu" id="edu" lay-verify="required" >
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="layui-inline">
+                    <label class="layui-form-label">国家:</label>
+                    <div class="layui-input-inline">
+                        <select name="guojia" id="guojia" lay-verify="required" >
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="layui-inline">
+                    <label class="layui-form-label">省:</label>
+                    <div class="layui-input-inline">
+                        <select name="sheng" id="sheng" lay-verify="required" >
+
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="layui-inline">
+                    <label class="layui-form-label">市:</label>
+                    <div class="layui-input-inline">
+                        <select name="shi" id="shi" lay-verify="required" >
+
+                            <option value="">请选择 </option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="layui-inline">
+                    <label class="layui-form-label">民族:</label>
+                    <div class="layui-input-inline">
+                        <select name="nation" id="nation" lay-verify="required" >
+
+                            <option value="">请选择 </option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="layui-inline">
+                    <label class="layui-form-label">联系方式:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="tel" id="tel" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="layui-inline">
+                    <label class="layui-form-label">地址:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="address" id="address" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="layui-inline">
+                    <label class="layui-form-label">职位状态:</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="payroll" id="payroll" value="1" checked="checked" title="在职">
+                        <input type="radio" name="payroll" id="payroll" value="0" title="不在职">
+                    </div>
+                </div>
+                <br>
+                <br>
+
+
+
+                <div class="layui-form-item">
+                    <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="reg">注  册 </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
+<script>
+    layui.use(['jquery','laydate','form', 'element','table', 'layer'], function() {
+        var $ = layui.jquery,
+            element = layui.element,
+            table = layui.table,
+            laydate = layui.laydate,
+            layer = layui.layer,
+            form = layui.form;
+
+
+
+
+        layer.ready(function () {
+            //动态获取类型
+            $.getJSON("/reg.do?opt=queryedu", function (typp) {
+                $("#edu").empty();
+                $("#edu").append("<option value=124>请选择 </option>");
+                $.each(typp, function (i, type) {
+                    $("#edu").append("<option value=" + type.id + ">" + type.e_name + "</option>");
+                });
+                form.render();
+            });
+            $.getJSON("/reg.do?opt=queryType", function (ty) {
+                $("#guojia").empty();
+                $("#guojia").append("<option value=124>请选择 </option>");
+                $.each(ty, function (i, type) {
+                    $("#guojia").append("<option value=" + type.id + ">" + type.c_name + "</option>");
+                });
+                form.render();
+            });
+            $.getJSON("/reg.do?opt=querypro", function (ty) {
+                $("#sheng").empty();
+                $("#sheng").append("<option value=124>请选择 </option>");
+                $.each(ty, function (i, type) {
+                    $("#sheng").append("<option value=" + type.id + ">" + type.p_name + "</option>");
+                });
+                form.render();
+            });
+
+            $.getJSON("/reg.do?opt=querycity", function (typ) {
+                $("#shi").empty();
+                $("#shi").append("<option value=125>请选择 </option>");
+                $.each(typ, function (i, type) {
+                    $("#shi").append("<option value=" + type.id + ">" + type.city_name + "</option>");
+                });
+                form.render();
+            });
+            $.getJSON("/reg.do?opt=querynation", function (yp) {
+                $("#nation").empty();
+                $("#nation").append("<option value=126>请选择 </option>");
+                $.each(yp, function (i, type) {
+                    $("#nation").append("<option value=" + type.id + ">" + type.n_name + "</option>");
+                });
+                form.render();
+            });
+        })
+
+
+
+
+
+
+        // 登录过期的时候，跳出ifram框架
+        if(top.location != self.location) top.location = self.location;
+
+        // 粒子线条背景
+        $(document).ready(function() {
+            $('.layui-container').particleground({
+                dotColor: '#5cbdaa',
+                lineColor: '#5cbdaa'
+            });
+        });
+
+
+
+
+
+
+    // 进行登录操作
+        form.on('submit(reg)', function (data) {
+            data = data.field;
+
+            if (data.employee_number == '') {
+                layer.msg('员工号不能为空');
+                return false;
+            }
+            if (data.username == '') {
+                layer.msg('姓名不能为空');
+                return false;
+            }
+            if (data.login_name == '') {
+                layer.msg('登录名不能为空');
+                return false;
+            }
+            if (data.password == '') {
+                layer.msg('登录密码不能为空');
+                return false;
+            }
+
+            if (data.tel == '') {
+                layer.msg('联系方式不能为空');
+                return false;
+            }
+            if (data.address == '') {
+                layer.msg('地址不能为空');
+                return false;
+            }
+
+
+
+
+            // form.verify({
+            //     //将用户名是否可用作为验证条件 表单提交时触发
+            //     username:function(value){
+            //         var datas={username: value};
+            //         var message = '';
+            //         $.ajax({
+            //             type:"POST",
+            //             url:'../reg.do?opt=reg',
+            //             async: false, //改为同步请求
+            //             contentType:'application/json;charset=UTF-8',
+            //             data:JSON.stringify(datas),
+            //             dataType:'json',
+            //             success:function(data){
+            //                 if(data){
+            //
+            //                 }else{
+            //                     message ="用户名已存在，请重新输入！"
+            //                 }
+            //             }
+            //         });
+            //         //需要注意 需要将返回信息写在ajax方法外
+            //         if (message !== '')
+            //             return message;
+            //     }
+            // });
+
+
+            var payroll = $("input[name=payroll]:checked").val();
+            $.get(
+                "../reg.do",
+                {
+                     opt:"reg",
+                    "employee_number":$("#employee_number").val(),
+                    "username":$("#username").val(),
+                    "login_name":$("#login_name").val(),
+                    "password":$("#password").val(),
+                    "c_id":$("#guojia").val(),
+                    "p_id":$("#sheng").val(),
+                    "city_id": $("#shi").val(),
+                    "n_id":$("#nation").val(),
+                    "e_id":$("#edu").val(),
+                    "payroll":payroll,
+                    "tel":$("#tel").val(),
+                    "address":$("#address").val()
+                },
+                function (flag){
+                    if(flag==1){
+                        alert("恭喜您操作成功!");
+                        window.location.href="login-1.html";
+                    }else{
+                        alert("该用户已存在!");
+                        // window.location.href="404.html";
+                    }
+                },"text");
+
+            return false;
+        });
+
+    });
+</script>
+</body>
+
+</html>

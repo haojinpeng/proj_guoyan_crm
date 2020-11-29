@@ -1,0 +1,28 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 101,
+	"data": [
+		{
+			"roleName": "管理员1",
+			"resourcesName": "商机",
+			"powerName": "增加",
+			"remarks": "1"
+		},{
+			"roleName": "管理员2",
+			"resourcesName": "商机",
+			"powerName": "增加，删除",
+			"remarks": "1"
+		},{
+			"roleName": "管理员3",
+			"resourcesName": "商机；项目",
+			"powerName": "增加；增加",
+			"remarks": "1"
+		},{
+			"roleName": "管理员4",
+			"resourcesName": "商机；项目",
+			"powerName": "增加，删除；查看，审批",
+			"remarks": "1"
+		}	
+	]
+}  

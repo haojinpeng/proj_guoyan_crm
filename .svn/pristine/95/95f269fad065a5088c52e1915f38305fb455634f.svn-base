@@ -1,0 +1,41 @@
+package com.it.services;
+
+import com.it.bean.BusinessOpporitunity;
+import com.it.dao.IBusinessOppoDao;
+import com.it.dao.IBusinessOppoDaoImpl;
+import com.it.services.IBusinessOppoServices;
+
+import java.util.List;
+
+public class IBusinessOppoServiceImpl implements IBusinessOppoServices {
+    private IBusinessOppoDao businessOppoDao  = new IBusinessOppoDaoImpl();
+
+    @Override
+    public boolean add(BusinessOpporitunity businessOpporitunity) {
+
+        
+
+        return businessOppoDao.add(businessOpporitunity);
+    }
+
+    @Override
+    public boolean del(BusinessOpporitunity businessOpporitunity) {
+        return businessOppoDao.del(businessOpporitunity);
+    }
+
+    @Override
+    public boolean upd(BusinessOpporitunity businessOpporitunity) {
+        return businessOppoDao.upd(businessOpporitunity);
+    }
+
+    @Override
+    public List<BusinessOpporitunity> queryAllLike(String sql) {
+        return businessOppoDao.queryAllLike(sql);
+    }
+
+    @Override
+    public int count(String sql) {
+        return businessOppoDao.count(sql);
+    }
+
+}

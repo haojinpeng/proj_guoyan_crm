@@ -1,0 +1,65 @@
+package com.it.utils;
+
+import org.apache.commons.dbcp.BasicDataSource;
+
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.Properties;
+
+public class JDBCUtils {
+    private static String driverClassName;
+    private static String url;
+    private static String username;
+    private static String password;
+    private static String maxActive;
+    private static String maxIdle;
+    private static String minIdle;
+    private static String initialSize;
+    private static String maxWait;
+
+    static BasicDataSource basicDataSource = null;
+    static {
+        basicDataSource = new BasicDataSource();
+        Properties properties = new Properties();
+
+        try {
+            properties.load(JDBCUtils.class.getClassLoader().getResourceAsStream("db.properties"));
+            driverClassName = properties.getProperty("driverClassName");
+            url = properties.getProperty("url");
+            username = properties.getProperty("username");
+            password = properties.getProperty("password");
+            maxActive = properties.getProperty("maxActive");
+            maxIdle = properties.getProperty("maxIdle");
+            minIdle = properties.getProperty("minIdle");
+            initialSize = properties.getProperty("initialSize");
+            maxWait = properties.getProperty("maxWait");
+            //System.out.println(driverClassName);
+            //System.out.println(url);
+            //System.out.println(username);
+            //System.out.println(password);
+            basicDataSource.setDriverClassName(driverClassName);
+            basicDataSource.setUrl(url);
+            basicDataSource.setUsername(username);
+            basicDataSource.setPassword(password);
+            basicDataSource.setMaxActive(Integer.parseInt(maxActive));
+            basicDataSource.setMaxIdle(Integer.parseInt(maxIdle));
+            basicDataSource.setMinIdle(Integer.parseInt(minIdle));
+            basicDataSource.setInitialSize(Integer.parseInt(initialSize));
+            basicDataSource.setMaxWait(Long.parseLong(maxWait));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+    public static DataSource getDataSourcde(){
+
+        return basicDataSource;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(JDBCUtils.getDataSourcde().toString());
+    }
+
+}
+

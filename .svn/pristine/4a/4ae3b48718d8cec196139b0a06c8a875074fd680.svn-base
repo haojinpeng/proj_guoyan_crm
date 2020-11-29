@@ -1,0 +1,74 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 20,
+	"data": [
+		{
+			"id": "001",
+			"username": "杜甫",
+			"age": "20",
+			"sex": "1",
+			"user": "wangye",
+			"password": "123456",
+			"LAY_CHECKED":true
+		},
+		{
+			"id": "002",
+			"username": "李白",
+			"age": "21",
+			"sex": "1",
+			"user": "wangye",
+			"password": "123456",
+			"LAY_CHECKED": true
+		},
+		{
+			"id": "003",
+			"username": "王勃",
+			"age": "22",
+			"sex": "1",
+			"user": "wangye",
+			"password": "123456"
+		},
+		
+		{
+			"id": "004",
+			"username": "李清照",
+			"age": "22",
+			"sex": "1",
+			"user": "wangye",
+			"password": "123456"
+		},
+		{
+			"id": "005",
+			"username": "冰心",
+			"age": "23",
+			"sex": "0",
+			"user": "wangye",
+			"password": "123456"
+		},
+		{
+			"id": "006",
+			"username": "贤心",
+			"age": "24",
+			"sex": "0",
+			"user": "wangye",
+			"password": "123456"
+		},
+		{
+			"id": "007",
+			"username": "贤心",
+			"age": "25",
+			"sex": "0",
+			"user": "wangye",
+			"password": "123456"
+		},
+		{
+			"id": "008",
+			"username": "贤心",
+			"age": "26",
+			"sex": "0",
+			"user": "wangye",
+			"password": "123456"
+		}
+	]
+}  

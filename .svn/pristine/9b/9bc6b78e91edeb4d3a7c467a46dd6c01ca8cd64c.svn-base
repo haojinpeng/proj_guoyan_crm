@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>工单记录</title>
+		<link rel="stylesheet" href="resources/layui/css/layui.css">
+
+	</head>
+	<style>
+		::-webkit-scrollbar {width: 4px;height: 4px}
+		::-webkit-scrollbar-track {background-color: transparent;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em;}
+		::-webkit-scrollbar-thumb {background-color: #9c9da0;-webkit-border-radius: 2em;-moz-border-radius: 2em;border-radius: 2em}
+				
+	</style>
+	<body>
+
+
+		<div >
+			
+			<div>
+				<!-- 工单处理开始 -->
+				<table class="layui-hide" id="userTable2" lay-filter="userTable2"></table>
+				
+				<!-- 表头搜索-->
+				<script type="text/html" id="toolbarDemo2">
+					<div class="layui-form-item" style="height: 30px;" >
+						   <div class="layui-inline">
+						     <label class="layui-form-label" style="width: auto;">处理状态：</label>
+						     <div class="layui-input-inline" >
+						       <input type="tel" name="xm_name2"  autocomplete="off" class="layui-input">
+						     </div>
+						     <label class="layui-form-label" style="width: auto;">日期范围</label>
+						     <div class="layui-input-inline">
+						       <input type="text" name="date" id="date2" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+						     </div>
+							 <label class="layui-form-label">状态：</label>
+							 <div class="layui-input-inline">
+							   <select name="zt" lay-verify="required">
+							     <option value=""></option>
+							     <option value="0">已处理</option>
+							     <option value="1">待处理</option>
+							     <option value="2">已转发</option>
+							     <option value="3">未转发</option>
+							   
+							   </select>
+							 </div>
+						     <button type="button" class="layui-btn layui-btn-sm" lay-event="ss2">搜索</button>
+						   </div>						
+					</div>
+				</script>
+				<!-- 表头-->
+				<!-- 行操作 -->
+				<script type="text/html" id="barDemo2" >
+					<!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="zf">处理</a> -->
+					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="doit">处理</a>
+				</script>
+				<!-- 行操作 -->
+				<!-- 工单处理结束 -->
+		</div>
+		
+		<!-- doitDIV开始 -->
+		<div id="doitDIV" style="display: none;line-height: 50px;">
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+		
+				<div class="layui-block">
+					<label class="layui-form-label">工单编号:</label>
+					<div class="layui-input-inline">
+						<input type="text" lay-verify="required" autocomplete="off" placeholder="12345" title="只读" class="layui-input" disabled="disabled">
+					</div>
+				</div>
+				<div class="layui-block">
+					<label class="layui-form-label">客户名称:</label>
+					<div class="layui-input-inline">
+						<input type="text" lay-verify="required" autocomplete="off"  placeholder="逼死人的甲方" title="只读" class="layui-input" disabled="disabled">
+					</div>
+				</div>
+				<div class="layui-block">
+					<label class="layui-form-label">接受人:</label>
+					<div class="layui-input-inline">
+						<input type="text" lay-verify="required" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-block">
+					<label class="layui-form-label" >委托人：</label>
+					<div class="layui-input-inline" style="width: 180px;">
+					  <select name="zt" lay-verify="required">
+					    <option value=""></option>
+					    <option value="0">委托人1</option>
+					    <option value="1">委托人2</option>
+					    <option value="2">委托人3</option>
+					
+					  
+					  </select>
+					</div>
+				</div>
+				<div class="layui-block">
+					<label class="layui-form-label">问题描述：</label>
+					<div class="layui-input-inline">
+						<textarea name="desc" placeholder="问题描述" class="layui-textarea" title="只读"  disabled="disabled"></textarea>
+					</div>
+				</div>
+				<div class="layui-block">
+					<label class="layui-form-label">问题处理流程：</label>
+					<div class="layui-input-inline">
+						<textarea name="desc" placeholder="处理流程" class="layui-textarea" title="只读"  disabled="disabled"></textarea>
+					</div>
+				</div>
+		
+				
+				<div class="layui-block">
+					<label class="layui-form-label">当前状态：</label>
+					<div class="layui-input-block">
+						<input type="radio" lay-filter="testRadio1" lay-verify="required" name="state" value="cl" title="已处理" checked>
+						<input type="radio" lay-filter="testRadio1" lay-verify="required" name="state" value="zf" title="转发"  >
+						
+					</div>
+				</div>
+				<div class="layui-block" style="display: none;" id="ztzfshow">
+					<label class="layui-form-label">转发给：</label>
+					<div class="layui-input-block">
+						<div class="layui-input-inline">
+						  <select name="zt" lay-verify="required">
+						    <option value=""></option>
+						    <option value="0">部门一</option>
+						    <option value="1">部门二</option>
+						    <option value="2">部门三</option>
+						  </select>
+						</div>
+						<div class="layui-input-inline">
+						  <select name="zt" lay-verify="required">
+						    <option value=""></option>
+						    <option value="0">张一</option>
+						    <option value="1">张二</option>
+						    <option value="2">张三</option>
+						  </select>
+						</div>
+						
+					</div>
+				</div>
+				
+		
+				<div class="layui-block">
+					<div class="layui-input-inline" style="margin-left: 100px;">
+						<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+						 lay-submit="">提交</button>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!-- doitDIV结束 -->
+		
+		<!-- zfDIV开始 -->
+		<div id="zfDIV" style="display: none;line-height: 50px;">
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+				<div class="layui-block">
+					<label class="layui-form-label">项目名称:</label>
+					<div class="layui-input-inline">
+						<input type="text" lay-verify="required" autocomplete="off" class="layui-input" placeholder="名称" title="只读"  disabled="disabled">
+					</div>
+				</div>
+		
+				<div class="layui-block">
+					<label class="layui-form-label">工作编号:</label>
+					<div class="layui-input-inline">
+						<input type="text" lay-verify="required" autocomplete="off" class="layui-input" placeholder="12345" title="只读"  disabled="disabled">
+					</div>
+				</div>
+				<div class="layui-block">
+					<label class="layui-form-label">接受人:</label>
+					
+					<div class="layui-input-inline" style="width: 180px;">
+					  <select name="zt" lay-verify="required">
+					    <option value=""></option>
+					    <option value="0">接受人</option>
+					    <option value="1">接受人</option>
+					    <option value="2">接受人</option>
+					    <option value="3">接受人</option>
+					  
+					  </select>
+					</div>
+				</div>
+				<div class="layui-block">
+					<label class="layui-form-label">委托人：</label>
+					<div class="layui-input-inline">
+						<input type="text" lay-verify="required" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-block">
+					<label class="layui-form-label">描述：</label>
+					<div class="layui-input-inline">
+						<textarea name="desc" placeholder="问题描述" class="layui-textarea" title="只读"  disabled="disabled"></textarea>
+					</div>
+				</div>
+				
+				<div class="layui-block">
+					<label class="layui-form-label">处理期限：</label>
+					<div class="layui-input-inline">
+						<input type="text" lay-verify="required"placeholder="2020-1~2020-2" title="只读"  disabled="disabled" class="layui-input" id="chuliTime" placeholder="yyyy-MM-dd">
+					</div>
+				</div>
+				
+		
+				<div class="layui-block">
+					<div class="layui-input-inline" style="margin-left: 100px;">
+						<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+						 lay-submit="">转发</button>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+					</div>
+				</div>
+			</form>
+		
+		</div>
+		<!-- zfDIV结束 -->
+		
+
+	</body>
+	<script src="resources/layui/layui.js"></script>
+	<script src="js/sh.js"></script>
+</html>

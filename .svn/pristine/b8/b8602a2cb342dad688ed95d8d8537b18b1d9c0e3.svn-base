@@ -1,0 +1,26 @@
+package com.it.services;
+
+import com.it.bean.*;
+
+import java.util.List;
+
+public interface EmployeeContrService {
+    //添加功能
+    boolean add(EmployeeContribution ec);
+    //删除单个
+    boolean delete(EmployeeContribution ec);
+    //按员工编号查询
+    EmployeeContribution selectById(EmployeeContribution ec);
+    //修改
+    boolean update(EmployeeContribution ec);
+    //按项目名称查询
+    List<Project> selectProjName(Project project);
+    //按岗位查询
+    List<Station> selectStatName(Station station);
+    //按员工号查询
+    List<User> selectEmploNum(User user);
+    //查询所有
+    List<EmployeeContribution> queryAll(EmployeeContribution ec, String beginTime, String endTime);
+    //查询所有带分页
+    List<EmployeeContribution> queryAll(EmployeeContribution ec,String beginTime,String endTime, PageBean pageBean);
+}

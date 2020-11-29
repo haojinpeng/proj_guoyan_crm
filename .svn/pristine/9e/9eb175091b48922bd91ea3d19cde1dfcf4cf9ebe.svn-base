@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+
+</head>
+<style>
+	/**自定义滚动条样式 */
+
+	::-webkit-scrollbar {
+		width: 8px;
+		height: 8px
+	}
+
+	::-webkit-scrollbar-track {
+		background-color: transparent;
+		-webkit-border-radius: 2em;
+		-moz-border-radius: 2em;
+		border-radius: 2em;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background-color: #9c9da0;
+		-webkit-border-radius: 2em;
+		-moz-border-radius: 2em;
+		border-radius: 2em
+	}
+</style>
+
+<body>
+<!-- 数据表格开始 -->
+<table class="layui-hide" id="userTable" lay-filter="userTable" style="height: 800px;"></table>
+
+<div style="display: none;" id="userToolBar">
+	<div class="layui-inline">
+		<label class="layui-form-label" style="width: 100px">编号:</label>
+		<div class="layui-input-inline" style="margin-top: 5px;">
+			<input type="text" name="idd" id="idd" autocomplete="off" class="layui-input" style="width: 120px;height: 30px;">
+		</div>
+	</div>
+	<div class="layui-inline" style="margin-left: 15px;">
+		<label class="layui-form-label" style="width: 100px">客户名称:</label>
+		<div class="layui-input-inline" style="margin-top: 5px;">
+			<input type="text" name="couser" id="couser" autocomplete="off" class="layui-input" style="width: 120px;height: 30px;">
+		</div>
+	</div>
+
+	<div class="layui-inline" style="text-align: center;margin-right:320px;">
+		<div class="layui-input-block" style="">
+			<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-search" lay-event="getCheckLength">查询</button>
+			<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+		</div>
+	</div>
+
+	<button type="button" class="layui-btn layui-btn-sm" lay-event="add" >增加</button>
+	<button type="button" class="layui-btn layui-btn-sm" lay-event="batchDelete">批量删除</button>
+	<button type="button" class="layui-btn layui-btn-sm" lay-event="">导入</button>
+
+</div>
+<div id="userBar" style="display: none;">
+
+	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</div>
+<!-- 数据表格结束 -->
+
+<!-- 添加和修改的弹出层开始 -->
+<div style="display: none;padding: 20px" id="saveOrUpdateDiv">
+	<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">ID:</label>
+				<div class="layui-input-inline">
+					<input type="text" name="id" id="id" lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">客户名称:</label>
+				<div class="layui-input-inline">
+					<input type="text" name="customer_name" id="customer_name" lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">国家:</label>
+				<div class="layui-input-inline">
+					<select name="guojia" id="guojia" lay-verify="required" >
+					</select>
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">省:</label>
+				<div class="layui-input-inline">
+					<select name="sheng" id="sheng" lay-verify="required" >
+
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+
+			<div class="layui-inline">
+				<label class="layui-form-label">市:</label>
+				<div class="layui-input-inline">
+					<select name="shi" id="shi" lay-verify="required" >
+
+						<option value="">请选择 </option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">地址:</label>
+				<div class="layui-input-inline">
+					<input type="text" name="address" id="address" lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<label class="layui-form-label">客户类型:</label>
+				<div class="layui-input-inline">
+					<input type="text" name="clientType" id="clientType" lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">联系人:</label>
+				<div class="layui-input-inline">
+					<input type="text" name="contact" id="contact" lay-verify="required" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item" style="text-align: center;">
+			<div class="layui-input-block">
+				<button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit" lay-submit="">提交</button>
+				<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+<!-- 添加和修改的弹出层结束 -->
+
+<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+
+</body>
+<script type="text/javascript">
+	layui.use(['jquery','laydate','form', 'element','table', 'layer'],function () {
+		var $ = layui.jquery,
+				element = layui.element,
+				table = layui.table,
+				laydate = layui.laydate,
+				layer = layui.layer,
+				form = layui.form;
+		//常规用法
+
+
+
+		laydate.render({
+			elem:'#sbirthday2'
+		});
+		//渲染数据表格
+		var tableIns = table.render({
+			elem:'#userTable',//渲染的目标对象
+			url:'customer.do?opt=queryAll',//数据接口
+			title:'客户管理',//数据导出来的标题
+			toolbar:'#userToolBar',//表格的工具条
+			height:'full-100',
+			cellMinWidth:120,//设置列的最小默认宽度
+			done:function (res,curr,count) {
+				lay('.layui-input-date').each(function () {
+					laydate.render({
+						elem:this,
+						format:'yyyy-MM-dd',
+						type:'date',
+						trigger:'click',
+						theme:'green',
+						calendar:true
+					});
+
+				});
+			},
+			cols: [[   //列表数据
+			{type: 'checkbox', fixed: 'left'}
+			,{field:'id', title:'ID', sort:true}
+			,{field:'customer_name', title:'客户名称', sort:true,align:'center'}
+			,{field:'c_name', title:'国家', sort:true,align:'center'}
+			,{field:'p_name', title:'所在省', sort:true,align:'center' }
+			,{field:'city_name', title:'所在城市', sort:true,align:'center'}
+			,{field:'address', title:'详细地址', sort:true,align:'center'}
+			,{field:'clientType', title:'客户类型', sort:true,align:'center'}
+			,{field:'contact', title:'联系人', sort:true,align:'center'}
+			,{fixed: 'right', title:'操作', toolbar: '#userBar', width:220,align:'center'}
+		]]
+			,page: {layout:['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']}
+			,id:'testReload'
+		});
+
+		//监听头部工具栏事件
+		table.on("toolbar(userTable)",function (obj) {
+			switch (obj.event) {
+				case 'add':
+					$("input[name=id]").attr("readonly", false);
+					openAddUser();
+					break;
+				case 'batchDelete':
+					delAll();
+					break;
+				case 'getCheckLength':
+					queryLike();
+					break;
+			};
+		});
+		//监听行工具栏事件
+		table.on('tool(userTable)',function (obj) {
+			var data = obj.data;//获得当前行数据
+			var layEvent = obj.event;//获得lay-event对应的值
+			if(obj.event==='del'){//删除
+				layer.msg("删除");
+				layer.confirm("是否删除！",function (index) {
+					obj.del();
+					//向服务器发送删除指令
+					//layer.msg(obj.data.sno)
+					delStu(obj.data.id);
+
+
+				});
+			}else if(layEvent==='edit'){//编辑
+				$("input[name=payroll][value='1']").attr("checked", data.payroll == 1 ? true : false);
+				$("input[name=payroll][value='0']").attr("checked", data.payroll == 0 ? true : false);
+				$("input[name=sex][value='1']").attr("checked", data.sex == 1 ? true : false);
+				$("input[name=sex][value='0']").attr("checked", data.sex == 0 ? true : false);
+				$("input[name=id]").attr("readonly", true);
+				openUpdateUser(data);
+
+			}
+
+		});
+		//模糊查询
+		function queryLike() {
+			var idd = $("#idd").val();
+			var couser = $("#couser").val();
+			// alert(employee);
+			// alert(name);
+			table.reload('testReload',{
+				where:{idd:idd,couser:couser}
+			});
+		}
+		//批量删除
+		function delAll() {
+			//获取选中数据
+			var checkStatus = table.checkStatus('testReload'),
+					data = checkStatus.data;
+			if(data==""){
+				layer.msg('至少也得选一个吧',{icon:2});
+				return;
+			}
+			var delArray = [];
+			//获取单元格选中的行
+			if(data.length>0){
+				for(var i=0;i<data.length;i++){
+					delArray.push(data[i].id);
+				}
+			}
+			var ids = delArray.join(",");
+			layer.confirm('确认要删除吗？'+delArray,function (index) {
+				//发起异步请求
+				$.ajax({
+					type:'post',
+					url:'customer.do?opt=dels',
+					data:{'delArray':ids}
+				});
+				layer.msg('删除成功！',{icon:1});
+				location.reload();
+
+			});
+		}
+		//删除操作
+		function delStu(id) {
+			$.post("customer.do", { opt: "del", id: id },function (flag) {
+				if(flag==1){
+					layer.msg("删除成功",{icon:6});
+					location.reload();
+					layer.close(index);
+				}else {
+					layer.msg("删除失败", {icon: 5});
+					location.reload();
+				}
+			});
+		}
+		//打开添加页面
+		function openAddUser() {
+			mainIndex = layer.open({
+				type:1,
+				title:'添加',
+				content:$("#saveOrUpdateDiv"),
+				area:['800px','400px'],
+				success: function (index) {
+					//清空表单数据
+					$("#dataFrm")[0].reset();
+						$.getJSON("customer.do?opt=queryType", function (types) {
+							$("#guojia").empty();
+							$("#guojia").append("<option value=123>请选择 </option>");
+							$.each(types, function (i, type) {
+								$("#guojia").append("<option value=" + type.id + ">" + type.c_name + "</option>");
+							});
+							form.render();
+						});
+					$.getJSON("customer.do?opt=querypro", function (ty) {
+						$("#sheng").empty();
+						$("#sheng").append("<option value=124>请选择 </option>");
+						$.each(ty, function (i, type) {
+							$("#sheng").append("<option value=" + type.id + ">" + type.p_name + "</option>");
+						});
+						form.render();
+					});
+					$.getJSON("customer.do?opt=querycity", function (typ) {
+						$("#shi").empty();
+						$("#shi").append("<option value=125>请选择 </option>");
+						$.each(typ, function (i, type) {
+							$("#shi").append("<option value=" + type.id + ">" + type.city_name + "</option>");
+						});
+						form.render();
+					});
+
+					url = "customer.do?opt=reg";
+				}
+
+			});
+		}
+		//打开修改页面
+		function openUpdateUser(data) {
+			mainIndex = layer.open({
+				type: 1,
+				title: '修改',
+				content: $("#saveOrUpdateDiv"),
+				area: ['800px', '400px'],
+				success: function (index) {
+					form.val("dataFrm", data);
+					// layer.msg(JSON.stringify(data.field));
+					$.getJSON("customer.do?opt=queryType", function (types) {
+						$("#guojia").empty();
+						$("#guojia").append("<option value=123>请选择 </option>");
+						$.each(types, function (i, type) {
+							$("#guojia").append("<option value=" + type.id + ">" + type.c_name + "</option>");
+						});
+						form.render();
+					});
+					$.getJSON("customer.do?opt=querypro", function (ty) {
+						$("#sheng").empty();
+						$("#sheng").append("<option value=124>请选择 </option>");
+						$.each(ty, function (i, type) {
+							$("#sheng").append("<option value=" + type.id + ">" + type.p_name + "</option>");
+						});
+						form.render();
+					});
+					$.getJSON("customer.do?opt=querycity", function (typ) {
+						$("#shi").empty();
+						$("#shi").append("<option value=125>请选择 </option>");
+						$.each(typ, function (i, type) {
+							$("#shi").append("<option value=" + type.id + ">" + type.city_name + "</option>");
+						});
+						form.render();
+					});
+					url = "customer.do?opt=upd";
+				}
+			});
+		}
+
+		form.on('submit(doSubmit)', function(data){
+			alert(JSON.stringify(data.field));
+			// var sex = $("input[type='radio']:checked").val();
+			// var payroll = $("input[type='radio']:checked").val();
+			alert(url);
+			// alert($("#guojia").val());
+			$.get(
+					url,
+					{
+						"id":$("#id").val(),
+						"customer_name":$("#customer_name").val(),
+						"c_id":$("#guojia").val(),
+						"p_id":$("#sheng").val(),
+						"city_id": $("#shi").val(),
+						"address": $("#address").val(),
+						"clientType":$("#clientType").val(),
+						"contact":$("#contact").val()
+					},
+					function (flag){
+						if(flag==1){
+							alert("恭喜您操作成功!");
+							window.location.href="customer.html";
+						}else{
+							alert("操作失败!");
+							window.location.href="customer.html";
+						}
+					},"json");
+			return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+		});
+
+	});
+
+</script>
+
+
+
+</html>

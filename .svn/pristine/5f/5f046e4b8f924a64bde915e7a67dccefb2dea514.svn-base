@@ -1,0 +1,15 @@
+package com.it.dao;
+
+import com.it.bean.PageBean;
+import com.it.bean.User;
+
+import java.util.List;
+
+public interface IUdao {
+    //登陆
+    public boolean logion(User user);
+    //带分页查询所有
+    public List<User> queryAllUser(PageBean pageBean, User user);
+    //查询总记录数
+    public int userCount(User user);
+}

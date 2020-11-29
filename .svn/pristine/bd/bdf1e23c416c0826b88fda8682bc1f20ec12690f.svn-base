@@ -1,0 +1,325 @@
+package com.it.controller;
+
+import com.it.bean.*;
+import com.it.services.IResourceSercices;
+import com.it.services.IRoleServices;
+import com.it.services.impl.ResourceServicesImpl;
+import com.it.services.impl.RoleServicesImpl;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+
+@WebServlet(name = "RoleAndResourcesAndJurisdictionServlet", value = "/role.do")
+public class RoleServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //处理乱码
+        response.setContentType("application/json; charset=utf-8");
+        //        response.setCharacterEncoding("utf-8");
+        request.setCharacterEncoding("utf-8");
+
+        //获取页面上的值
+        String opt = request.getParameter("opt");
+        System.out.println("opt==========" + opt);
+        String role_id = request.getParameter("role_id");
+        String role_name = request.getParameter("role_name");
+        String res_id = request.getParameter("res_id");
+        String res_name = request.getParameter("res_name");
+        String jur_id = request.getParameter("jur_id");
+        String jur_name = request.getParameter("jur_name");
+        //page 当前页码
+        String page = request.getParameter("page");
+        //limit pageSize
+        String rows = request.getParameter("limit");
+
+        PrintWriter out = response.getWriter();
+
+        //创建对象
+        Role role = new Role();
+        RoleAndResourcesAndJurisdiction roleAndResourcesAndJurisdiction = new RoleAndResourcesAndJurisdiction();
+        JSONObject result = new JSONObject();
+
+        // 存放集合内容
+        List<Role> roleList = null;
+        List<RoleAndResourcesAndJurisdiction> roleAndResourcesAndJurisdictionList = null;
+
+        // 判 "" null
+        if (role_id != null && !"".equals(role_id)) {
+            role.setId(Long.parseLong(role_id));
+            roleAndResourcesAndJurisdiction.setId(Long.parseLong(role_id));
+        }
+        if (role_name != null && !"".equals(role_name)) {
+            role.setName(role_name);
+            roleAndResourcesAndJurisdiction.setName(role_name);
+        }
+
+        if (res_id != null && !"".equals(res_id)) {
+            roleAndResourcesAndJurisdiction.setRes_id(Long.parseLong(res_id));
+        }
+
+        if (res_name != null && !"".equals(res_name)) {
+            roleAndResourcesAndJurisdiction.setRes_name(res_name);
+        }
+
+        if (jur_id != null && !"".equals(jur_id)) {
+            roleAndResourcesAndJurisdiction.setJur_id(Long.parseLong(jur_id));
+        }
+        if (jur_name != null && !"".equals(jur_name)) {
+            roleAndResourcesAndJurisdiction.setJur_name(jur_name);
+        }
+
+        //service
+        IRoleServices roleServices = new RoleServicesImpl();
+
+        // 判别flag
+        int flag = 0;
+
+        if ("delete".equals(opt)) {
+            //获取前端页面的id集合
+            String delIds = request.getParameter("delArray");
+            System.out.println("delIds--->" + delIds);
+            //{key:value,key:value....}
+            int delNums = 0;
+//            如果前端有role_id,单一删除
+            if (!"".equals(role_id) && role_id != null) {
+                roleServices.del(role_id);
+                delNums = 1;
+            } else {
+                delNums = roleServices.del(delIds);
+            }
+            out.print(delNums);
+            return;
+        }
+
+        if ("update".equals(opt)) {
+            response.sendRedirect("role.html");
+            return;
+        }
+
+        //role.html查询
+        if ("queryAll".equals(opt)) {
+            //查询所有信息默认分页
+            PageBean pageBean = new PageBean(Integer.parseInt(page), Integer.parseInt(rows));
+
+            roleAndResourcesAndJurisdictionList = roleServices.queryAll(pageBean, roleAndResourcesAndJurisdiction);
+            //查询总记录数
+            int total = roleServices.count(roleAndResourcesAndJurisdiction);
+
+            System.out.println("total==========" + total);
+            // jsonArray
+            JSONArray jsonArray = JSONArray.fromObject(roleAndResourcesAndJurisdictionList);
+            result.put("code", 0);
+            result.put("msg", "正在加载....");
+            result.put("count", total);
+            result.put("data", jsonArray);
+            System.out.println(result.toString());
+            out.print(result);
+            return;
+        }
+
+        //查询所有的res_jur
+
+        List<ResourceAndJurisdiction> resourceAndJurisdictionList = roleServices.queryAllResAndJur(new ResourceAndJurisdiction());
+
+        //把所有type为C和M的分为两个list
+        ArrayList<ResourceAndJurisdiction> typeCList = new ArrayList<>();
+        ArrayList<ResourceAndJurisdiction> typeMList = new ArrayList<>();
+        for (ResourceAndJurisdiction res_jur : resourceAndJurisdictionList
+        ) {
+            if (res_jur.getType().equals("C")) {
+                typeCList.add(res_jur);
+            }
+            //把type为M的细分
+            if (res_jur.getType().equals("M")) {
+                String[] jurNames = res_jur.getJurisdiction_name().split(",");
+                String[] jurIds = res_jur.getJurisdiction_id().split(",");
+                for (int i = 0; i < jurNames.length; i++) {
+                    ResourceAndJurisdiction res_jur1 = new ResourceAndJurisdiction(res_jur.getResource_id(), res_jur.getName(),
+                            res_jur.getPath(), res_jur.getType(), jurIds[i], jurNames[i]);
+                    typeMList.add(res_jur1);
+                }
+
+//                for (String jurName : jurNames
+//                ) {
+//                    ResourceAndJurisdiction res_jur1 = new ResourceAndJurisdiction
+//                            (res_jur.getResource_id(), res_jur.getName(), res_jur.getPath(),
+//                                    res_jur.getType(), res_jur.getJurisdiction_id(), jurName);
+//                    typeMList.add(res_jur1);
+//                }
+            }
+        }
+
+        //获得这样的String;
+        StringBuffer sb = new StringBuffer();
+        sb.append("{");
+        JSONObject jsonObject = new JSONObject();
+        List<String> list = new ArrayList<String>();
+
+
+        for (ResourceAndJurisdiction typeC : typeCList
+        ) {
+            sb.append("'" + typeC.getName() + "':{");
+            //将type为C的path拆分,若与type为M的name相等,则逐步添加
+            String[] paths = typeC.getPath().split(",");
+            for (String path : paths
+            ) {
+                sb.append("'" + path + "':[");
+                for (ResourceAndJurisdiction typeM : typeMList
+                ) {
+                    if (path.equals(typeM.getName())) {
+                        sb.append("'" + typeM.getJurisdiction_name() + "',");
+                    }
+                }
+                sb.deleteCharAt(sb.length() - 1);
+                sb.append("],");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append("},");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append("}");
+//        {
+//            '商机管理':{
+//            '商机管理首页': ['修改', '审批'],
+//            '商机费用管理': ['查询', '审批']
+//        },
+//            '合同管理':{
+//            '合同信息管理': ['审批', '添加'],
+//            '开票管理': ['查询']
+//        },
+//            '工时管理':{
+//            '日报管理': ['删除']
+//        }
+//        }
+        //str 的格式如上
+        String str = sb.toString();
+
+        if ("queryResAndJur".equals(opt)) {
+            //查询所有的res_jur
+            System.out.println("str======" + str);
+            out.print(str);
+            return;
+        }
+
+        if ("add".equals(opt)) {
+            System.out.println("role_name========" + role_name);
+            // 获取前端allChecked的值
+            String allchecked = request.getParameter("allChecked");
+            System.out.println("alll========" + allchecked);
+            if (allchecked != null && !"".equals(allchecked)) {
+                Role role1 = new Role();
+
+                //分为添加,先加role表，再根据role_name找role_id
+                if (role_id == null || "".equals(role_id)) {
+                    // role_name添加Role表
+                    roleServices.addRole(role);
+                    flag++;
+                    // 根据role_name查找Role表的id,name
+                    role1 = roleServices.selectRole(role);
+                    flag++;
+
+                } else { //分为修改,先修改,再删除role_res_jur
+                    System.out.println("修改=========" + role);
+                    roleServices.updRole(role);
+                    role1 = role;
+                    roleServices.delRole_res_jurByRole_id(role.getId());
+                }
+
+                System.out.println("role1========="+role1);
+
+                System.out.println("allchecked==============="+allchecked);
+                //权限表要加一个目录权限，最好id=1，name=目录，所有目录资源都要加上此权限
+                if (allchecked.equals("所有权限")) {
+                    for (ResourceAndJurisdiction typeC : typeCList
+                    ) {
+                        roleServices.addRoleAndResourcesAndJurisdiction(new RoleAndResourcesAndJurisdiction(
+                                role1.getId(), typeC.getResource_id(), Long.parseLong("1")));
+                        flag++;
+                    }
+                    for (ResourceAndJurisdiction typeM : typeMList
+                    ) {
+                        roleServices.addRoleAndResourcesAndJurisdiction(new RoleAndResourcesAndJurisdiction(
+                                role1.getId(), typeM.getResource_id(), Long.parseLong(typeM.getJurisdiction_id())));
+                        flag++;
+                    }
+                } else {//商机管理首页,合同信息管理-添加,开票管理 此为样例
+                    int[] typeCs = new int[typeCList.size()];
+                    String[] checkeds = allchecked.split(",");
+                    //添加type为M的 角色_资源_权限连接
+                    for (String checked : checkeds
+                    ) {
+                        String[] checks = checked.split("-");
+                        if (checks.length == 1) {//当为1时，表示拥有改资源的所有权限
+                            for (ResourceAndJurisdiction typeM : typeMList
+                            ) {
+                                if (checked.equals(typeM.getName())) {
+                                    roleServices.addRoleAndResourcesAndJurisdiction(new RoleAndResourcesAndJurisdiction(
+                                            role1.getId(), typeM.getResource_id(), Long.parseLong(typeM.getJurisdiction_id())));
+                                    flag++;
+
+                                    for (int i = 0; i < typeCList.size(); i++) {
+                                        String[] aa = typeCList.get(i).getPath().split(",");
+                                        for (String a : aa
+                                        ) {
+                                            if (a.equals(checked)) {
+                                                typeCs[i]++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            for (ResourceAndJurisdiction typeM : typeMList
+                            ) {
+                                if (checks[0].equals(typeM.getName()) && checks[1].equals(typeM.getJurisdiction_name())) {
+                                    roleServices.addRoleAndResourcesAndJurisdiction(new RoleAndResourcesAndJurisdiction(
+                                            role1.getId(), typeM.getResource_id(), Long.parseLong(typeM.getJurisdiction_id())));
+                                    flag++;
+
+                                    for (int i = 0; i < typeCList.size(); i++) {
+                                        String[] aa = typeCList.get(i).getPath().split(",");
+                                        for (String a : aa
+                                        ) {
+                                            if (a.equals(checks[0])) {
+                                                typeCs[i]++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                    //typeCs中数字>0,添加对应的 角色_资源_权限连接
+                    for (int i = 0; i < typeCs.length; i++) {
+                        if (typeCs[i] > 0) {
+                            //获得对应
+                            roleServices.addRoleAndResourcesAndJurisdiction(new RoleAndResourcesAndJurisdiction(
+                                    role1.getId(), typeCList.get(i).getResource_id(), Long.parseLong("1")));
+                            flag++;
+                        }
+                    }
+                }
+            }
+
+
+            out.print(flag - 2);
+            return;
+        } else {
+            System.out.println("无opt");
+        }
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
+    }
+}

@@ -1,0 +1,8 @@
+package com.it.dao;
+
+import com.it.bean.User;
+
+public interface IUdao {
+    //登陆
+    public boolean logion(User user);
+}

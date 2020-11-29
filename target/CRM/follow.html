@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+		<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/follow.js" type="text/javascript" charset="utf-8"></script>
+		<title>商机跟进管理</title>
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+				<fieldset class="table-search-fieldset" style="border-bottom: 1px solid darkgrey;border-top: white;border-left: white;border-right: white;">
+					<div style="margin: 20px 10px 10px 10px">
+						<form class="layui-form layui-form-pane" action="">
+							<div class="layui-form-item" style="margin-left:80px">
+								<div class="layui-inline" style="margin-left: 20px;">
+									<label class="layui-form-label" style="width: 100px;">商机类型&nbsp;</label>
+									<div class="layui-input-inline ">
+										<select id="businesstype" name="businesstype"  autocomplete="off" lay-search  >
+										</select>
+									</div>
+								</div>
+								<div class="layui-inline">
+									<label class="layui-form-label" style="width: 90px;">记录人&nbsp;</label>
+									<div class="layui-input-inline">
+										<input type="text" id="busrecorder" name="busrecorder" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-inline">
+									<label class="layui-form-label" style="width: 100px;">日期范围</label>
+									<div class="layui-input-inline">
+										<input type="text" id="date" name="date" class="layui-input" id="test6" placeholder=" - ">
+									</div>
+								</div>
+								<div class="layui-inline" style="margin-top: 10px;margin-left: 320px;">
+									<a type="submit" class="layui-btn layui-btn-sm" id="searchSubmit" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
+										查询</a>
+									<button type="button"  class="layui-btn  layui-btn-sm" id="data-add-btn" ><i class="layui-icon"></i>
+											添加跟进信息</button>
+									<button type="button"  class="layui-btn layui-btn-danger  data-delete-btn layui-btn-sm" id="data-delete-btn" lay-filter="data-delete-btn"><i class="layui-icon"></i>
+												批量删除</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</fieldset>
+				<!-- 内容主体区域 -->
+				<table class="layui-hide" id="userTable" lay-filter="userTable"></table>
+				<div id="userBar" class="layui-hide">
+					<a class="layui-btn  layui-btn-xs" lay-event="edit">编辑</a>
+					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+					<a class="layui-btn layui-btn-xs" id="addPrice" lay-event="addPrice">添加费用申请</a>
+					<!--<a href="" class="layui-btn 	layui-btn-xs" lay-event="rev1">预览</a>-->
+				</div>
+			</div>
+		</div>
+		<!--添加商机信息弹出层开始-->
+		<div style="display: none;padding: 20px" id="saveOrUpdateDiv">
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+				<div class="layui-form-item">
+						<label class="layui-form-label">商机名称&nbsp;</label>
+						<div class="layui-input-block">
+							<select id="business" name="business" lay-verify="required"  autocomplete="off" lay-search >
+								<option value="">请选择商机名称</option>
+							</select>
+						</div>
+				</div>
+				<div class="layui-form-item">
+						<label class="layui-form-label">记录类型&nbsp;</label>
+						<div class="layui-input-block">
+							<select id="type" name="type"  >
+								<option name="type" selected="selected" >--请选择--</option>
+							</select>
+						</div>
+				</div>
+				<div class="layui-form-item">
+						<label class="layui-form-label">创建时间&nbsp;</label>
+						<div class="layui-input-block">
+							<input type="text" placeholder="请输入记录创建时间" id="createdate" name="createdate" autocomplete="off" class="layui-input">
+						</div>
+				</div>
+				<div class="layui-form-item">
+						<label class="layui-form-label">记录人&nbsp;</label>
+						<div class="layui-input-block" >
+							<input type="text" placeholder="请输入记录人" id="recorder" name="recorder" autocomplete="off" class="layui-input">
+						</div>
+				</div>
+				<div class="layui-form-item">
+						<label class="layui-form-label">记录的信息&nbsp;</label>
+						<div class="layui-input-block">
+							<input type="text" placeholder="请输入记录信息" id="message" name="message" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+				</div>
+				<div class="layui-form-item">
+						<label class="layui-form-label">反馈的结果&nbsp;</label>
+						<div class="layui-input-block">
+							<input type="text" placeholder="请输入反馈结果" id="feedback_result" name="feedback_result" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">备注&nbsp;</label>
+					<div class="layui-input-block">
+						<textarea id="remarks" name="remarks" placeholder="请输入备注" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item" style="text-align: center;">
+					<div class="layui-input-block">
+						<a type="submit" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit"
+						 lay-submit="">提交</a>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+					</div>
+				</div>
+
+			</form>
+
+		</div>
+		<!--添加商机信息弹出层结束-->
+		<!--添加费用申请信息弹出层开始-->
+		<div style="display: none;padding: 20px" id="openPrice">
+			<form class="layui-form " action="" lay-filter="dataFrmP" id="dataFrmP">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">商机名称&nbsp;</label>
+						<div class="layui-input-inline">
+							<select id="business_id" name="business_id" lay-search >
+							</select>
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">商机跟进编号&nbsp;</label>
+						<div class="layui-input-inline">
+							<select id="business_tracking" name="business_tracking"   lay-verify="required"  autocomplete="off" lay-search  class="layui-input">
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">消费类型&nbsp;</label>
+					<div class="layui-input-inline">
+						<select id="consume_type" name="consume_type" autocomplete="off" >
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">实际消费&nbsp;</label>
+						<div class="layui-input-inline">
+							<input type="text" id="reality_consume" name="reality_consume" placeholder="请输入费用金额" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">计划消费&nbsp;</label>
+						<div class="layui-input-inline">
+							<input type="text" id="perdict_consume" name="perdict_consume" placeholder="请输入费用金额" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">费用申报人&nbsp;</label>
+						<div class="layui-inline">
+							<select id="cost_declarant" name="cost_declarant" autocomplete="off" lay-search  lay-verify="required">
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">备注&nbsp;</label>
+					<div class="layui-input-block">
+						<textarea id="cost_description" name="cost_description" placeholder="请输入备注" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item" style="text-align: center;">
+					<div class="layui-input-block">
+						<a type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmitP"
+						   lay-submit="">提交</a>
+						<button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!--添加费用申请信息弹出层结束-->
+	</body>
+</html>

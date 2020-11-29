@@ -1,0 +1,27 @@
+package com.it.services;
+
+import com.it.bean.PageBean;
+import com.it.bean.User;
+import com.it.dao.IUdao;
+import com.it.dao.IUserImpl;
+
+import java.util.List;
+
+
+public class UserServicesImpl implements IUserServices {
+   IUdao iUdao = new IUserImpl();
+    @Override
+    public boolean logion(User user) {
+        return iUdao.logion(user);
+    }
+
+    @Override
+    public List<User> queryAllUser(PageBean pageBean, User user) {
+        return iUdao.queryAllUser(pageBean, user);
+    }
+
+    @Override
+    public int userCount(User user) {
+        return iUdao.userCount(user);
+    }
+}

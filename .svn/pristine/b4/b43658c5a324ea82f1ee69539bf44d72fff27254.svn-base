@@ -1,0 +1,115 @@
+package com.it.bean;
+
+public class BusinessOpporitunity {
+    private Long id;
+    private String name;
+    private Long status;
+    private Long customers_id;
+    private Long business_type_id;
+    private String intention;
+    private Long userid;
+    private String contact;
+    private String remarks;
+
+    public BusinessOpporitunity() {
+    }
+
+    public BusinessOpporitunity(Long id, String name, Long status, Long customers_id, Long business_type_id, String intention, Long userid, String contact, String remarks) {
+        this.id = id;
+        this.name = name;
+        this.status = status;
+        this.customers_id = customers_id;
+        this.business_type_id = business_type_id;
+        this.intention = intention;
+        this.userid = userid;
+        this.contact = contact;
+        this.remarks = remarks;
+    }
+
+    @Override
+    public String toString() {
+        return "BusinessOpporitunity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                ", customers_id=" + customers_id +
+                ", business_type_id=" + business_type_id +
+                ", intention='" + intention + '\'' +
+                ", userid=" + userid +
+                ", contact='" + contact + '\'' +
+                ", remarks='" + remarks + '\'' +
+                '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getStatus() {
+        return status;
+    }
+
+    public void setStatus(Long status) {
+        this.status = status;
+    }
+
+    public Long getCustomers_id() {
+        return customers_id;
+    }
+
+    public void setCustomers_id(Long customers_id) {
+        this.customers_id = customers_id;
+    }
+
+    public Long getBusiness_type_id() {
+        return business_type_id;
+    }
+
+    public void setBusiness_type_id(Long business_type_id) {
+        this.business_type_id = business_type_id;
+    }
+
+    public String getIntention() {
+        return intention;
+    }
+
+    public void setIntention(String intention) {
+        this.intention = intention;
+    }
+
+    public Long getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Long userid) {
+        this.userid = userid;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+}

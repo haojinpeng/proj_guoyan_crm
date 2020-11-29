@@ -1,0 +1,38 @@
+{
+  "title": "相册标题",
+  "id": 123, 
+  "start": 0 ,
+  "data": [
+	  {
+	        "alt": "图片名1",
+	        "pid": 5, 
+	        "src": "resources/layui/images/6.jpg",
+	        "thumb": "resources/layui/images/6.jpg"
+	      },
+	      {
+	        "alt": "图片名3",
+	        "pid": 1, 
+	        "src": "resources/layui/images/5.jpg",
+	        "thumb": "resources/layui/images/5.jpg"
+	      },
+	      {
+	        "alt": "图片名4",
+	        "pid": 2, 
+	        "src": "resources/layui/images/4.jpg",
+	        "thumb": "resources/layui/images/4.jpg"
+	      },
+	      {
+	        "alt": "图片名5",
+	        "pid": 3, 
+	        "src": "resources/layui/images/3.jpg",
+	        "thumb": "resources/layui/images/3.jpg"
+	      },
+	      {
+	        "alt": "图片名6",
+	        "pid": 4, 
+	        "src": "resources/layui/images/1.jpg",
+	        "thumb": "resources/layui/images/1.jpg"
+	      }
+	  
+  ]
+  }

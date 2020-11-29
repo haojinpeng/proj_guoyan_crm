@@ -1,0 +1,822 @@
+//JavaScript代码区域
+layui.use(['jquery', 'layer', 'form', 'table', 'element', 'laydate'], function() {
+	var $ = layui.jquery;
+	var layer = layui.layer;
+	var form = layui.form;
+	var table = layui.table;
+	var element = layui.element;
+	var laydate = layui.laydate;
+	var url;
+	var mainIndex;
+	var index = 0;
+	var data;
+	//渲染数据表格
+	table.render({
+		elem: '#userTable' //渲染的目标对象
+			,
+		url: 'bus.do?opt=queryAllLike' //数据接口
+			,
+		title: '商机信息表' //数据导出来的标题
+			/* ,toolbar:"<div>xxx</div>" */
+			,
+		/*toolbar: "#userToolBar" //表格的工具条
+			,
+		defaultToolbar: []
+			/!* ,height:300 *!/
+			,
+		height: 500
+				,*/
+		cellMinWidth: 100 //设置列的最小默认宽度
+			,
+		/*done: function(res, curr, count) {
+			/!* alert(res);//后台url返回的json串
+			alert(curr);//当前页
+			alert(count);//数据总条数 *!/
+		},
+		totalRow: true //开启合并行
+			,*/
+		page: true //是否启用分页
+			/*   ,limit:20 //设置每页显示条数 默认为10
+			  ,limits:[20,40,60,80] */
+			,
+		skin: 'line',
+		text: {
+			none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+		},done: function(res, curr, count) {
+
+        }
+        ,
+		cols: [
+			[ //列表数据
+				{
+					type: 'checkbox',
+					fixed: 'left'
+				}, {
+					field: 'id',
+					title: '商机编号',
+					width: 110,
+					sort: true,
+					align: 'center'
+				}, {
+					field: 'name',
+					title: '商机名称',
+					sort: true,
+					width: 110,
+					edit: true,
+					align: 'center'
+				}, {
+					field: 'status',
+					title: '商机状态',
+					width: 110,
+					align: 'center'
+				}, {
+					field: 'customers_id',
+					title: '客户编号',
+					width: 110,
+					sort: true,
+					align: 'center'
+				}, {
+					field: 'business_type_id',
+					width: 100,
+					title: '商机类型编号',
+					align: 'center'
+				}, {
+					field: 'intention',
+					title: '客户意向',
+					width: 90,
+					align: 'center'
+					,templet:function(d){
+                    return d.intention=='1'?(d.intention=='0'?'强':'中'):'弱';
+                }
+				},{
+                field: 'contact',
+                title: '联系人',
+                width: 90,
+                align: 'center'
+          		  },
+				{
+                field: 'userid',
+                title: '员工',
+                width: 60,
+                align: 'center'
+           		 }, {
+					field: 'remarks',
+					title: '备注',
+					width: 120,
+					align: 'center'
+				}, {
+					field: 'operate',
+					title: '操作',
+					toolbar: '#userBar',	
+					align: 'center'
+				}
+			]
+		],
+        page: {layout:['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']}
+		,
+		id: 'testReload',
+		/*done: function(res, curr, count) {
+			index++;
+			if (index == 1)
+				data = res.data;
+		}*/
+	});
+	//模糊查询
+    $("#searchSubmit").click(function () {
+        var tname=$("#tname").val();
+        var timeStart = $("#timeStart").val();
+        var timeEnd = $("#timeEnd").val();
+        var index = layer.msg('查询中,请稍后...',{icon:16,time:true,shade:0});
+        //alert(search_name);
+        setTimeout(function () {
+            table.reload('testReload',{
+                where:{tname:tname,timeStart:timeStart,timeEnd:timeEnd}
+            });
+        },500);
+        layer.close(index);
+    });
+    //添加与修改弹窗提交
+    form.on('submit(doSubmit)', function(data){
+        alert(JSON.stringify(data.field));
+        $.get(
+            url,
+            {"title":$("#title").val(),"type_id":$('input[type=radio][name=type_id]:checked').val(),"bill_time":$("#bill_time").val(),"price":$("#price").val(),"explain1":$("#explain1").val()},
+            function (flag){
+                if(flag==1){
+                    layer.msg("恭喜您操作成功!",{
+                        time:1000,
+                        end:function () {
+                            window.location.href="bills.html";
+                        }
+                    });
+
+                }else{
+                    alert("操作失败!");
+                    window.location.href="bills.html";
+                }
+            },"json");
+        return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+    });
+    //客户意向下拉框渲染
+    form.on('select(searchName)',function (data) {
+        // alert("是否选择");
+        var name = data.value;
+        layer.msg("恭喜您操作成功",{
+            time:800,
+            end:function () {
+                var index = layer.msg('查询中,请稍后...',{icon:16,time:true,shade:0});
+                setTimeout(function () {
+                    table.reload('testReload',{
+                        where:{id:busid,intention:busintention,status:busstatus}
+                    });
+                },500);
+                layer.close(index);
+            }
+
+        });
+        return false;
+    });
+
+
+
+	/*// 按要求查找
+	var active = {
+		reload: function() {
+			var selectData = new Array();
+			var demoReload = $('#demoReload');
+			data.forEach(function(value) {
+				if (value.id == demoReload.val())
+					selectData.push(value);
+
+			});
+			table.reload('testReload', {
+				page: {
+					curr: 1 //重新从第 1 页开始
+				},
+				data: selectData,
+				url: ""
+			});
+		}
+	};*/
+
+	$('.demoTable .layui-btn').on('click', function() {
+		var type = $(this).data('type');
+		active[type] ? active[type].call(this) : '';
+	});
+	
+	//监听商机首页事件
+	table.on('toolbar(userTable)', function(obj) {
+		var checkStatus = table.checkStatus(obj.config.id)
+		switch (obj.event) {
+			case 'doadd':
+				openAddUser();
+				break;
+			case 'doSearch':
+				break;
+			case 'dodelete':
+				layer.msg("是否确定删除")
+				break;
+		}
+
+	})
+	// 	//删除
+	// 	function openDelete(data) {
+	// 		layer.confirm('真的删除ID为：' + data.userId + "的用户吗?", function(index) {
+
+	//添加
+	function openAddUser() {
+		mainIndex = layer.open({
+			type: 1,
+			title: '添加商机信息',
+			content: $("#saveOrUpdateDiv"),
+			area: ['600px', '500px'],
+			success: function(index) {
+				//清空表单数据       
+				$("#dataFrm")[0].reset();
+				url = "bus.do?opt=addbus";
+			}
+		});
+	}
+	//监听工具栏事件
+	table.on('tool(userTable)', function(obj) {
+		var data = obj.data;
+		var layEvent = obj.event;
+
+		if (obj.event === "del") {
+			layer.confirm("你确定要删除么？", {
+					btn: ['是的,我确定', '我再想想']
+				},
+				function() {
+					var oldData = table.cache["userTable"];
+					oldData.splice(obj.tr.data('index'), 1);
+					layer.msg("删除成功", {
+						time: 10
+					}, function() {
+						table.reload('userTable', {
+							data: oldData
+						});
+					});
+				}
+			)
+		}
+		if (layEvent === 'edit') {
+			openUpdateUser(data);
+		}
+		if (layEvent === 'rep') {
+			openReport(data);
+		}
+	});
+
+	function openReport(data) {
+		mainIndex = layer.open({
+			type: 1,
+			title: '添加报备项目',
+			content: $("#openReport"),
+			area: ['800px', '400px'],
+			success: function(index) {
+				//清空表单数据       
+				$("#dataReport")[0].reset();
+				url = "user/addUser.action";
+			}
+		});
+
+
+
+	}
+
+
+	function openUpdateUser(data) {
+		mainIndex = layer.open({
+			type: 1,
+			title: '修改商机信息',
+			content: $("#saveOrUpdateDiv"),
+			area: ['900px', '600px'],
+			success: function(index) {
+				form.val("dataFrm", data);
+				url = "user/updateUser.action";
+			}
+		});
+	}
+
+	//渲染表格2
+	table.render({
+		elem: '#userTable1' //渲染的目标对象
+			,
+		url: 'js/follow.json' //数据接口
+			,
+		title: '商机跟进表' //数据导出来的标题
+			/* ,toolbar:"<div>xxx</div>" */
+			,
+		// toolbar: "#userToolBar1" //表格的工具条
+		// 	,
+		// defaultToolbar: []
+		// 	/* ,height:300 */
+		// 	,
+		// height: 500
+		// 		,
+		cellMinWidth: 90 //设置列的最小默认宽度
+			,
+		// done: function(res, curr, count) {
+		// 	/* alert(res);//后台url返回的json串
+		// 	alert(curr);//当前页
+		// 	alert(count);//数据总条数 */
+		// },
+		// totalRow: true //开启合并行
+		// 	,
+		page: true //是否启用分页
+			/*   ,limit:20 //设置每页显示条数 默认为10
+			  ,limits:[20,40,60,80] */
+			,
+			skin: 'line',
+		text: {
+			none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+		},
+		cols: [
+			[ //列表数据
+				{
+					type: 'checkbox',
+					fixed: 'left'
+				}, {
+					field: 'fid',
+					title: '商机编号',
+					width: 110,
+					sort: true,
+					align: 'center'
+				}, {
+					field: 'fname',
+					title: '商机名称',
+					sort: true,
+					edit: true,
+					align: 'center'
+				}, {
+					field: 'type',
+					title: '记录类型',
+					width: 90,
+					align: 'center'
+				}, {
+					field: 'date',
+					title: '记录日期',
+					width: 110,
+					sort: true,
+					align: 'center'
+				}, {
+					field: 'person',
+					title: '记录人',
+					width: 80,
+					align: 'center'
+				}, {
+					field: 'manage',
+					title: '记录信息',
+					width: 150,
+					align: 'center'
+				}, {
+					field: 'manage1',
+					title: '反馈信息',
+					width: 90,
+					align: 'center'
+				}, {
+					field: 'remark',
+					title: '备注',
+					width: 100,
+					align: 'center'
+				}, {
+					field: 'operate',
+					title: '操作',
+					width:300,
+					toolbar: '#userBar1',
+					align: 'center'
+				}
+			]
+		]
+	});
+	
+	//监听商机跟进管理时间
+	table.on('toolbar(userTable1)', function(obj) {
+		var checkStatus = table.checkStatus(obj.config.id)
+		switch (obj.event) {
+			case 'doaddfol':
+				openAddUser1();
+				break;
+			case 'doSearchfol':
+				layer.msg('查询');
+				break;
+			case 'dodeletefol':
+				layer.confirm('真的删除ID为：' + data.userId + "的用户吗?", function(index) {
+					layer.close(index);
+					obj.del();
+
+
+				});
+				break;
+		}
+
+	})
+
+
+	//添加
+	function openAddUser1() {
+		mainIndex = layer.open({
+			type: 1,
+			title: '添加商机跟进信息',
+			content: $("#openUpdateMan"),
+			area: ['600px', '700px'],
+			success: function(index) {
+				//清空表单数据       
+				$("#dataFrmMan")[0].reset();
+				url = "user/addUser.action";
+			}
+		});
+	}
+	//监听工具栏事件
+	table.on('tool(userTable1)', function(obj) {
+		var data = obj.data;
+		var layEvent = obj.event;
+		if (layEvent === 'del1') {
+			openDelete1(data);
+		}
+		if (layEvent === 'edit1') {
+			openUpdateUser1(data);
+		}
+		if (layEvent === 'addprice') {
+			addprice(data);
+		}
+		if (layEvent === 'rev1') {
+			layer.msg('预览')
+		}
+	});
+
+	function addprice(data) {
+		mainIndex = layer.open({
+			type: 1,
+			title: '添加费用申请',
+			content: $("#openUpdatePrice"),
+			area: ['600px', '750px'],
+			success: function(index) {
+				//清空表单数据       
+				$("#dataFrmPrice")[0].reset();
+				url = "user/addUser.action";
+			}
+		});
+
+
+	}
+
+
+
+	function openDelete1(data) {
+		layer.confirm("你确定要删除么？", {
+				btn: ['是的,我确定', '我再想想']
+			},
+			function() {
+				var oldData = table.cache["userTable1"];
+				oldData.splice(obj.tr.data('index'), 1);
+				layer.msg("删除成功", {
+					time: 10
+				}, function() {
+					table.reload('userTable1', {
+						data: oldData
+					});
+				});
+			}
+		)
+	}
+
+	function openUpdateUser1(data) {
+		mainIndex = layer.open({
+			type: 1,
+			title: '修改商机跟进信息',
+			content: $("#openUpdateMan"),
+			area: ['900px', '600px'],
+			success: function(index) {
+				form.val("dataFrmMan", data);
+				url = "user/updateUser.action";
+			}
+		});
+	}
+	//日期范围
+	  laydate.render({
+	    elem: '#test6'
+	    ,range: true
+	  });
+
+
+	//渲染表格3
+	table.render({
+		elem: '#userTable2' //渲染的目标对象
+			,
+		url: 'js/price.json' //数据接口
+			,
+		title: '费用申请表' //数据导出来的标题
+			/* ,toolbar:"<div>xxx</div>" */
+			,
+		// toolbar: "#userToolBar2" //表格的工具条
+		// 	,
+		// defaultToolbar: []
+		// 	/* ,height:300 */
+		// 	,
+		// height: 500
+		// 	,
+		cellMinWidth: 100 //设置列的最小默认宽度
+			,
+		done:function(res, curr, count) {
+			merge(res);
+		},
+		// totalRow: true //开启合并行
+		// 	,
+		page: true //是否启用分页
+			/*   ,limit:20 //设置每页显示条数 默认为10
+			  ,limits:[20,40,60,80] */
+			,
+		text: {
+			none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+		},
+		cols: [
+			[ //列表数据
+				{
+					type: 'checkbox',
+					fixed: 'left'
+				}, {
+					field: 'pid',
+					title: '申请编号',
+					width: 110,
+					sort: true,
+					align: 'center'
+				}, {
+					field: 'pname',
+					title: '商机名称',
+					sort: true,
+					edit: true,
+					align: 'center'
+				}, {
+					field: 'price',
+					title: '费用金额',
+					width: 110,
+					align: 'center'
+				}, {
+					field: 'person',
+					title: '审核人',
+					width: 90,
+					sort: true,
+					align: 'center'
+				}, {
+					field: 'status',
+					title: '审核状态',
+					align: 'center',
+					width: 120,
+					templet:function(msg){
+						if(msg.status == '已驳回'){
+							return '<font color = red>'+msg.status +'</font>'
+						}
+						if(msg.status == '已通过'){
+							return '<font color = green>'+msg.status +'</font>'
+						}
+						if(msg.status == '审核中'){
+							return '<font color = skyblue>'+msg.status +'</font>'
+						}
+						
+					}
+				}, {
+					field: 'suggestion',
+					title: '审核意见',
+					width: 100,
+					align: 'center'
+				}, {
+					field: 'remark',
+					title: '备注',
+					width: 180,
+					align: 'center'
+				}, {
+					field: 'operate',
+					title: '操作',
+					toolbar: '#userBar2',
+					width: 200,
+					align: 'center',
+				}
+			]
+		]
+	});
+	
+	function merge(res) {
+
+		var data = res.data;
+		var mergeIndex = 0; //定位需要添加合并属性的行数
+		var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
+		var columsName = ['pid', 'pname', 'person']; //需要合并的列名称
+		var columsIndex = [1,2,4,5]; //需要合并的列索引值
+
+		for (var k = 0; k < columsName.length; k++) { //这里循环所有要合并的列
+			var trArr = $(".layui-table-body>.layui-table").find("tr"); //所有行
+			for (var i = 1; i < res.data.length; i++) { //这里循环表格当前的数据
+				var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]); //获取当前行的当前列
+				var tdPreArr = trArr.eq(mergeIndex).find("td").eq(columsIndex[k]); //获取相同列的第一列
+
+				if (data[i][columsName[k]] === data[i - 1][columsName[k]]) { //后一行的值与前一行的值做比较，相同就需要合并
+					mark += 1;
+					tdPreArr.each(function() { //相同列的第一列增加rowspan属性
+						$(this).attr("rowspan", mark);
+					});
+					tdCurArr.each(function() { //当前行隐藏
+						$(this).css("display", "none");
+					});
+				} else {
+					mergeIndex = i;
+					mark = 1; //一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+				}
+			}
+			mergeIndex = 0;
+			mark = 1;
+		}
+	}
+	//监听商机跟进管理时间
+	table.on('toolbar(userTable2)', function(obj) {
+		var checkStatus = table.checkStatus(obj.config.id)
+		switch (obj.event) {
+			case 'doaddprice':
+				openAddPrice();
+				break;
+			case 'dosearchprice':
+				layer.msg('查询');
+				break;
+		}
+	})
+	//添加
+	function openAddPrice() {
+		mainIndex = layer.open({
+			type: 1,
+			title: '添加费用申请',
+			content: $("#openUpdatePrice"),
+			area: ['600px', '750px'],
+			success: function(index) {
+				//清空表单数据       
+				$("#dataFrmPrice")[0].reset();
+				url = "user/addUser.action";
+			}
+		});
+	}
+	table.on('tool(userTable2)', function(obj) {
+		var data = obj.data;
+		var layEvent = obj.event;
+		if (layEvent === 'updateprice') {
+			UpdatePrice(data);
+		}
+		if (layEvent === 'check') {
+			layer.msg("审批流程");
+		}
+	});
+
+	function UpdatePrice(data) {
+		mainIndex = layer.open({
+			type: 1,
+			title: '修改费用申请',
+			content: $("#openUpdatePrice"),
+			area: ['550px', '450px'],
+			success: function(index) {
+				form.val("dataFrmPrice", data);
+				url = "user/updateUser.action";
+			}
+		});
+	}
+
+	//渲染表格4
+	table.render({
+		elem: '#userTable3' //渲染的目标对象
+			,
+		url: 'js/check.json' //数据接口
+			,
+		title: '费用审核表' //数据导出来的标题
+			/* ,toolbar:"<div>xxx</div>" */
+			,
+		// toolbar: "#userToolBar3" //表格的工具条
+		// 	,
+		// defaultToolbar: []
+		// 	/* ,height:300 */
+		// 	,
+		// // height: 500
+		// // 		,
+		skin: 'line',
+		cellMinWidth: 80 //设置列的最小默认宽度
+			,
+		done: function(res, curr, count) {
+			/* alert(res);//后台url返回的json串
+			alert(curr);//当前页
+			alert(count);//数据总条数 */
+		}
+			,
+		page: true //是否启用分页
+			/*   ,limit:20 //设置每页显示条数 默认为10
+			  ,limits:[20,40,60,80] */
+			,
+		// text: {
+		// 	none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+		// },
+		cols: [
+			[ //列表数据
+				{
+					type: 'checkbox',
+					fixed: 'left'
+				}, {
+					field: 'id',
+					title: '审核编号',
+					width: 120,
+					sort: true,
+					align: 'center'
+				}, {
+					field: 'name',
+					title: '商机名称',
+					sort: true,
+					edit: true,
+					align: 'center'
+				}, {
+					field: 'status',
+					title: '审核状态',
+					width: 120,
+					sort: true,
+					align: 'center'
+				}, {
+					field: 'suggestion',
+					title: '审核意见',
+					width: 120,
+					align: 'center'
+				}, {
+					field: 'date',
+					title: '审核日期',
+					width: 120,
+					align: 'center'
+				}, {
+					field: 'remark',
+					title: '备注',
+					width: 80,
+					width: 180,
+					align: 'center'
+				}, {
+					field: 'operate',
+					title: '操作',
+					toolbar: '#userBar3',
+					width: 300,
+					align: 'center'
+				}
+			]
+		]
+	});
+
+
+
+
+
+
+
+	var laydate = layui.laydate;
+
+	//执行一个laydate实例
+	laydate.render({
+		elem: '#test1' //指定元素
+	});
+	//监听商机跟进管理时间
+	table.on('toolbar(userTable3)', function(obj) {
+		var checkStatus = table.checkStatus(obj.config.id)
+		switch (obj.event) {
+			case 'doaddsuggestion':
+				openAddSuggestion()();
+				break;
+			case 'doSearchsuggestion':
+				layer.msg('查询');
+				break;
+		}
+	})
+	//添加
+	function openAddSuggestion() {
+		mainIndex = layer.open({
+			type: 1,
+			title: '添加审核信息',
+			content: $("#openUpdateCheck"),
+			area: ['600px', '750px'],
+			success: function(index) {
+				//清空表单数据       
+				$("#dataFrmCheck")[0].reset();
+				url = "user/addUser.action";
+			}
+		});
+	}
+
+
+	table.on('tool(userTable3)', function(obj) {
+		var data = obj.data;
+		var layEvent = obj.event;
+		if (layEvent === 'addSuggestion') {
+			openUpdateSuggestion(data);
+		}
+	});
+
+	function openUpdateSuggestion(data) {
+		mainIndex = layer.open({
+			type: 1,
+			title: '添加审核意见',
+			content: $("#openUpdateCheck"),
+			area: ['900px', '600px'],
+			success: function(index) {
+				form.val("dataFrmCheck", data);
+				url = "user/updateUser.action";
+			}
+		});
+	}
+});

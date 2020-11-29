@@ -1,0 +1,36 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 101,
+	"data": [
+		{
+			"no": "001",
+			"type_id": "001",
+			"approval_type": "用餐"
+		},{
+			"no": "002",
+			"type_id": "002",
+			"approval_type": "出租车"
+		},{
+			"no": "003",
+			"type_id": "003",
+			"approval_type": "公交车"
+		},{
+			"no": "004",
+			"type_id": "004",
+			"approval_type": "地铁"
+		},{
+			"no": "005",
+			"type_id": "005",
+			"approval_type": "火车"
+		},{
+			"no": "006",
+			"type_id": "006",
+			"approval_type": "高铁"
+		},{
+			"no": "007",
+			"type_id": "007",
+			"approval_type": "商务"
+		}
+	]
+}  

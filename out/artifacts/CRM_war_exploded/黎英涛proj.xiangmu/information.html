@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>实施信息管理</title>
+		<link rel="stylesheet" type="text/css" href="resources/layui/css/layui.css" />
+	</head>
+	<body>
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;"></fieldset>
+		<form action="" class="layui-form" method="post">
+			<div class="layui-form-item">
+			    <div class="layui-inline">
+			      <label class="layui-form-label">项目名称</label>
+			      <div class="layui-input-inline">
+			        <input type="text" name="project_name"  autocomplete="off" class="layui-input" placeholder="请输入关键字">
+			      </div>
+			    </div>
+			    <div class="layui-inline">
+			      <label class="layui-form-label">负责人</label>
+			      <div class="layui-input-inline">
+			        <input type="text" name="manager"  autocomplete="off" class="layui-input" placeholder="请选择添加人">
+			      </div>
+			    </div>
+			     <div class="layui-inline">
+			      <label class="layui-form-label">实施日期</label>
+			      <div class="layui-input-inline">
+			        <input type="text" name="start_time"  autocomplete="off" class="layui-input">
+			      </div>
+			    </div>
+				<div class="layui-inline">
+				  <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-search" id="doSearch">查询</button>
+				  <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">添加项目实施</button>
+				</div>
+			 </div>
+		</form>
+		<table class="layui-hide" id="userTable" lay-filter="userTable"></table>
+		<div id="userBar" style="display: none;">
+			<a class="layui-btn layui-btn-xs" lay-event="update">修改</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+			<a class="layui-btn layui-btn-xs" lay-event="add">添加体验</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="appl">费用申请</a>
+		</div>
+		
+		<!-- 修改的弹出层开始 -->
+		
+		<div style="display: none;padding: 20px" id="saveOrUpdateDiv" >
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">编号</label>
+						<div class="layui-input-inline">
+							<input type="text" name=""  lay-verify="required" autocomplete="off"
+								class="layui-input" placeholder="编号">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">负责人</label>
+						<div class="layui-input-inline">
+							<input type="text" name="" autocomplete="off"
+								class="layui-input" placeholder="请选择">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">项目描述</label>
+						<div class="layui-input-inline">
+							<input type="text" name=""  lay-verify="required" autocomplete="off"
+								class="layui-input" placeholder="请输入项目描述">
+						</div>
+					</div>
+					
+				</div>
+		
+				<div class="layui-form-item" style="text-align: center;">
+			    <div class="layui-input-block">
+			      <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit" lay-submit="">修改</button>
+			      <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh" >取消</button>
+			    </div>
+			  </div>
+			</form>
+		
+		</div>
+		<!-- 修改的弹出层结束 -->
+		
+		<!-- 添加体验的弹出层开始 -->
+		
+		<div style="display: none;padding: 20px" id="saveOrAddDiv" >
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">编号</label>
+						<div class="layui-input-inline">
+							<input type="text" name="id" disabled="" lay-verify="required" autocomplete="off"
+								class="layui-input" placeholder="不可修改项">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">项目名称</label>
+						<div class="layui-input-inline">
+							<input type="text" name="project_name" disabled="" autocomplete="off"
+								class="layui-input" placeholder="不可修改项">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">测试人</label>
+						<div class="layui-input-inline">
+							<input type="text" name=""  lay-verify="required" autocomplete="off"
+								class="layui-input" placeholder="添加人">
+						</div>
+					</div>
+					
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">测试时间</label>
+						<div class="layui-input-inline">
+							<input type="text" name=""  lay-verify="required" autocomplete="off"
+								class="layui-input" placeholder="添加时间">
+						</div>
+					</div>
+					
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">体验描述</label>
+						<div class="layui-input-inline">
+							<input type="text" name=""  lay-verify="required" autocomplete="off"
+								class="layui-input" placeholder="体验描述">
+						</div>
+					</div>
+					
+				</div>
+		
+				<div class="layui-form-item" style="text-align: center;">
+			    <div class="layui-input-block">
+			      <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit" lay-submit="">添加</button>
+			      <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh" >取消</button>
+			    </div>
+			  </div>
+			</form>
+		
+		</div>
+		
+		<!-- 添加体验的弹出层结束 -->
+		
+		
+		<!-- 费用申请的弹出层开始 -->
+		
+		<div style="display: none;padding: 20px" id="saveOrApplDiv" >
+			<form class="layui-form " action="" lay-filter="dataFrm" id="dataFrm">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">编号</label>
+						<div class="layui-input-inline">
+							<input type="text" name="id" disabled="" lay-verify="required" autocomplete="off"
+								class="layui-input" placeholder="不可修改项">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">项目名称</label>
+						<div class="layui-input-inline">
+							<input type="text" name="project_name" disabled="" autocomplete="off"
+								class="layui-input" placeholder="不可修改项">
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">支出类型</label>
+						<div class="layui-input-inline">
+							<select name="" lay-verify="">
+							  <option value="">请选择</option>
+							  <option value="010">出差</option>
+							  <option value="021">聚餐</option>
+							  <option value="0571">机票</option>
+							</select>
+						</div>
+					</div>
+					
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">支出费用</label>
+						<div class="layui-input-inline">
+							<input type="text" name=""  lay-verify="required" autocomplete="off"
+								class="layui-input" placeholder="添加费用支出">
+						</div>
+					</div>
+					
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">申请人</label>
+						<div class="layui-input-inline">
+							<input type="text" name=""  lay-verify="required" autocomplete="off"
+								class="layui-input" placeholder="添加申请人">
+						</div>
+					</div>
+					
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">申请时间</label>
+						<div class="layui-input-inline">
+							<input type="text" name=""  lay-verify="required" autocomplete="off"
+								class="layui-input" placeholder="new data">
+						</div>
+					</div>
+					
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">支出描述</label>
+						<div class="layui-input-inline">
+							<input type="text" name=""  lay-verify="required" autocomplete="off"
+								class="layui-input" placeholder="添加支出详细描述">
+						</div>
+					</div>
+					
+				</div>
+		
+				<div class="layui-form-item" style="text-align: center;">
+			    <div class="layui-input-block">
+			      <button type="button" class="layui-btn layui-btn-normal layui-btn-sm layui-icon layui-icon-release" lay-filter="doSubmit" lay-submit="">确定</button>
+			      <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh" >取消</button>
+			    </div>
+			  </div>
+			</form>
+		
+		</div>
+		
+		<!-- 费用申请的弹出层结束 -->
+		
+	</body>
+	<script src="resources/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		layui.use(['jquery', 'slider', 'element', 'carousel', 'rate', 'table','layer','form'], function() {
+
+			    var $ = layui.jquery,
+				slider = layui.slider,
+				element = layui.element,
+				form = layui.form,
+				table = layui.table,
+				rate = layui.rate,
+				layer = layui.layer,
+				carousel = layui.carousel;
+
+			//渲染数据表格
+			table.render({
+				elem: '#userTable' //渲染的目标对象
+					,
+				url: 'js/table1.json' //数据接口
+					,
+				title: '用户数据表' //数据导出来的标题
+					/* ,toolbar:"<div>xxx</div>" */
+					,
+				toolbar: "#userToolBar" //表格的工具条
+					,
+				defaultToolbar: ['filter', 'print']
+					/* ,height:300 */
+					,
+				height: 'full-200',
+				cellMinWidth: 100 //设置列的最小默认宽度
+					,
+				done: function(res, curr, count) {
+					/* alert(res);//后台url返回的json串
+					alert(curr);//当前页
+					alert(count);//数据总条数 */
+				},
+				totalRow: true //开启合并行
+					,
+				page: true //是否启用分页
+					/*   ,limit:20 //设置每页显示条数 默认为10
+					  ,limits:[20,40,60,80] */
+					,
+				text: {
+					none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+				},
+				cols: [
+					[ //列表数据
+						{
+							type: 'checkbox',
+							fixed: 'left',
+						},
+						// }, {
+						// 	//type: 'numbers'
+						// },
+						{
+							field: 'id',
+							title: 'ID',
+							width: 80,
+							edit: true,
+							align: 'center',
+							//hide: true,
+							sort: true
+						}, {
+							field: 'project_name',
+							title: '项目名称',
+							width: 120,
+							sort: true,
+							align: 'center'
+						}, {
+							field: 'manager',
+							title: '负责人',
+							width: 150,
+							edit: true,
+							align: 'center'
+						}, {
+							field: 'start_time',
+							title: '实施开始时间',
+							width: 150,
+							sort: true,
+							align: 'center'
+						}, {
+							field: 'end_time',
+							title: '实施结束时间',
+							width: 150,
+							align: 'center'
+						}, {
+							field: 'actual_time',
+							title: '实施实际时间',
+							width: 150,
+							edit: true,
+							align: 'center'
+						}, {
+							field: 'cycle',
+							title: '实施工时',
+							width: 100,
+							totalRow: true,
+							align: 'center'
+						}, {
+							field: 'actual_cycle',
+							title: '实际工时',
+							width: 100,
+							edit: true,
+							align: 'center'
+						},{
+							field: 'remarks',
+							title: '描述',
+							width: 200,
+							edit: true,
+							align: 'center'
+						}, {
+							fixed: 'right',
+							title: '操作',
+							toolbar: '#userBar',
+							width: 330,
+							align:'center'
+					
+						}
+					]
+				]
+			});
+
+			
+			//监听复选框选择
+
+
+			table.on('checkbox(userTable)', function(obj){
+			  console.log(obj.checked); //当前是否选中状态
+			  console.log(obj.data); //选中行的相关数据
+			  console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+			});
+			//监听复选框选择
+			table.on('edit(userTable)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+			// alert(obj.data);
+			  console.log(obj.value); //得到修改后的值
+			  console.log(obj.field); //当前编辑的字段名
+			  console.log(obj.data); //所在行的所有相关数据  
+			});
+			//监听行工具栏
+			table.on('tool(userTable)', function(obj){
+				var data = obj.data;
+				var layEvent = obj.event;
+				if(layEvent === 'del'){ //删除
+					layer.msg("删除");
+				   layer.confirm('确定删除此信息吗？', function(index){
+				     layer.close(index);
+				     //向服务端发送删除指令
+				   });
+				 }
+				if(layEvent==='add'){//添加体验
+					openAddUser(data);
+					
+				}
+				if(layEvent==='appl'){
+					openApplUser(data);
+					
+				}else if(layEvent === 'update'){ //修改
+					openUpdateUser(data);
+						   }
+				
+			});
+			var url;
+			var mainIndex;
+			//打开修改页面
+						function openUpdateUser(data){
+							mainIndex=layer.open({
+								type:1,
+								title:'修改项目实施信息',
+								content:$("#saveOrUpdateDiv"),
+								area:['400px','310px'],
+								success:function(index){
+									form.val("dataFrm",data);
+									url="user/updateUser.action";
+								},
+								
+							});
+						
+						}
+			//打开添加体验页面
+						function openAddUser(data){
+							mainIndex=layer.open({
+								type:1,
+								title:'添加体验项目信息',
+								content:$("#saveOrAddDiv"),
+								area:['400px','310px'],
+								success:function(index){
+									form.val("dataFrm",data);
+									url="user/addUser.action";
+								},
+								
+							});
+						
+						}
+			//打开费用申请页面
+						function openApplUser(data){
+							mainIndex=layer.open({
+								type:1,
+								title:'费用申请提交',
+								content:$("#saveOrApplDiv"),
+								area:['400px','310px'],
+								success:function(index){
+									form.val("dataFrm",data);
+									url="user/addUser.action";
+								},
+								
+							});
+						
+						}			
+		});
+	</script>
+</html>

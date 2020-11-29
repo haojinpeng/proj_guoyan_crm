@@ -1,0 +1,130 @@
+package com.it.dao;
+
+import com.it.bean.PageBean;
+import com.it.bean.User;
+
+import com.it.utils.JdbcUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+
+import java.sql.SQLException;
+import java.util.List;
+
+public class IUserImpl implements IUdao {
+QueryRunner queryRunner = new QueryRunner(JdbcUtils.getDataSource());
+    @Override
+    public boolean logion(User user) {
+        //1 编写sql
+        String sql = "select * from user where login_name=? and password=? ";
+        //2 打印sql
+        System.out.println("sql-->"+sql);
+        //3 处理c参数
+        Object params[] = {user.getLogin_name(),user.getPassword()};
+        //4 执行并返回结果
+
+        //4 执行并返回结果
+
+            User users1 = null;
+            try {
+                users1 = queryRunner.query(sql,new BeanHandler<>(User.class),params);
+                System.out.println("users1--->"+users1);
+                if(users1!=null) {
+                    return true;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw  new RuntimeException("登录失败！");
+            }
+
+
+        return false;
+    }
+
+    @Override
+    public List<User> queryAllUser(PageBean pageBean, User user) {
+        //编写sql
+        StringBuffer sql = new StringBuffer("select *  from user and 1=1 ");
+
+        if(user!=null){
+            //判定账户名的文本框的合法性
+            // "" null判定
+//            if(!"".equals(bills.getUsername()) && bills.getUsername()!=null) {
+//
+//                //拼接sql
+//                sql.append("and username like '%"+bills.getUsername()+"%' ");
+//
+//            }
+//            if(!"".equals(bills.getBill_time())&&bills.getBill_time()!=null){
+//               sql.append("and type_id'='"+bills.getType_id()+"'");
+//            }
+//            if(!"'null' and 'null'".equals(time)){
+//                sql.append("and bill_time between "+time);
+//            }
+
+
+
+        }
+
+        if (pageBean != null) {
+            sql.append(" limit " + pageBean.getStart() + ","
+                    + pageBean.getRows());
+        }
+
+
+
+        System.out.println("sql-->"+sql);
+        //存放所有Users信息
+        List<User> listU = null;
+        try {
+
+            listU = queryRunner.query(sql.toString(), new BeanListHandler<>(User.class));
+
+            for (User st:listU
+            ) {
+                System.out.println(st);
+
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            throw new RuntimeException("查询数据失败!");
+        }
+
+
+        return listU;
+    }
+
+    @Override
+    public int userCount(User user) {
+        StringBuffer sb = new StringBuffer("select count(*) from bills where 1=1 ");
+        //有条件判断条件，重新拼接sql
+//        if(billsVo!=null){
+//            //判定账户名的文本框的合法性
+//            // "" null判定
+//            if(!"".equals(student.getSno()) && student.getSno()!=null) {
+//
+//                //拼接sb
+//                sb .append("and sno like '%"+student.getSno()+"%' ");
+//
+//            }
+//
+//            if(!"".equals(student.getSname()) && student.getSname()!=null) {
+//                sb .append(" and sname like '%"+student.getSname()+"%'");
+//
+//            }
+//        }
+        Number num;
+        try {
+            num = (Number)queryRunner.query(sb.toString(),new ScalarHandler<>());
+
+            return num.intValue();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            throw new RuntimeException("查询数据失败!");
+        }
+
+    }
+}
